@@ -1,0 +1,19 @@
+echo: echo [-neE] [arg ...]
+    Output the ARGs.  If -n is specified, the trailing newline is
+    suppressed.  If the -e option is given, interpretation of the
+    following backslash-escaped characters is turned on:
+        \a      alert (bell)
+        \b      backspace
+        \c      suppress trailing newline
+        \E      escape character
+        \f      form feed
+        \n      new line
+        \r      carriage return
+        \t      horizontal tab
+        \v      vertical tab
+        \\      backslash
+        \0nnn   the character whose ASCII code is NNN (octal).  NNN can be
+                0 to 3 octal digits
+    
+    You can explicitly turn off the interpretation of the above characters
+    with the -E option.
