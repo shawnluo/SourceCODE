@@ -1,0 +1,15 @@
+total 76
+drwxrwxr-x 2 wallace wallace  4096 Oct 22 00:32 aa
+-rwxr--r-- 1 wallace wallace  1599 Oct 22 00:53 builtin_command.c
+-rw-rw-r-- 1 wallace wallace     0 Oct 22 00:57 gg
+-rwxr--r-- 1 wallace wallace   472 Oct 22 00:56 makefile
+-rwxr--r-- 1 wallace wallace  2460 Oct 22 00:50 parsing.c
+-rwxr--r-- 1 wallace wallace  2600 Oct 22 00:50 read_command.c
+-rw-r--r-- 1 wallace wallace  4213 May 13  2014 README.md
+drwxr-xr-x 2 wallace wallace  4096 Oct 22 00:50 SI_PRJ
+-rwxrwxr-x 1 wallace wallace 12675 Oct 22 00:56 sshell
+-rwxr--r-- 1 wallace wallace  5480 Oct 22 00:49 sshell.c
+-rwxr--r-- 1 wallace wallace  1174 Oct 22 00:50 sshell.h
+-rwxrwxr-x 1 wallace wallace  4646 Oct 22 00:56 test
+-rwxr--r-- 1 wallace wallace   374 Oct 22 00:38 test.c
+-rwxr--r-- 1 wallace wallace  1398 Oct 22 00:50 type_prompt.c

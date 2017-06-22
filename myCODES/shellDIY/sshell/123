@@ -1,0 +1,17 @@
+total 76
+-rw-rw-r-- 1 wallace wallace     0 Oct 26 19:39 123
+-rw-rw-r-- 1 wallace wallace   897 Oct 26 19:16 222
+drwxrwxrwx 2 wallace wallace  4096 Oct 26 19:18 aa
+-rw-rw-r-- 1 wallace wallace     0 Oct 26 18:22 aadds
+-rwxrwxrwx 1 wallace wallace   807 Oct 22 00:57 gg
+-rwxrwxrwx 1 wallace wallace   465 Oct 26 19:31 Makefile
+-rwxrwxrwx 1 root    root     2727 Oct 22 01:19 parsing.c
+-rwxrwxrwx 1 root    root     2881 Oct 26 18:48 read_command.c
+-rwxrwxrwx 1 wallace wallace  2806 Oct 26 19:36 setup_command.c
+drwxrwxrwx 2 wallace wallace  4096 Oct 26 17:33 SI_PRJ
+-rwxrwxr-x 1 wallace wallace 13415 Oct 26 19:38 sshell
+-rwxrwxrwx 1 root    root     6516 Oct 26 19:32 sshell.c
+-rwxrwxrwx 1 wallace wallace  1176 Oct 26 19:31 sshell.h
+-rwxrwxr-x 1 wallace wallace  4650 Oct 26 19:38 test
+-rwxrwxrwx 1 root    root      376 Oct 22 01:18 test.c
+-rwxrwxrwx 1 root    root     1550 Oct 25 22:42 type_prompt.c

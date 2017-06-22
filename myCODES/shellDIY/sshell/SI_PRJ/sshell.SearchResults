@@ -1,0 +1,37 @@
+---- printf Matches (39 in 6 files) ----
+Parsing.c:    printf("\nbackground:%s\n", info->flag & BACKGROUND ? "yes" : "no");
+Parsing.c:    printf("in redirect:");
+Parsing.c:    info->flag&IN_REDIRECT ? printf("yes,file:%s\n", info->in_file) : printf("no\n");
+Parsing.c:    printf("out redirect:");
+Parsing.c:    info->flag&OUT_REDIRECT ? printf("yes,file:%s\n", info->out_file) : printf("no\n");
+Parsing.c:    printf("pipe:");
+Parsing.c:    info->flag&IS_PIPED ? printf("yes,command:%s %s %s\n", info->command2, info->parameters2[0], info->parameters2[1]) : printf("no\n");
+Read_command.c:        printf("\n");
+Read_command.c:    printf("%s", prompt);
+Read_command.c:        printf("\n");
+Read_command.c:            printf("\ncommand:  %s\n", *command);
+Read_command.c:    printf("input analysis:\n");
+Read_command.c:    printf("pathname:%s\ncommand:%s\nparameters:\n", *command, parameters[0]);
+Read_command.c:        printf("%s\n", parameters[i]);
+Setup.c:        printf("This is a simulation of shell (bash) in Linux.\n");
+Setup.c:                printf("cd:malloc failed.\n");
+Setup.c:            printf("path with ~:\n%s\n", cd_path);
+Setup.c:                printf("cd:malloc failed.\n");
+Setup.c:            printf("-sshell: cd: %s:%s\n", cd_path, strerror(errno));
+Setup.c:	        printf( "Failed\n" );
+Setup.c://	    printf( "/proc/self/exe ->; [%s]\n", buf );
+Sshell.c:                printf("process %d exited.\n", pid);
+Sshell.c:        printf("sshell error:malloc failed.\n");
+Sshell.c:                printf("sshell error:pipe failed.\n");
+Sshell.c:					printf("Invalid Command !!!\n");
+Sshell.c:                printf("Child pid:%u\n", ChdPid);
+Sshell.c:			printf("Invalid Command !!!\n");
+Sshell.c:			printf("\n fork() is failed \n");
+Test.c:    printf("Fxxx this world!\n");
+Type_prompt.c:        sprintf(prompt, "[sshell]%s@%s:", pwd->pw_name, hostname);
+Type_prompt.c:        sprintf(prompt, "[sshell]%s@unknown:", pwd->pw_name);
+Type_prompt.c:    //printf("pathname: %s,length:%d\npw_dir:%s,length:%d\n",
+Type_prompt.c:        sprintf(prompt + length, "%s", pathname);
+Type_prompt.c:        sprintf(prompt + length, "~%s", pathname + strlen(pwd->pw_dir));
+Type_prompt.c:        sprintf(prompt + length, "#");
+Type_prompt.c:        sprintf(prompt + length, "$");

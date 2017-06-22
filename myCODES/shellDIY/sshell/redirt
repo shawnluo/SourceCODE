@@ -1,0 +1,22 @@
+xxxxx
+blacksheepwall
+total 68
+-rw-r--r-- 1 lwang2 dip   905 Oct 26 17:39 123
+9fdsafdsafda
+1fdsafda
+4fdsafdsafdas
+-rw-r--r-- 1 lwang2 dip   897 Oct 26 17:16 222
+drwx------ 2 lwang2 dip    28 Oct 27 14:25 aa
+-rw-r--r-- 1 lwang2 dip     0 Oct 26 16:22 aadds
+-rw-r--r-- 1 lwang2 dip   807 Oct 21 22:57 gg
+-rw-r--r-- 1 lwang2 dip   460 Oct 30 11:17 Makefile
+-rw-r--r-- 1 lwang2 dip  2727 Oct 21 23:19 parsing.c
+-rw-r--r-- 1 lwang2 dip  2880 Oct 26 19:00 read_command.c
+-rw------- 1 lwang2 dip     0 Oct 30 11:26 redirt
+-rw-r--r-- 1 lwang2 dip  2806 Oct 26 17:36 setup_command.c
+drwx------ 2 lwang2 dip  4096 Oct 27 14:25 SI_PRJ
+-rwx------ 1 lwang2 dip 16903 Oct 30 11:17 sshell
+-rw-r--r-- 1 lwang2 dip  6516 Oct 26 17:32 sshell.c
+-rw-r--r-- 1 lwang2 dip  1176 Oct 26 17:31 sshell.h
+-rw-r--r-- 1 lwang2 dip  1550 Oct 25 20:42 type_prompt.c
+ofd112
