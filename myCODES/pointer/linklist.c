@@ -15,6 +15,7 @@ int main(void)
 
 	printf("name: %s\n", s1.name);
 
+	creat_Linklist();
 	//STU *s2 =
 	//	{};
 			
