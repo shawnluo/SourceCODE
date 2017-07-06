@@ -80,16 +80,15 @@ void free_Linklist(STU *head)
 	{
 		p2 = p1->next;
 		free(p1);
+		p1 = p2;
 	}
-	
-	return head;
 }
 
 void showme(STU *head)
 {
 	STU *p = head;
 
-	if(p == NULL)
+	if(p->id == NULL)
 	{
 		printf("empty list!\n");
 
