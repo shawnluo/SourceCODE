@@ -1,2 +1,1 @@
-make;
-./linklist
+make clean; make && ./linklist
