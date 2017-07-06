@@ -74,12 +74,12 @@ STU *insert_Linklist(STU *head)
 
 void free_Linklist(STU *head)
 {
-	STU *p1 = head;
+	STU *p1 = head, *p2;
 
 	while(p1->next != NULL)
 	{
+		p2 = p1->next;
 		free(p1);
-		p1 = p1->next;
 	}
 	
 	return head;
@@ -88,6 +88,13 @@ void free_Linklist(STU *head)
 void showme(STU *head)
 {
 	STU *p = head;
+
+	if(p == NULL)
+	{
+		printf("empty list!\n");
+
+		return;
+	}
 	
 	while(p != NULL)
 	{
@@ -111,7 +118,8 @@ int main(void)
 	head = insert_Linklist(head);
 	showme(head);
 
-//	free_Linklist(head);
+	free_Linklist(head);
+	showme(head);
 	
 	return 0;
 }
