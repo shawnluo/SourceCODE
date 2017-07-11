@@ -107,6 +107,13 @@ STU *del_Linklist(STU *head, int id)
 //		p2->next = p1->next;
 		
 	}
+	http://blog.csdn.net/iwm_next/article/details/7450734
+	http://www.cnblogs.com/lifuqing/archive/2011/08/20/List.html
+	http://blog.csdn.net/daniel_ustc/article/details/17094285
+	http://hczhcz.github.io/2015/11/19/double-pointers-in-linked-list-modification.html
+	http://blog.csdn.net/jasonchen_gbd/article/details/45276629
+	https://www.youtube.com/watch?v=LW8Rfh6TzGg
+	
 
 
 	
