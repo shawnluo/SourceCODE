@@ -72,6 +72,54 @@ STU *insert_Linklist(STU *head)
 	return head;
 }
 
+STU *del_Linklist(STU *head, int id)
+{
+	STU *p1 = head;
+
+	while(p1->next->id != id)
+	{
+		p1 = p1->next;
+	}
+//	printf("%d\n", p1->next->id);
+	
+	p1->next = p1->next->next;
+
+	while(p1 != NULL)
+	{
+		if(p1->id == id)
+		{
+			if(p1 == head)
+			{
+				head = p1->next;
+			}
+			else
+			{
+				
+			}
+		}
+	}
+	
+	return head;
+}
+
+STU **del_Linklist_ext(STU **head, int id)
+{
+	STU **p1 = head;
+
+	while(((*p1)->id != id) && (*p1 != NULL))
+	{
+		//printf("--------%d--------\n", (*p1)->id);
+		*p1 = (*p1)->next;
+	}
+
+	//if(*p1 != NULL)
+	{
+		p1 = &((*p1)->next);
+	}
+
+	return head;
+}
+
 void free_Linklist(STU *head)
 {
 	STU *p1 = head, *p2;
@@ -117,7 +165,12 @@ int main(void)
 	head = insert_Linklist(head);
 	showme(head);
 
-	free_Linklist(head);
+//	free_Linklist(head);
+//	showme(head);
+
+	printf("\n");
+
+	head = del_Linklist(head, 6000);
 	showme(head);
 	
 	return 0;
