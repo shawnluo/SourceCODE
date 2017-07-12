@@ -32,7 +32,7 @@ STU *creat_Linklist()
 		p2->next = p1;
 		p2 = p1;
 	}
-	p1 = NULL;
+//	p1 = NULL;
 	
 	return head;
 }
@@ -89,9 +89,7 @@ STU *del_Linklist(STU *head, int id)
 	{
 		p2 = p1;
 		p1 = p1->next;		
-	}
-	
-	
+	}	
 	
 	if(p1 == head)
 	{
@@ -104,8 +102,9 @@ STU *del_Linklist(STU *head, int id)
 */	
 //		p1 = NULL;				//p1 changes value in local stack(del_Linklist), it will not effect the main stack!!!
 //		p1->id = 888;			//p1->id changes value in the main() stack by using (*p1).id !!
-		p2->next = p1->next;	//p2->next changes the value in the main() stack by using (*p2).next = (*p1).next !!!
-		
+//		p2->next = p1->next;	//p2->next changes the value in the main() stack by using (*p2).next = (*p1).next !!!
+		printf("\taddress: %p", p2);
+		printf("\taddress: %p\n", &(p2->next));
 	}
 /*	
 	http://blog.csdn.net/iwm_next/article/details/7450734
@@ -152,6 +151,8 @@ void free_Linklist(STU *head)
 void showme(STU *head)
 {
 	STU *p = head;
+	
+	printf("\thead address: %p\n", head);
 
 	if(p->id == NULL)
 	{
@@ -162,8 +163,8 @@ void showme(STU *head)
 	
 	while(p != NULL)
 	{
-		printf("\t%d", p->id);
-		printf("\t%p\n", p);
+		printf("\t%p", p);
+		printf("\t%d\n", p->id);
 		
 		p = p->next;
 	}
@@ -175,14 +176,14 @@ int main(void)
 	printf("\t%d", sizeof(int *));
 	printf("\t%d", sizeof(char *));
 	
-	printf("\t%d\n\n", LEN);				
+	printf("\t%d\n\n", (int)LEN);				
 
-	STU s1 = 
-		{16, "shawn"};
+//	STU s1 = 
+//		{16, "shawn"};
 
 //	printf("name: \t%s\n", s1.name);
 
-	STU *head, *p;
+	STU *head;//, *p;
 
 	head = creat_Linklist();
 //	showme(head);
