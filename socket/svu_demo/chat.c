@@ -19,9 +19,9 @@ void error(char *msg)
 
 typedef struct
 {
-	char *Ipad;
+	char *ipaddress;
 	int port;
-} *
+} *PARA;
 
 int main(int argc, char *argv[])
 {
@@ -29,7 +29,9 @@ int main(int argc, char *argv[])
     char               buffer[256];
     struct sockaddr_in serv_addr, cli_addr;
     int                n;
-
+	PARA para = (PARA)malloc(sizeof(PARA));
+	para->ipaddress = argv[1];
+	para->port = atoi(argv[2]);
 
 //    pthread_t tidServ;
     pthread_t tidClie;
