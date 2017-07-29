@@ -1,0 +1,41 @@
+Determining if the strchr exist failed with the following output:
+Change Dir: /home/wallace/workSPACE/gitHUB/SourceCODE/myCODES/tools/codebeauty_tool/uncrustify/build/CMakeFiles/CMakeTmp
+
+Run Build Command:/usr/bin/gmake "cmTryCompileExec1187942657/fast"
+/usr/bin/gmake -f CMakeFiles/cmTryCompileExec1187942657.dir/build.make CMakeFiles/cmTryCompileExec1187942657.dir/build
+gmake[1]: Entering directory `/home/wallace/workSPACE/gitHUB/SourceCODE/myCODES/tools/codebeauty_tool/uncrustify/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /home/wallace/workSPACE/gitHUB/SourceCODE/myCODES/tools/codebeauty_tool/uncrustify/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+Building CXX object CMakeFiles/cmTryCompileExec1187942657.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-qual -Wcast-align    -o CMakeFiles/cmTryCompileExec1187942657.dir/CheckSymbolExists.cxx.o -c /home/wallace/workSPACE/gitHUB/SourceCODE/myCODES/tools/codebeauty_tool/uncrustify/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+/home/wallace/workSPACE/gitHUB/SourceCODE/myCODES/tools/codebeauty_tool/uncrustify/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
+/home/wallace/workSPACE/gitHUB/SourceCODE/myCODES/tools/codebeauty_tool/uncrustify/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:17:25: error: address of overloaded function with no contextual type information
+   return ((int*)(&strchr))[argc];
+                         ^
+gmake[1]: *** [CMakeFiles/cmTryCompileExec1187942657.dir/CheckSymbolExists.cxx.o] Error 1
+gmake[1]: Leaving directory `/home/wallace/workSPACE/gitHUB/SourceCODE/myCODES/tools/codebeauty_tool/uncrustify/build/CMakeFiles/CMakeTmp'
+gmake: *** [cmTryCompileExec1187942657/fast] Error 2
+
+File /home/wallace/workSPACE/gitHUB/SourceCODE/myCODES/tools/codebeauty_tool/uncrustify/build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
+/* */
+#include <inttypes.h>
+#include <memory.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <strings.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <utime.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef strchr
+  return ((int*)(&strchr))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
