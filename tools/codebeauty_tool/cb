@@ -1,1 +1,1 @@
-cp $1 $1.bak && uncrustify -c /home/wallace/workSPACE/gitHUB/myCODES/tools/codebeauty_tool/uncrustify/obj-c_shawnluo.cfg -f $1.bak > $1
+cp $1 $1.bak && uncrustify -c /home/wallace/workSPACE/gitHUB/SourceCODE/myCODES/tools/codebeauty_tool/uncrustify/obj-c_shawnluo.cfg -f $1.bak > $1

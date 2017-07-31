@@ -1,5 +1,0 @@
-cp cb /usr/bin/;
-chmod 777 uncrustify/build/uncrustify;
-cp uncrustify/build/uncrustify /usr/bin;
-
-example: cb test.c
