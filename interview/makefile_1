@@ -1,0 +1,8 @@
+1_typedef: 1_typedef.c
+	gcc 1_typedef.c -o 1_typedef
+	./1_typedef
+
+.PHONY: clean
+
+clean:
+	rm 1_typedef
