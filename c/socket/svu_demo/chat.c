@@ -1,8 +1,15 @@
 /* A simple server in the internet domain using TCP
  * The port number is passed as an argument */
 
-//	./chat 8888
+/*	
+	./chat 8888
 
+	1. the app sets itself to be a client;
+	2. get ip addresses by scanning local ARP cache;
+	3. trying to connect the devices as a client;
+	4. if it fails in 3 seconds, then converts itself to be a server;
+	5. 
+*/
 
 #include <stdio.h>
 #include <sys/types.h>
@@ -24,6 +31,12 @@ typedef struct arp_device
 	char ipAddress[255][1024];
 	int count;
 }*ARP_Device;
+
+typedef struct DEV
+{
+	char *Dev_ipaddress;
+	
+}
 
 #define ARP_Len sizeof(struct arp_device)
 
