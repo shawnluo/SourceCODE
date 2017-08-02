@@ -1,5 +1,9 @@
 /* A simple server in the internet domain using TCP
  * The port number is passed as an argument */
+
+//	./chat 8888
+
+
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -15,13 +19,13 @@ void error(char *msg)
     exit(1);
 }
 
-typedef struct
+typedef struct arp_device
 {
-	char *ipaddress;
-	int port;
-} *PARA;
+	char ipAddress[255][1024];
+	int count;
+}*ARP_Device;
 
-
+#define ARP_Len sizeof(struct arp_device)
 
 #define xstr(s)    str(s)
 #define str(s)     #s
@@ -39,7 +43,8 @@ typedef struct
 /********************************************
  *
  ********************************************/
-char *getLocalDevice()
+ 
+ARP_Device getLocalDevice(ARP_Device deviceInfo)
 {
     FILE *arpCache = fopen(ARP_CACHE, "r");
 
@@ -62,14 +67,20 @@ char *getLocalDevice()
     {
         printf("%03d: Mac Address of [%s] on [%s] is \"%s\"\n",
                ++count, ipAddr, device, hwAddr);
+		strcpy(deviceInfo->ipAddress[count], ipAddr);
+		deviceInfo->count++;
     }
+		
     fclose(arpCache);
-    //return 0;
-
-	return ipAddr;
+	
+    return deviceInfo;
 }
 
 
+typedef struct localDevice
+{
+	ipAddr
+}
 
 
 void *client(void *arg)
@@ -80,13 +91,14 @@ void *client(void *arg)
     struct hostent     *server;
 
     char               buffer[256];
+	struct localDevice
 
-    if (argc < 3)
+    if (argc < 2)
     {
         fprintf(stderr, "usage %s hostname port\n", argv[0]);
         exit(0);
     }
-    portno = (int)arg;//atoi(argv[2]);
+    portno = atoi(arg[1]);
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0)
     {
@@ -94,7 +106,9 @@ void *client(void *arg)
     }
     setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(1));
 
-    server = gethostbyname(argv[1]);
+
+    //server = gethostbyname(argv[1]);
+    server = 
     if (server == NULL)
     {
         fprintf(stderr, "ERROR, no such host\n");
@@ -139,33 +153,37 @@ int main(int argc, char *argv[])
     int                sockfd, newsockfd, portno, clilen, option = 1;
     char               buffer[256];
     struct sockaddr_in serv_addr, cli_addr;
-    int                n;
+    int                n, i;
 	PARA para = (PARA)malloc(sizeof(PARA));
 	para->ipaddress = argv[1];
 	para->port = atoi(argv[2]);
+    pthread_t tidClie[255];
 
-//    pthread_t tidServ;
-    pthread_t tidClie;
+	ARP_Device arpDevice = (ARP_Device)malloc(ARP_Len);
 
-//    pthread_create(&tidServ, NULL, server, NULL);
-    pthread_create(&tidClie, NULL, client, (void *)argv[0]);
+	getLocalDevice(arpDevice);
 
-//    pthread_join(tidServ, NULL);
-
-	sleep(3);
-
-	if(clientMode == 1)
+	if(arpDevice->count > 0)
 	{
-		while(1)
+		for(i = 0; i < arpDevice->count; i++)
 		{
-			sleep(1);
+    		pthread_create(&tidClie[i], NULL, client, (void *)arpDevice->ipAddress[i]);
+		}
+		sleep(3);
+
+		if(clientMode == 1)
+		{
+			while(1)
+			{
+				sleep(1);
+			}
+		}
+		else
+		{
+			pthread_cancel(&tidClie);
 		}
 	}
-	else
-	{
-		pthread_cancel(&tidClie);
-	}
-	
+
     if (argc < 2)
     {
         fprintf(stderr, "ERROR, no port provided\n");
@@ -213,9 +231,13 @@ int main(int argc, char *argv[])
     }
     close(sockfd);
 
-
-    pthread_join(tidClie, NULL);
-	
+	if(arpDevice->count > 0)
+	{
+		for(i = 0; i < arpDevice->count; i++)
+		{
+	    	pthread_join(tidClie[i], NULL);
+		}
+	}		
     return 0;
 }
 
