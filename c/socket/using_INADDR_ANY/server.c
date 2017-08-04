@@ -29,6 +29,11 @@ int main(int argc, char *argv[])
     memset(&serv_addr, '0', sizeof(serv_addr));
     memset(sendBuff, '0', sizeof(sendBuff));
 
+	/*
+		INADDR_ANY is used when you don't need to bind a socket to a specific IP. 
+		When you use this value as the address when calling bind(), 
+		the socket accepts connections to all the IPs of the machine.
+	*/
     serv_addr.sin_family      = AF_INET;
     serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     serv_addr.sin_port        = htons(5000);

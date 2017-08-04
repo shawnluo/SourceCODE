@@ -32,11 +32,11 @@ typedef struct arp_device
 	int count;
 }*ARP_Device;
 
-typedef struct DEV
+typedef struct dev
 {
 	char *Dev_ipaddress;
-	
-}
+	int port;
+}*DEV;
 
 #define ARP_Len sizeof(struct arp_device)
 
@@ -80,6 +80,8 @@ ARP_Device getLocalDevice(ARP_Device deviceInfo)
     {
         printf("%03d: Mac Address of [%s] on [%s] is \"%s\"\n",
                ++count, ipAddr, device, hwAddr);
+		
+		memset(deviceInfo->ipAddress[count], '0', 1024);
 		strcpy(deviceInfo->ipAddress[count], ipAddr);
 		deviceInfo->count++;
     }
@@ -87,12 +89,6 @@ ARP_Device getLocalDevice(ARP_Device deviceInfo)
     fclose(arpCache);
 	
     return deviceInfo;
-}
-
-
-typedef struct localDevice
-{
-	ipAddr
 }
 
 
@@ -104,13 +100,7 @@ void *client(void *arg)
     struct hostent     *server;
 
     char               buffer[256];
-	struct localDevice
-
-    if (argc < 2)
-    {
-        fprintf(stderr, "usage %s hostname port\n", argv[0]);
-        exit(0);
-    }
+	strcpy(serv_addr, (DEV)arg->Dev_ipaddress);
     portno = atoi(arg[1]);
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0)
@@ -137,6 +127,9 @@ void *client(void *arg)
     {
         error("ERROR connecting");
     }
+
+	clientMode = 1;
+	
     printf("Please enter the message: ");
     while (1)
     {
@@ -160,6 +153,104 @@ void *client(void *arg)
 }
 
 
+void *client_ext(void *arg)
+{
+    struct addrinfo hints;
+    struct addrinfo *result, *rp;
+    int             sfd, s, j;
+    size_t          len;
+    ssize_t         nread;
+    char            buf[BUF_SIZE];
+
+	DEV myinfo = (DEV)arg;
+#if 0
+    if (argc < 3)
+    {
+        fprintf(stderr, "Usage: %s host port msg...\n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
+#endif
+    /* Obtain address(es) matching host/port */
+
+    memset(&hints, 0, sizeof(struct addrinfo));
+    hints.ai_family   = AF_UNSPEC;  /* Allow IPv4 or IPv6 */
+    hints.ai_socktype = SOCK_DGRAM; /* Datagram socket */
+    hints.ai_flags    = 0;
+    hints.ai_protocol = 0;          /* Any protocol */
+
+    s = getaddrinfo(myinfo->Dev_ipaddress, myinfo->port, &hints, &result);
+    if (s != 0)
+    {
+        fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(s));
+        exit(EXIT_FAILURE);
+    }
+
+    /* getaddrinfo() returns a list of address structures.
+     *  Try each address until we successfully connect(2).
+     *  If socket(2) (or connect(2)) fails, we (close the socket
+     *  and) try the next address. */
+
+    for (rp = result; rp != NULL; rp = rp->ai_next)
+    {
+        sfd = socket(rp->ai_family, rp->ai_socktype,
+                     rp->ai_protocol);
+        if (sfd == -1)
+        {
+            continue;
+        }
+
+        if (connect(sfd, rp->ai_addr, rp->ai_addrlen) != -1)
+        {			
+			clientMode = 1;
+            break;                  /* Success */
+        }
+        close(sfd);
+    }
+
+    if (rp == NULL)                /* No address succeeded */
+    {
+        fprintf(stderr, "Could not connect\n");
+        exit(EXIT_FAILURE);
+    }
+
+    freeaddrinfo(result);          /* No longer needed */
+
+    /* Send remaining command-line arguments as separate
+     *  datagrams, and read responses from server */
+
+    for (j = 3; j < argc; j++)
+    {
+        len = strlen(argv[j]) + 1;
+        /* +1 for terminating null byte */
+
+        if (len + 1 > BUF_SIZE)
+        {
+            fprintf(stderr,
+                    "Ignoring long message in argument %d\n", j);
+            continue;
+        }
+
+        if (write(sfd, argv[j], len) != len)
+        {
+            fprintf(stderr, "partial/failed write\n");
+            exit(EXIT_FAILURE);
+        }
+
+        nread = read(sfd, buf, BUF_SIZE);
+        if (nread == -1)
+        {
+            perror("read");
+            exit(EXIT_FAILURE);
+        }
+
+        printf("Received %ld bytes: %s\n", (long)nread, buf);
+    }
+
+    exit(EXIT_SUCCESS);
+}
+
+
+
 
 int main(int argc, char *argv[])
 {
@@ -167,6 +258,7 @@ int main(int argc, char *argv[])
     char               buffer[256];
     struct sockaddr_in serv_addr, cli_addr;
     int                n, i;
+	DEV thread_para;
 	PARA para = (PARA)malloc(sizeof(PARA));
 	para->ipaddress = argv[1];
 	para->port = atoi(argv[2]);
@@ -176,11 +268,15 @@ int main(int argc, char *argv[])
 
 	getLocalDevice(arpDevice);
 
+	thread_para->port = atoi(argv[1]);
+	
 	if(arpDevice->count > 0)
 	{
+		
 		for(i = 0; i < arpDevice->count; i++)
 		{
-    		pthread_create(&tidClie[i], NULL, client, (void *)arpDevice->ipAddress[i]);
+			strcpy(thread_para->Dev_ipaddress, arpDevice->ipAddress[i]);
+    		pthread_create(&tidClie[i], NULL, client_ext, (void *)thread_para);
 		}
 		sleep(3);
 

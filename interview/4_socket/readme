@@ -1,0 +1,8 @@
+
+
+server.c and client.c
+	using getaddrinfo() function to implement socket program. This is the best way, don't use gethostbyname()!
+
+
+ai_next.c 
+	it explains why we use for loop to show ai_next.
