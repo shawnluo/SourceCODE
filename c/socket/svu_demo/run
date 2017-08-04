@@ -1,0 +1,2 @@
+clear;
+make clean; make && ./chat_ext 192.168.0.106 7777
