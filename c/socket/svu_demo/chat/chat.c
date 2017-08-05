@@ -46,7 +46,7 @@ void *Run_clientMode(void *arg)
     if (connect(clientSocket, (struct sockaddr *)&serverAddr, addr_size) == 0)
     {
         clientMode = 1;
-        printf("Running n client mode\n");
+        printf("Running in client mode\n");
     }
     else
     {
