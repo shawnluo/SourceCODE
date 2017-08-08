@@ -1,0 +1,1 @@
+export LD_LIBRARY_PATH=/home/wallace/workSPACE/gitHUB/SourceCODE/c/textcolor:$LD_LIBRARY_PATH
