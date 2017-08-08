@@ -118,23 +118,53 @@ STU *del_Linklist(STU *head, int id)
 	return head;
 }
 
-STU **del_Linklist_ext(STU **head, int id)
+#if 0
+void del_Linklist_ext(STU **head, int id)
 {
+	printf("[in function]*head = %p\n", *head);	
 	STU **p1 = head;
 
 	while(((*p1)->id != id) && (*p1 != NULL))
 	{
-		//printf("--------%d--------\n", (*p1)->id);
-		*p1 = (*p1)->next;
+		*p1 = (*p1)->next;		//this code will change *head value!!!
 	}
+	printf("[in function]*p1 = %p\n", *p1);
+	printf("[in function]*head = %p\n", *head);
 
-	//if(*p1 != NULL)
-	{
-		p1 = &((*p1)->next);
-	}
+	p1 = &((*p1)->next);
+	(*p1)->next = NULL;
+	printf("[in function]*head = %p\n", *head);
 
-	return head;
+	printf("----------*head = %p\n", *head);
+
+//	return head;
 }
+
+#else
+void del_Linklist_ext(STU **head, int id)
+{
+	printf("[in function]*head = %p\n", *head);
+
+	STU **p1 = head;
+	STU *tmp = NULL;
+
+	while(((*p1)->id != id) && (*p1 != NULL))
+	{
+		p1 = &(*p1)->next;		//if this line code is not excuted. That means *head will be changed!
+	}
+
+	tmp = *p1;
+	*p1 = (*p1)->next;		//WHY? WHy is *p1 changed, but it will nt change *head?
+							//answer: because p1 changed! -- "p1 = &(*p1)->next"
+
+	printf("[in function]*p1 = %p\n", *p1);	
+	printf("[in function]*head = %p\n", *head);
+	
+	tmp->next = NULL;
+
+	printf("[in function]*head = %p\n", *head);
+}
+#endif
 
 void free_Linklist(STU *head)
 {
@@ -152,9 +182,9 @@ void showme(STU *head)
 {
 	STU *p = head;
 	
-	printf("\thead address: %p\n", head);
+//	printf("\thead address: %p\n", head);
 
-	if(p->id == NULL)
+	if(!p->id)
 	{
 		printf("empty list!\n");
 
@@ -163,21 +193,22 @@ void showme(STU *head)
 	
 	while(p != NULL)
 	{
-		printf("\t%p", p);
-		printf("\t%d\n", p->id);
+//		printf("%p\t", p);
+		printf("%d\n", p->id);
 		
 		p = p->next;
 	}
+	printf("\n");
 }
 
 int main(void)
 {
-	printf("\t%d", sizeof(int));
+/*	printf("\t%d", sizeof(int));
 	printf("\t%d", sizeof(int *));
 	printf("\t%d", sizeof(char *));
 	
 	printf("\t%d\n\n", (int)LEN);				
-
+*/
 //	STU s1 = 
 //		{16, "shawn"};
 
@@ -186,7 +217,7 @@ int main(void)
 	STU *head;//, *p;
 
 	head = creat_Linklist();
-//	showme(head);
+	showme(head);
 
 	head = insert_Linklist(head);
 	showme(head);
@@ -194,9 +225,9 @@ int main(void)
 //	free_Linklist(head);
 //	showme(head);
 
-	printf("\n");
-
-	head = del_Linklist(head, 6000);
+	printf("head = %p\n", head);
+	del_Linklist_ext(&head, 6000);
+	printf("head = %p\n", head);	
 	showme(head);
 	
 	return 0;
