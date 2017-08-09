@@ -1,9 +1,10 @@
-linklist: linklist.c
-	gcc linklist.c -o linklist -Wall -g
+FLAGS = -std=c99 -Wall -O -L/home/wallace/workSPACE/gitHUB/SourceCODE/tools/textColor -I/home/wallace/workSPACE/gitHUB/SourceCODE/tools/textColor/include
 
 
-clean:
-	rm linklist
+linklist_ext: linklist_ext.c
+	gcc linklist_ext.c -o linklist_ext -lcolor  $(FLAGS)
 
 .PHONY: clean
 
+clean:
+	rm linklist_ext

@@ -1,1 +1,4 @@
-clear; make clean; make && ./linklist
+#!/usr/bin/env bash
+
+clear;
+make clean; make && ./linklist_ext
