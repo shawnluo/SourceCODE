@@ -16,30 +16,28 @@
 #define Column    7
 
 
+void fun(int k, int *p)
+{
+    int a, b;
+
+    if (k == 1 || k == 2)
+    {
+        *p = 1;
+    }
+    else
+    {
+        fun(k - 1, &a);
+        fun(k - 2, &b);
+        *p = a + b;
+    }
+}
 
 int main(void)
 {
-	char *data[Row] = {"gooday", "showme", "fine!", "whoare", "getup!"};
-#if 0
-	char (*pt)[Column] = (char (*)[Column])malloc(sizeof(char) * Column * Row);
+    int x;
 
-	for(int i = 0; i < Row; i++)
-	{
-		strcpy(*(pt + i), data[i]);
-		printf("%s\n", *(pt + i));
-	}
-
-	free(pt);
-#endif
-
-	char (*pt)[Column] = (char (*)[Column])data[0];//&data[0];
-
-	for(int i = 0; i < Row; i++, pt++)
-	{
-		pt = (char (*)[Column])data[i];
-
-		printf("%s\n", *pt);
-	}	
-
-	return 0;
+    fun(6, &x);
+    printf(" %d\n ", x);
+    return 0;
 }
+
