@@ -20,9 +20,8 @@
 int main(void)
 {
 	char *data[Row] = {"gooday", "showme", "fine!", "whoare", "getup!"};
-
-	char (*pt)[Column];
-	pt = (char (*)[Column])malloc(sizeof(char) * Column * Row);	// = data;
+#if 0
+	char (*pt)[Column] = (char (*)[Column])malloc(sizeof(char) * Column * Row);
 
 	for(int i = 0; i < Row; i++)
 	{
@@ -31,7 +30,16 @@ int main(void)
 	}
 
 	free(pt);
+#endif
+
+	char (*pt)[Column] = (char (*)[Column])data[0];//&data[0];
+
+	for(int i = 0; i < Row; i++, pt++)
+	{
+		pt = (char (*)[Column])data[i];
+
+		printf("%s\n", *pt);
+	}	
 
 	return 0;
 }
-

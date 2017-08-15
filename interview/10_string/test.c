@@ -279,20 +279,9 @@ int main()
 
 int main(void)
 {
-#if 0
-    char str[] = "MengLiang";
-    //???????????'\0'
-    char *New_str = (char *)malloc(strlen(str));
-
-    strcpy(New_str, str);
-
-    printf("The New_str = %s\n", New_str);
-    free(New_str);
-    New_str = NULL;
-#endif
-
 //============usage of char *str[]=================================
-    char *name[5] = { "1234", "5678", "Shaw", "Alex", "Joe" };
+	char name[5][]
+	char *name[5] = { "1234", "5678", "Shaw", "Alex", "Joe" };
     printf("%s\n", name[1]);
 
 //============usage of char (*str)[]=================================
@@ -325,115 +314,3 @@ int main(void)
     return 0;
 }
 
-#if 0
-#ifndef _MSG__H__
-#define _MSG__H__
-#include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/msg.h>
-
-#define BODY_LEN    1024
-
-typedef struct _testmsg
-{
-    long type;
-    char msgbody[1];
-} testmsg, *ptestmsg;
-
-#define MSG_TYPE    0xFF
-#define MSGS_LEN    (sizeof(long) + sizeof(char) * BODY_LEN)
-
-// 一般使用ftok函数获取key_t，这里简单起见，直接定义一个键值。
-#define MSG_KEY     (key_t)0x320310F2
-
-int open_queue()
-{
-// 获取queue的ID，如果不存在则创建queue。
-    return msgget(MSG_KEY, IPC_CREAT);
-}
-
-#endif
-#include <unistd.h>
-#include <stdio.h>
-#include <errno.h>
-#include "msg.h"
-
-void do_statistic(void);
-unsigned char rcvbuf[MSGS_LEN] = { 0 };
-
-int main(int argc, char **argv)
-{
-    int msqid = open_queue();
-
-    if (msqid == -1)
-    {
-        printf("error when opened the queue!\n");
-        return -1;
-    }
-
-    while (1)
-    {
-        int ret = msgrcv(msqid, rcvbuf, MSGS_LEN, MSG_TYPE, IPC_NOWAIT);
-        do_statistic();
-        if (ENOMSG == errno || EAGAIN == errno)
-        {
-            usleep(12000);
-            continue;
-        }
-
-        if (ret == -1)
-        {
-            printf("msgrcv failed!\n");
-        }
-
-        usleep(12030);
-    }
-
-    return 0;
-}
-
-void do_statistic(void)
-{
-    static int msgcount = 0;
-
-    msgcount++;
-    printf("do recived msg %d times.\n", msgcount);
-}
-#include <unistd.h>
-#include <stdio.h>
-#include <string.h>
-#include "msg.h"
-
-unsigned char send_msg[MSGS_LEN] = { 0 };
-unsigned char *some_array[1024] = { 0 };
-
-int main(int argc, char **argv)
-{
-    int msqid = open_queue();
-
-    if (msqid == -1)
-    {
-        printf("error when opened the queue!\n");
-        return -1;
-    }
-
-    int i = 0;
-    while (1)
-    {
-        ptestmsg p = (ptestmsg)send_msg;
-        p->type = MSG_TYPE;
-        memset(p->msgbody, 0, BODY_LEN);
-        int ret = msgsnd(msqid, send_msg, MSGS_LEN, 0);
-
-        if (-1 == ret)
-        {
-            printf("error when sent the msg\n");
-            return -1;
-        }
-        printf("sent %d msges.\n", ++i);
-        usleep(500000);
-    }
-
-    return 0;
-}
-#endif

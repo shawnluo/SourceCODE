@@ -25,6 +25,7 @@ int main(void)
 
 
 /*============usage of char *str[N]=================================
+ *			char str[N][]	
  *	1. str is a array, has N elements, every element is a pointer!
  *	2. m is the second dimension of this 2 dimensions array!
  *	3. free every name[i]
@@ -61,15 +62,18 @@ int main(void)
     //============END=================================
 
 
+
+
 /*************usage of char (*str)[N]********************************
-*
+*		char str[][N]
 *	1. str is a pointer, points to the row of a 2 dimensions array, this row has N elements!
 *	2. N is the first dimension of this 2 dimensions array!
 *	3. p is the first address of this 2 dimensions array--str[][N]
 *
 ********************************************************************/
+
+#ifdef way1
 	char (*name2)[Column] = NULL;
-#if 1
 	name2 = (char (*)[Column])malloc(sizeof(char) * Row * Column);
 	printf("1 --- %p\n", name2);
 
@@ -80,29 +84,28 @@ int main(void)
 	for(int i = 0; i < Row; i++)
 	{
 		strcpy(*(name2 + i), data[i]);
+		printf("%s\n", *(name2 + i));
 	}
 
-	printf("%s\n", *(name2 + 2));
-
-//	printf("2 --- %p\n", name2);
-
-//    printf("%s\n", *name2);
-//    printf("%s\n", *(name2 + 1));
     for (int i = 0; i < Column; i++)
     {
         printf("%c\t", *(*name2 + i));
         printf("%c\n", *(*(name2 + 1) + i));
     }
-//	printf("3 --- %p\n", name2);
 
-#else
-	for(int i = 0; i < Row; i++)
+#ifdef way2
+	/***********************
+		DO NOT malloc! Assign data  to pointer pt.
+
+	 ***********************/
+	char (*pt)[Column] = (char (*)[Column])data[0];
+
+	for(int i = 0; i < Row; i++, pt++)
 	{
-//		*(name2 + i) = (char (*)[Column])malloc(sizeof(char) * Column);
-
-//        my_trace(BLINK, GREEN, BLACK, "%s\t", name2[i]);
+		pt = (char (*)[Column]data[i]);
+		printf("");
 	}
-#endif	
+#endif
     //============END=================================
 
     return 0;
