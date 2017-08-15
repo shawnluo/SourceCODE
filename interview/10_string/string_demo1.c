@@ -92,6 +92,7 @@ int main(void)
         printf("%c\t", *(*name2 + i));
         printf("%c\n", *(*(name2 + 1) + i));
     }
+#endif
 
 #ifdef way2
 	/***********************
