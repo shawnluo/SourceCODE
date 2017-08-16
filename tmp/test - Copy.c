@@ -18,7 +18,6 @@ void print_trace()
     my_trace(BRIGHT, GREEN, BLACK, "good\n");
 }
 
-#if 0
 /***************************************************************************************
  *	write a general purpose function, calculate (0, 1)sinxdx, (-1, 1)cosxdx, (0, 2)exdx.
  ****************************************************************************************/
@@ -83,7 +82,7 @@ int main(void)
 
     return 0;
 }
-#endif
+
 
 typedef (*fun)(float);
 
@@ -93,16 +92,20 @@ void myFun(float i)
 	printf("%f\n", i);
 }
 
+float intergral(float (*fun)(float), )
+{
+
+}
 
 int main(void)
 {
-//	float ret;
+	float ret;
 
 	fun Fun = myFun;
 
 	Fun(10.9809);
 
-//	ret = integral(fun);
+	ret = integral(fun);
 
 	return 0;
 }

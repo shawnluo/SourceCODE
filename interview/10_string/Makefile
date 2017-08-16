@@ -1,6 +1,6 @@
 
 #CFLAGS	= -g -O3 `pkg-config opencv --cflags`  
-CFLAGS	= -std=c99 -g -Wall -O -L/home/wallace/workSPACE/gitHUB/SourceCODE/tools/textColor -I/home/wallace/workSPACE/gitHUB/SourceCODE/tools/textColor/include
+CFLAGS	= -std=c99 -g -Wall -O -L/home/wallace/workSPACE/gitHUB/SourceCODE/tools/textColor -I/home/wallace/workSPACE/gitHUB/SourceCODE/tools/textColor/include -lpthread -lcolor
 
 #LIBS	= `pkg-config opencv --libs`  
 LIBS 	= -lpthread -lcolor 

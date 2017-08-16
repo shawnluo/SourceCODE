@@ -2,7 +2,7 @@ FLAGS = -std=c99 -g -Wall -O -L/home/wallace/workSPACE/gitHUB/SourceCODE/tools/t
 
 
 test: test.c
-	@gcc test.c -o test -lcolor  $(FLAGS)
+	@gcc test.c -o test -lcolor -lm  $(FLAGS)
 
 .PHONY: clean
 

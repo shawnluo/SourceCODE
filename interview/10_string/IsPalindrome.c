@@ -18,9 +18,11 @@ void print_trace()
 }
 
 #define way1
-char *IsPalindrome(char const *str, char *Flag)
+char *IsPalindrome(char const *str)
 {
-    assert(str && Flag);
+	char *Flag_Yes = "yes!";
+	char *Flag_No = "NO";
+    assert(str);
 
     int Len = strlen(str), j = Len - 1, i = 0;
     int Cent = (Len + 1) / 2;
@@ -32,11 +34,9 @@ char *IsPalindrome(char const *str, char *Flag)
 
         if (*(str + i++) != *(str + j--))
         {
-            strcpy(Flag, "no!");
-            return Flag;
+            return Flag_No;
         }
     }
-    strcpy(Flag, "yes!");
 #endif
 
 #ifdef way2
@@ -46,23 +46,21 @@ char *IsPalindrome(char const *str, char *Flag)
 
         if (str[i++] != str[j--])
         {
-            strcpy(Flag, "no!");
-            return Flag;
+            return Flag_No;
         }
     }
-
-    strcpy(Flag, "yes!");
 #endif
 
-    return Flag;
+    return Flag_Yes;
 }
 
 int main(void)
 {
-    char *str = "shdwdhs";    //"show me the money!";
-    char *Flag = (char *)malloc(10);
+    char const *str = "shdwdhs";    //"show me the money!";
 
-    printf("%s\n", IsPalindrome(str, Flag));
+	char *p = IsPalindrome(str);
+
+    printf("%s\n", p);
 
     return 0;
 }
