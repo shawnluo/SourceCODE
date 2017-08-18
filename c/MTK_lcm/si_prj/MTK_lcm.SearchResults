@@ -1,0 +1,2 @@
+---- MainLCD Matches (1 in 1 files) ----
+Lcd.c:   MainLCD = &LCD_func_HX8306A;
