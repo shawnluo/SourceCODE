@@ -10,7 +10,7 @@
 #include "math.h"
 
 #include <stdbool.h>
-#include "color.h"
+//#include "color.h"
 
 
 /*************************
@@ -25,43 +25,269 @@
 *************************/
 //#define d_01	//show the usage of strcpy and strncpy
 //#define d_02	//find and return the substring
-
+//#define d_03	//bit operations
+//#define d_04	//find the addtional charater
 
 
 #define test
+//#define test_2
+
 
 void print_trace()
 {
-    my_trace(BRIGHT, GREEN, BLACK, "good\n");
+//    my_trace(BRIGHT, GREEN, BLACK, "good\n");
 }
 
 
 #ifdef test
+
+char *testi(char *str)
+{
+//	printf("%d\n", strlen(str));
+	static char k[20] = "showme";
+	strcpy(k, "haha");
+	return k;
+}
+
 int main(void)
 {
-	const char *str = "htt p://dd. ae";
-	const char *sub = "d. ae";
-	char *ret;
+//	char str[50] = "gooday!";
+	char *str = "goodayr";
 
-	ret = my_strstr(str, sub);
+/*	memmove(str + 3, str + 4, 50);
 
-	printf("%s\n", ret);
+	for(int i = 0; i < strlen(str); i++)
+	{
+		printf("%c", str[i]);
+	}
+*/
+	char *x = testi(str);
+	printf("%s\n", x);
 
-	
 	return 0;
 }
+
+#elif defined d_04
+
+char findit(char *str1, char *str2)
+{
+	char *p1 = str1;
+	char *p2 = str2;
+	char tmp[100];// = NULL;
+	char x;
+	int i;
+	
+	memset(tmp, 0, 100);
+	strcpy(tmp, p2);
+
+	for(; *p1 != '\0'; p1++)
+	{		
+		for(i = 0; i < strlen(tmp); i++)
+		{
+			if(*p1 == tmp[i])
+			{
+				memmove(tmp + i, tmp + i + 1, 100);
+//				printf("after: tmp = %s\n\n", tmp);
+
+				break;
+			}
+/*			else
+			{
+				x = tmp[i];
+			}*/
+		}
+	}
+	
+//	printf("end: %c\n", tmp[i]);
+	return tmp[0];
+}
+
+int main(void)
+{
+	char *str1 = (char *)malloc(20);
+	strcpy(str1, "abcdea");
+	
+	char *str2 = (char *)malloc(20);
+	strcpy(str2, "ackdbae");
+
+	char x = findit(str1, str2);
+	printf("x = %c\n", x);
+		
+	return 0;
+}
+
+#elif defined test3
+
+typedef struct stu
+{
+    int        id;
+    char       *name;
+    struct stu *next;
+}STU;
+
+#define LEN    sizeof(STU)
+
+STU *creat_Linklist(int *data, int len)
+{
+    STU *head = NULL;
+    STU *p    = NULL;
+
+    while (len--)
+    {
+        p = (STU *)malloc(LEN);
+//		assert(p);
+        if (!p)
+        {
+            perror("malloc failed!");
+        }
+        p->id   = *(data + len);
+        p->next = head;
+        head    = p;
+    }
+
+    return head;
+}
+
+void del_Linklist(STU **head, int id)
+{
+    STU **p = head;
+
+    while ((*p != NULL) && ((*p)->id != id))
+    {
+        p = &((*p)->next);
+    }
+//	printf("cannot find it\n");
+
+    if (*p == NULL)
+    {
+        printf("Cannot find it!\n");
+        return;
+    }
+
+    STU *tmp = *p;
+    *p = (*p)->next;
+    free(tmp);
+    tmp = NULL;
+}
+
+void ins_Linklist_Front(STU **head, int id, int new_id)
+{
+    STU **p = head;
+
+    while ((*p != NULL) && ((*p)->id != id))
+    {
+        p = &(*p)->next;
+    }
+
+    if (*p == NULL)
+    {
+        printf("Cannot find it!\n");
+        return;
+    }
+
+    STU *tmp = *p;
+    *p         = (STU *)malloc(LEN);
+    (*p)->id   = new_id;
+    (*p)->next = tmp;
+}
+
+void ins_Linklist_Behind(STU **head, int id, int new_id)
+{
+    STU **p = head;
+
+    while (((*p) != NULL) && ((*p)->id != id))
+    {
+        p = &((*p)->next);
+    }
+
+    if ((*p) == NULL)
+    {
+        printf("Cannot find it!\n");
+        return;
+    }
+
+    STU *tmp = (STU *)malloc(LEN);
+    tmp->id    = new_id;
+    tmp->next  = (*p)->next;
+    (*p)->next = tmp;
+}
+
+void showme(STU *head)
+{
+    while (head)
+    {
+        printf("id = %d\t", head->id);
+        head = head->next;
+    }
+    printf("\n");
+}
+
+int main()
+{
+    int data[] = { 510, 111, 123, 234, 98 };
+    int len    = (int)(sizeof(data) / sizeof(data[0]));
+    STU *head  = NULL;
+
+    head = creat_Linklist(data, len);
+    showme(head);
+    printf("\n");
+
+    del_Linklist(&head, 2314);
+    del_Linklist(&head, 111);
+    showme(head);
+
+    ins_Linklist_Front(&head, 510, 999);
+    showme(head);
+
+    ins_Linklist_Behind(&head, 510, 1999);
+    showme(head);
+
+    return(0);
+}
+
+
+#elif defined test_2
+#include <stdio.h>
+
+void print_buf(char *buf, size_t len)
+{
+    int k;
+
+    printf("%02X", buf[0]);
+    for (k = 1; k < len; k++)
+    {
+        printf(" %02X", buf[k]);
+    }
+}
+
+int main(void)
+{
+    char buf[3] = { 1, 1, 1 };
+    char *r;
+
+    printf("Enter CTRL+D: ");
+    fflush(stdout);
+    r = fgets(buf, sizeof buf, stdin);
+    printf("\nfgets returned %p, buf has [", (void *)r);
+    print_buf(buf, sizeof buf);
+    printf("]\n");
+
+    return 0;
+}
+
+
 
 #elif defined d_03
 
 int main(void)
 {
-	number |= 1 << x;			//set bit x
-	number &= ~(1 << x);		//clear bit x
-	number ^= 1 << x;			//toggling bit x   (XOR)
-	bit = (number >> x) & 1;	//checking a bit -- this will put the value of bit x into the variable bit.
-	number ^= (-x ^ number) & (1 << n);		//bit n will be set if x is 1, and cleared if x is 0.
-	
-	return 0;
+    number |= 1 << x;                   //set bit x
+    number &= ~(1 << x);                //clear bit x
+    number ^= 1 << x;                   //toggling bit x   (XOR)
+    bit     = (number >> x) & 1;        //checking a bit -- this will put the value of bit x into the variable bit.
+    number ^= (-x ^ number) & (1 << n); //bit n will be set if x is 1, and cleared if x is 0.
+
+    return 0;
 }
 
 #elif defined d_02
@@ -142,7 +368,7 @@ char *strstr_6(char *str, char *substr)
 
         str = Begin + 1;                // Increament main string
     }
-	
+
     char *ret = "(null)";
     return ret;
 }
@@ -190,10 +416,10 @@ char *my_strstr2(const char *haystack, const char *needle)
     {
         p_h = haystack;
 
-        for (p_n = needle ; *p_n != '\0'; p_n++)
+        for (p_n = needle; *p_n != '\0'; p_n++)
         {
-			printf("p_h = %s\tp_n = %s\n", p_h, p_n);
-			
+//			printf("p_h = %s\tp_n = %s\n", p_h, p_n);
+
             if (*p_h++ != *p_n)
             {
                 break;
@@ -205,50 +431,41 @@ char *my_strstr2(const char *haystack, const char *needle)
             return (char *)haystack;
         }
     }
-    char *ret = "(null)";
+//    char *ret = "(null)";
 
-    return ret;
+    return NULL;
 }
 
 char *my_strstr3(const char *s1, const char *s2)
 {
-	assert(s1 && s2);
-	
-	const char *str = s1;
-	
-	for(; strchr(str, *s2) != NULL; str++)
-	{
-		if(strncmp(str, s2, strlen(s2)) == 0)
-		{
-			return (char *)str;
-		}
-	}
+    assert(s1 && s2);
 
-	char *p = "(null)";
-	return p;
+    const char *str = s1;
+
+    for ( ; strchr(str, *s2) != NULL; str++)
+    {
+        if (strncmp(str, s2, strlen(s2)) == 0)
+        {
+            return (char *)str;
+        }
+    }
+
+    char *p = "(null)";
+    return p;
 }
 
 int main(void)
 {
 #if 1
-//step1: use pointer string
+    const char *p1 = "htt p://dd. ae";
+    const char *p2 = "tx p";    //"/dd. a";
 
-/*	char *p1 = (char *)malloc(100);
- *      strcpy(p1, "happydayto dance");
- *
- *      char *p2 = (char *)malloc(100);
- *      strcpy(p2, "day");
- */
-    char *p1 = "happydayt odance";
-    char *p2 = "appdy";
+    char       *x = my_strstr2(p1, p2);
 
-    char *x = my_strstr(p1, p2);
-//	char *null_byte = NULL;//'\0';//(char *)(NULL);
+    char       *p = strstr(p1, p2);
 
-//	char *null_byte = "(null)";//(char *)malloc(100);
-//	strcpy(null_byte, "\0");
 
-    printf("%s\n", x);
+    printf("x = %s\n", p);
 #else
 //step2: use array[]
 
