@@ -18,7 +18,7 @@
 *************************/
 //#define w_01	//wrong case NO.01		strcpy before malloc
 //#define w_02	//wrong case NO.02		strncpy pointer cross-border
-
+//#define w_03	//wrong case NO.03		try to get the length of a interger pointer array.
 
 /*************************
 *		demo
@@ -27,8 +27,10 @@
 //#define d_02	//find and return the substring
 //#define d_03	//bit operations
 //#define d_04	//find the addtional charater
+//#define d_05	//linklist and sorting
+//#define d_06	//quick sorting
 
-
+//#define test_pre
 #define test
 //#define test_2
 //#define test_3
@@ -39,143 +41,122 @@ void print_trace()
 //    my_trace(BRIGHT, GREEN, BLACK, "good\n");
 }
 
-
-#ifdef test_pre	//fast sorting
-
-int *fastsorting(int arr[], int start, int end)
-{
-	int pos = 0;
-	if(start < end)
-	{
-		
-	}
-	
-	fastsorting()
-}
-
-int main(void)
-{
-	int arr[] = {22, 112, 763, 98, 766};
-	int length = sizeof(arr) / sizeof(arr[0]) - 1;
-
-	fastsorting(arr, 0, length);
-	showme(arr, );
-
-	return 0;
-}
-
-#elif defined test
-
+#ifdef test
 typedef struct stu
 {
-	int id;
-	char *name;
+	int num;
 	struct stu *next;
-} STU;
+}STU;
 
-#define LEN sizeof(struct stu)
+#define LEN sizeof(STU)
 
 STU *create_Linklist(int data[], int number)
 {
-	STU *head = NULL, *p = NULL;
-
-	for(int i = number; i >= 0; i--)
+	int i;
+	STU *head = NULL, *p= NULL;
+	
+	while(number-- != 0)
 	{
 		p = (STU *)malloc(LEN);
-		p->id = data[i];
+		p->num = data[number];
 		p->next = head;
 		head = p;
 	}
-	
+
 	return head;
 }
 
-void ins_Linklist_Front(STU **head, int id, int new_id)
+STU *sum_Linklist(STU *l1, STU *l2)
 {
-	STU **p = head;
-
-	while(*p && ((*p)->id != id))
-	{
-		p = &((*p)->next);
-	}
-
-	STU *tmp = *p;
-	*p = (STU *)malloc(LEN);
-	(*p)->id = new_id;
-	(*p)->next = tmp;
-}
-
-void ins_Linklist_Behind(STU **head, int id, int new_id)
-{
-	STU **p = head;
-
-	while(*p && ((*p)->id != id))
-	{
-		p = &((*p)->next);
-	}
-
-	STU *tmp = (*p)->next;
-	(*p)->next = (STU *)malloc(LEN);
-	(*p)->next->id = new_id;
-	(*p)->next->next = tmp;
-}
-
-void del_Linklist(STU **head, int id)
-{
-	STU **p = head;
-
-	while(*p && (*p)->id != id)
-	{
-		p = &((*p)->next);
-	}
-
-	STU *tmp = *p;
-	*p = tmp->next;
-	free(tmp);
-	tmp->next = NULL;	
-}
-
-STU *sort_Linklist(STU *head)
-{
+	assert(l1 || l2);
 	
+	STU *ret = NULL, *p = NULL, *p1 = NULL, *tmp = NULL;
+	int len_l1 = 1, len_l2 = 1, len_ret = 0, flag = 0;
+
+	tmp = l1;
+	while(tmp->next != NULL)
+	{
+		len_l1++;
+		tmp = tmp->next;
+	}
+
+	tmp = l2;
+	while(tmp->next != NULL)
+	{
+		len_l2++;
+		tmp = tmp->next;
+	}
+
+	len_ret = (len_l1 >= len_l2 ? len_l1 : len_l2);
+
+	if(len_l1 < len_l2)
+	{
+		insert_Linklist(&l1, len_ret - len_l1, 0);
+	}
+	else
+	{
+		insert_Linklist(&l2, len_ret - len_l2, 0);
+	}
+
+	for(int i = 0; i < len_ret; i++)
+	{
+		if(i == 0)
+		{
+			ret = (STU *)malloc(LEN);
+			p = p1 = ret;
+
+			ret->num = l1->num + l2->num;
+			ret->next = NULL;
+			//p = p1 = ret->next;
+			
+			if(ret->num >= 10)
+			{
+				ret->num- = 10;
+				flag = 1;
+			}
+		}
+		else
+		{
+			p = (STU *)malloc(LEN);
+			if(flag == 1)
+			{
+				p->num = 
+			}
+			
+			p1->next = p;
+		}
+		p = p->next;
+		l1 = l1->next;
+		l2 = l2->next;
+	}
+	return ret;
 }
 
 void showme(STU *head)
 {
-	while(head)
+	while(head != NULL)
 	{
-		printf("%d\t", head->id);
+		printf("%d\t", head->num);
 		head = head->next;
 	}
-
 	printf("\n");
 }
 
 int main(void)
 {
-	int data[] = {102, 45, 876, 8, 21};
-	int number = sizeof(data) / sizeof(data[0]) - 1;
-	STU *head = create_Linklist(data, number);
-//	ins_Linklist_Front(&head, 8, 1000);
+	int data[][4] = {{1, 8, 4}, {9, 3, 5, 1}};
+//	int data2[] = {1, 66, 987, 7};
+	int len = sizeof(data[0]) / sizeof(data[0][0]);
+//	printf("%d\n", sizeof(data[0]) / sizeof(data[0][0]));
 	
-	ins_Linklist_Front(&head, 102, 7666);	
-	showme(head);
-	
-	ins_Linklist_Behind(&head, 21, 22222);
-	showme(head);
-	
-	del_Linklist(&head, 21);
-	showme(head);
-	
-	del_Linklist(&head, 7666);
-	showme(head);
-	
-	del_Linklist(&head, 22222);
-	showme(head);
+	STU *l1 = create_Linklist(data[0], 3);
+	STU *l2 = create_Linklist(data[1], 4);;
+
+	showme(l1);
+	showme(l2);
 	
 	return 0;
 }
-
 
 #elif defined test_3
 
@@ -593,6 +574,213 @@ int main(void)
     printf("%s\n", text);
 
     return 0;
+}
+#elif defined d_05
+
+typedef struct stu
+{
+	int id;
+	char *name;
+	struct stu *next;
+} STU;
+
+#define LEN sizeof(struct stu)
+
+STU *create_Linklist(int data[], int number)
+{
+	STU *head = NULL, *p = NULL;
+
+	for(int i = number; i >= 0; i--)
+	{
+		p = (STU *)malloc(LEN);
+		p->id = data[i];
+		p->next = head;
+		head = p;
+	}
+	
+	return head;
+}
+
+void ins_Linklist_Front(STU **head, int id, int new_id)
+{
+	STU **p = head;
+
+	while(*p && ((*p)->id != id))
+	{
+		p = &((*p)->next);
+	}
+
+	STU *tmp = *p;
+	*p = (STU *)malloc(LEN);
+	(*p)->id = new_id;
+	(*p)->next = tmp;
+}
+
+void ins_Linklist_Behind(STU **head, int id, int new_id)
+{
+	STU **p = head;
+
+	while(*p && ((*p)->id != id))
+	{
+		p = &((*p)->next);
+	}
+
+	STU *tmp = (*p)->next;
+	(*p)->next = (STU *)malloc(LEN);
+	(*p)->next->id = new_id;
+	(*p)->next->next = tmp;
+}
+
+void del_Linklist(STU **head, int id)
+{
+	STU **p = head;
+
+	while(*p && (*p)->id != id)
+	{
+		p = &((*p)->next);
+	}
+
+	STU *tmp = *p;
+	*p = tmp->next;
+	free(tmp);
+	tmp->next = NULL;	
+}
+
+void swap(int *p1, int *p2)
+{
+	int tmp = 0;
+	tmp = *p1;
+	*p1 = *p2;
+	*p2 = tmp;
+}
+
+
+void bubleSort_Linklist(STU *head)
+{
+	int length = 0;	
+	int i, j;
+	STU *p = head;
+
+	while(p != NULL)
+	{
+		length++;
+		p = p->next;
+	}
+	
+	p = head;
+
+	for(i = 0; i < length; i++)
+	{
+		p = head;
+		while(p->next != NULL)
+		{
+			if(p->id > p->next->id)
+			{
+				swap(&(p->id), &(p->next->id));
+			}
+			p = p->next;
+		}
+	}
+}
+
+void showme(STU *head)
+{
+	while(head)
+	{
+		printf("%d\t", head->id);
+		head = head->next;
+	}
+
+	printf("\n");
+}
+
+int main(void)
+{
+	int data[] = {102, 45, 876, 8, 21};
+	int number = sizeof(data) / sizeof(data[0]) - 1;
+	STU *head = create_Linklist(data, number);
+//	ins_Linklist_Front(&head, 8, 1000);
+	
+	ins_Linklist_Front(&head, 102, 7666);	
+	showme(head);
+	
+	ins_Linklist_Behind(&head, 21, 22222);
+	showme(head);
+
+	del_Linklist(&head, 21);
+	showme(head);
+	
+	del_Linklist(&head, 7666);
+	showme(head);
+	
+	del_Linklist(&head, 22222);
+	showme(head);
+
+	bubleSort_Linklist(head);	
+	showme(head);
+	return 0;
+}
+#elif defined d_06	//fast sorting
+
+void swap(int *p1, int *p2)
+{
+	int tmp;
+	tmp = *p1;
+	*p1 = *p2;
+	*p2 = tmp;
+}
+
+void fastsorting(int arr[], int start, int end)
+{
+	int left, right;
+	if(start < end)
+	{
+		left = start + 1;
+		right = end;
+
+		while(left <= right)
+		{
+			while(arr[left] <= arr[start])
+			{
+				left++;
+			}
+
+			while(arr[right] > arr[start])
+			{
+				right--;
+			}
+
+			if(left < right)
+			{
+				swap(&arr[left], &arr[right]);
+			}
+		}
+		swap(&arr[start], &arr[right]);
+		
+		fastsorting(arr, start, right - 1);
+		fastsorting(arr, right, end);
+	}
+}
+
+void showme(int *arr, int length)
+{
+	int i;
+	for(i = 0; i < length; i++)
+	{
+		printf("%d\t", *(arr + i));
+	}
+	printf("\n");
+}
+
+int main(void)
+{
+	int arr[] = {22, 112, 763, 98, 766};
+	int length = sizeof(arr) / sizeof(arr[0]);
+
+	fastsorting(arr, 0, length - 1);
+	showme(arr, length);
+
+	return 0;
 }
 
 #elif defined w_02                                      // strncpy, pointer cross-border
