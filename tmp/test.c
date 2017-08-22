@@ -31,6 +31,7 @@
 
 #define test
 //#define test_2
+//#define test_3
 
 
 void print_trace()
@@ -39,84 +40,144 @@ void print_trace()
 }
 
 
-#ifdef test
+#ifdef test_pre	//fast sorting
 
-char *testi(char *str)
+int *fastsorting(int arr[], int start, int end)
 {
-//	printf("%d\n", strlen(str));
-	static char k[20] = "showme";
-	strcpy(k, "haha");
-	return k;
-}
-
-int main(void)
-{
-//	char str[50] = "gooday!";
-	char *str = "goodayr";
-
-/*	memmove(str + 3, str + 4, 50);
-
-	for(int i = 0; i < strlen(str); i++)
+	int pos = 0;
+	if(start < end)
 	{
-		printf("%c", str[i]);
-	}
-*/
-	char *x = testi(str);
-	printf("%s\n", x);
-
-	return 0;
-}
-
-#elif defined d_04
-
-char findit(char *str1, char *str2)
-{
-	char *p1 = str1;
-	char *p2 = str2;
-	char tmp[100];// = NULL;
-	char x;
-	int i;
-	
-	memset(tmp, 0, 100);
-	strcpy(tmp, p2);
-
-	for(; *p1 != '\0'; p1++)
-	{		
-		for(i = 0; i < strlen(tmp); i++)
-		{
-			if(*p1 == tmp[i])
-			{
-				memmove(tmp + i, tmp + i + 1, 100);
-//				printf("after: tmp = %s\n\n", tmp);
-
-				break;
-			}
-/*			else
-			{
-				x = tmp[i];
-			}*/
-		}
+		
 	}
 	
-//	printf("end: %c\n", tmp[i]);
-	return tmp[0];
+	fastsorting()
 }
 
 int main(void)
 {
-	char *str1 = (char *)malloc(20);
-	strcpy(str1, "abcdea");
-	
-	char *str2 = (char *)malloc(20);
-	strcpy(str2, "ackdbae");
+	int arr[] = {22, 112, 763, 98, 766};
+	int length = sizeof(arr) / sizeof(arr[0]) - 1;
 
-	char x = findit(str1, str2);
-	printf("x = %c\n", x);
-		
+	fastsorting(arr, 0, length);
+	showme(arr, );
+
 	return 0;
 }
 
-#elif defined test3
+#elif defined test
+
+typedef struct stu
+{
+	int id;
+	char *name;
+	struct stu *next;
+} STU;
+
+#define LEN sizeof(struct stu)
+
+STU *create_Linklist(int data[], int number)
+{
+	STU *head = NULL, *p = NULL;
+
+	for(int i = number; i >= 0; i--)
+	{
+		p = (STU *)malloc(LEN);
+		p->id = data[i];
+		p->next = head;
+		head = p;
+	}
+	
+	return head;
+}
+
+void ins_Linklist_Front(STU **head, int id, int new_id)
+{
+	STU **p = head;
+
+	while(*p && ((*p)->id != id))
+	{
+		p = &((*p)->next);
+	}
+
+	STU *tmp = *p;
+	*p = (STU *)malloc(LEN);
+	(*p)->id = new_id;
+	(*p)->next = tmp;
+}
+
+void ins_Linklist_Behind(STU **head, int id, int new_id)
+{
+	STU **p = head;
+
+	while(*p && ((*p)->id != id))
+	{
+		p = &((*p)->next);
+	}
+
+	STU *tmp = (*p)->next;
+	(*p)->next = (STU *)malloc(LEN);
+	(*p)->next->id = new_id;
+	(*p)->next->next = tmp;
+}
+
+void del_Linklist(STU **head, int id)
+{
+	STU **p = head;
+
+	while(*p && (*p)->id != id)
+	{
+		p = &((*p)->next);
+	}
+
+	STU *tmp = *p;
+	*p = tmp->next;
+	free(tmp);
+	tmp->next = NULL;	
+}
+
+STU *sort_Linklist(STU *head)
+{
+	
+}
+
+void showme(STU *head)
+{
+	while(head)
+	{
+		printf("%d\t", head->id);
+		head = head->next;
+	}
+
+	printf("\n");
+}
+
+int main(void)
+{
+	int data[] = {102, 45, 876, 8, 21};
+	int number = sizeof(data) / sizeof(data[0]) - 1;
+	STU *head = create_Linklist(data, number);
+//	ins_Linklist_Front(&head, 8, 1000);
+	
+	ins_Linklist_Front(&head, 102, 7666);	
+	showme(head);
+	
+	ins_Linklist_Behind(&head, 21, 22222);
+	showme(head);
+	
+	del_Linklist(&head, 21);
+	showme(head);
+	
+	del_Linklist(&head, 7666);
+	showme(head);
+	
+	del_Linklist(&head, 22222);
+	showme(head);
+	
+	return 0;
+}
+
+
+#elif defined test_3
 
 typedef struct stu
 {
@@ -247,7 +308,6 @@ int main()
 
 
 #elif defined test_2
-#include <stdio.h>
 
 void print_buf(char *buf, size_t len)
 {
@@ -275,6 +335,43 @@ int main(void)
     return 0;
 }
 
+#elif defined d_04	//
+
+char findit(char *str1, char *str2)
+{
+	char tmp[strlen(str2)];// = NULL;
+	int i;
+	
+	memset(tmp, 0, strlen(str2));
+	strcpy(tmp, str2);
+
+	for(; *str1 != '\0'; str1++)
+	{		
+		for(i = 0; i < strlen(tmp); i++)
+		{
+			if(*str1 == tmp[i])
+			{
+				memmove(tmp + i, tmp + i + 1, strlen(str2));
+				break;
+			}
+		}
+	}
+	return tmp[0];
+}
+
+int main(void)
+{
+	char *str1 = (char *)malloc(20);
+	strcpy(str1, "abcdea");
+	
+	char *str2 = (char *)malloc(20);
+	strcpy(str2, "eacdbae");
+
+	char x = findit(str1, str2);
+	printf("x = %c\n", x);
+		
+	return 0;
+}
 
 
 #elif defined d_03
