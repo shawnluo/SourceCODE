@@ -29,6 +29,7 @@
 //#define d_04	//find the addtional charater
 //#define d_05	//linklist and sorting
 //#define d_06	//quick sorting
+//#define d_07	//2 linklists adding with carry bit
 
 #define test_pre
 //#define test
@@ -42,36 +43,99 @@ void print_trace()
 }
 
 #ifdef test_pre
-float grades_average(float grades[7]);
+
+typedef struct stu
+{
+	int id;
+	struct stu *next;
+}STU;
+
+#define LEN sizeof(STU)
+
+STU *create_Linklist(int data[],int number)
+{
+	STU *head = NULL, *p = NULL;
+	number--;
+	
+	while(number >= 0)
+	{
+		p = (STU *)malloc(LEN);
+		p->id = data[number];
+		p->next = head;
+		head = p;
+		number--;
+	}
+	return head;
+}
+
+void swap(int *x, int *y)
+{
+	int tmp = 0;
+	tmp = *x;
+	*x = *y;
+	*y = tmp;
+}
+
+void sort_Linklist(STU *head)
+{
+	STU *p = head, *p1 = NULL;
+
+	for(; p != NULL; p = p->next)
+	{
+		for(p1 = p->next; p1 != NULL; p1 = p1->next)
+		{
+			if(p->id > p1->id)
+			{
+				swap(&(p->id), &(p1->id));
+			}
+		}
+	}
+}
+
+void merge_Linklist(STU **head1, STU **head2)
+{
+	assert(*head1 || *head2);
+
+	STU **p = head1;
+	while(*p != NULL)
+	{
+		p = &((*p)->next);
+	}
+
+	*p = *head2;
+
+	sort_Linklist(*head1);
+}
+
+void showme(STU *head)
+{
+	while(head != NULL)
+	{
+		printf("%d\t", head->id);
+		head = head->next;
+	}
+	printf("\n");
+}
 
 int main(void)
 {
-	int *data[5] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-	create_Linklist(data[0],int number);
+	STU *head1 = NULL, *head2 = NULL;
+	int data[2][5] = {{11, 12, 3, 2314, 5}, {216, 71, 8, 9}};
+	head1 = create_Linklist(data[0], 5);
+	showme(head1);
+	
+	head2 = create_Linklist(data[1], 5);
+	showme(head2);	
 
+	merge_Linklist(&head1, &head2);
+	showme(head1);
+	
     return 0;
 }
-
-float grades_average(float grades[7])
-{
-    int   i;
-    float sum     = 0;
-    float average = 0.0;
-
-    /* calculate the sum of grades using for loop*/
-
-    /*Changed here to <7 because i takes 0,1,2,3,4,5,6 which are 7 elements, your code is <=7 which takes 0.......7 which are 8 elements */
-    for (i = 0; i < 7; i++)
-    {
-        /*Changed here to i from 7, your code everytime sums out of bound element, Garbage value since grades[7] does not exist*/
-        sum = sum + grades[i];
-    }
-    average = sum / 7.f;
-
-    return average;
-}
-
 #elif defined test
+
+
+#elif defined d_07
 typedef struct stu
 {
     int        num;
@@ -101,12 +165,8 @@ void insert_linklist_tail(STU **head, int len, int num)
     STU **p = head, *newNode;
     int i = 0;
 
-//	printf("len = %d\n", len);
-
     while ((*head != NULL) && (*p != NULL))
     {
-//		printf("(*p)->num = %d\n", (*p)->num);
-
         p = &((*p)->next);
     }
 
@@ -114,16 +174,12 @@ void insert_linklist_tail(STU **head, int len, int num)
     {
         newNode      = (STU *)malloc(LEN);
         newNode->num = num;
-//		printf("xx = %d\n", newNode->num);
 
         *p      = newNode;
         newNode = newNode->next;
-//		p = &newNode;
         p = &((*p)->next);
     }
     newNode = NULL;
-//	printf("len = %d\n", len);
-//	showme(*head);
 }
 
 STU *sum_Linklist(STU *l1, STU *l2)
@@ -219,13 +275,10 @@ void showme(STU *head)
 int main(void)
 {
     int data[][5] = { { 1, 8, 4, 8, 5, 9 }, { 9, 3, 9, 9 } };
-//	int data2[] = {1, 66, 987, 7};
     int len = sizeof(data[0]) / sizeof(data[0][0]);
-//	printf("%d\n", sizeof(data[0]) / sizeof(data[0][0]));
 
     STU *l1 = create_Linklist(data[0], 6);
     STU *l2 = create_Linklist(data[1], 4);
-
 
     showme(l1);
     showme(l2);
