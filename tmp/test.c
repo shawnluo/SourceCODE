@@ -41,121 +41,205 @@ void print_trace()
 //    my_trace(BRIGHT, GREEN, BLACK, "good\n");
 }
 
-#ifdef test
+#ifdef test_pre
+float grades_average(float grades[7]);
+
+int main(void)
+{
+    float grades[7] = { 98.8, 97.9, 99.3, 99.8, 99.6, 99.4, 99.9 };
+    float average;
+
+    average = grades_average(grades);
+    printf("Average is: %.2f\n", average);
+
+
+    return 0;
+}
+
+float grades_average(float grades[7])
+{
+    int   i;
+    float sum     = 0;
+    float average = 0.0;
+
+    /* calculate the sum of grades using for loop*/
+
+    /*Changed here to <7 because i takes 0,1,2,3,4,5,6 which are 7 elements, your code is <=7 which takes 0.......7 which are 8 elements */
+    for (i = 0; i < 7; i++)
+    {
+        /*Changed here to i from 7, your code everytime sums out of bound element, Garbage value since grades[7] does not exist*/
+        sum = sum + grades[i];
+    }
+    average = sum / 7.f;
+
+    return average;
+}
+
+#elif defined test
 typedef struct stu
 {
-	int num;
-	struct stu *next;
+    int        num;
+    struct stu *next;
 }STU;
 
-#define LEN sizeof(STU)
+#define LEN    sizeof(STU)
 
 STU *create_Linklist(int data[], int number)
 {
-	int i;
-	STU *head = NULL, *p= NULL;
-	
-	while(number-- != 0)
-	{
-		p = (STU *)malloc(LEN);
-		p->num = data[number];
-		p->next = head;
-		head = p;
-	}
+    int i;
+    STU *head = NULL, *p = NULL;
 
-	return head;
+    while (number-- != 0)
+    {
+        p       = (STU *)malloc(LEN);
+        p->num  = data[number];
+        p->next = head;
+        head    = p;
+    }
+
+    return head;
+}
+
+void insert_linklist_tail(STU **head, int len, int num)
+{
+    STU **p = head, *newNode;
+    int i = 0;
+
+//	printf("len = %d\n", len);
+
+    while ((*head != NULL) && (*p != NULL))
+    {
+//		printf("(*p)->num = %d\n", (*p)->num);
+
+        p = &((*p)->next);
+    }
+
+    for (i = 0; i < len; i++)
+    {
+        newNode      = (STU *)malloc(LEN);
+        newNode->num = num;
+//		printf("xx = %d\n", newNode->num);
+
+        *p      = newNode;
+        newNode = newNode->next;
+//		p = &newNode;
+        p = &((*p)->next);
+    }
+    newNode = NULL;
+//	printf("len = %d\n", len);
+//	showme(*head);
 }
 
 STU *sum_Linklist(STU *l1, STU *l2)
 {
-	assert(l1 || l2);
-	
-	STU *ret = NULL, *p = NULL, *p1 = NULL, *tmp = NULL;
-	int len_l1 = 1, len_l2 = 1, len_ret = 0, flag = 0;
+    assert(l1 || l2);
 
-	tmp = l1;
-	while(tmp->next != NULL)
-	{
-		len_l1++;
-		tmp = tmp->next;
-	}
+    STU *ret = NULL, *p = NULL, *p1 = NULL, *tmp = NULL;
+    int len_l1 = 1, len_l2 = 1, len_ret = 0, flag = 0;
 
-	tmp = l2;
-	while(tmp->next != NULL)
-	{
-		len_l2++;
-		tmp = tmp->next;
-	}
+    tmp = l1;
+    while (tmp->next != NULL)
+    {
+        len_l1++;
+        tmp = tmp->next;
+    }
 
-	len_ret = (len_l1 >= len_l2 ? len_l1 : len_l2);
+    tmp = l2;
+    while (tmp->next != NULL)
+    {
+        len_l2++;
+        tmp = tmp->next;
+    }
 
-	if(len_l1 < len_l2)
-	{
-		insert_Linklist(&l1, len_ret - len_l1, 0);
-	}
-	else
-	{
-		insert_Linklist(&l2, len_ret - len_l2, 0);
-	}
+    len_ret = (len_l1 >= len_l2 ? len_l1 : len_l2);
 
-	for(int i = 0; i < len_ret; i++)
-	{
-		if(i == 0)
-		{
-			ret = (STU *)malloc(LEN);
-			p = p1 = ret;
+    if (len_l1 < len_l2)
+    {
+        insert_linklist_tail(&l1, len_ret - len_l1, 0);
+//		showme(l1);
+    }
+    else
+    {
+        insert_linklist_tail(&l2, len_ret - len_l2, 0);
+//		showme(l2);
+    }
 
-			ret->num = l1->num + l2->num;
-			ret->next = NULL;
-			//p = p1 = ret->next;
-			
-			if(ret->num >= 10)
-			{
-				ret->num- = 10;
-				flag = 1;
-			}
-		}
-		else
-		{
-			p = (STU *)malloc(LEN);
-			if(flag == 1)
-			{
-				p->num = 
-			}
-			
-			p1->next = p;
-		}
-		p = p->next;
-		l1 = l1->next;
-		l2 = l2->next;
-	}
-	return ret;
+    for (int i = 0; i < len_ret; i++)
+    {
+        if (i == 0)
+        {
+            p = p1 = ret = (STU *)malloc(LEN);
+
+            ret->num = l1->num + l2->num;
+
+            if (ret->num >= 10)
+            {
+                ret->num -= 10;
+                flag      = 1;
+            }
+        }
+        else
+        {
+            p = (STU *)malloc(LEN);
+
+            p->num = l1->num + l2->num + flag;
+            if (p->num >= 10)
+            {
+                p->num -= 10;
+                flag    = 1;
+            }
+            else
+            {
+                flag = 0;
+            }
+            p1->next = p;
+            p1       = p;
+        }
+
+        l1 = l1->next;
+        l2 = l2->next;
+    }
+
+    if (flag == 1)
+    {
+        p        = (STU *)malloc(LEN);
+        p->num   = 1;
+        p1->next = p;
+
+        p->next = NULL;
+    }
+
+    return ret;
 }
 
 void showme(STU *head)
 {
-	while(head != NULL)
-	{
-		printf("%d\t", head->num);
-		head = head->next;
-	}
-	printf("\n");
+    while (head != NULL)
+    {
+        printf("%d\t", head->num);
+        head = head->next;
+    }
+    printf("\n");
 }
 
 int main(void)
 {
-	int data[][4] = {{1, 8, 4}, {9, 3, 5, 1}};
+    int data[][5] = { { 1, 8, 4, 8, 5, 9 }, { 9, 3, 9, 9 } };
 //	int data2[] = {1, 66, 987, 7};
-	int len = sizeof(data[0]) / sizeof(data[0][0]);
+    int len = sizeof(data[0]) / sizeof(data[0][0]);
 //	printf("%d\n", sizeof(data[0]) / sizeof(data[0][0]));
-	
-	STU *l1 = create_Linklist(data[0], 3);
-	STU *l2 = create_Linklist(data[1], 4);;
 
-	showme(l1);
-	showme(l2);
-	
-	return 0;
+    STU *l1 = create_Linklist(data[0], 6);
+    STU *l2 = create_Linklist(data[1], 4);
+
+
+    showme(l1);
+    showme(l2);
+    STU *new = sum_Linklist(l1, l2);
+
+    showme(new);
+
+    return 0;
 }
 
 #elif defined test_3
@@ -316,42 +400,43 @@ int main(void)
     return 0;
 }
 
-#elif defined d_04	//
+#elif defined d_04      //
 
 char findit(char *str1, char *str2)
 {
-	char tmp[strlen(str2)];// = NULL;
-	int i;
-	
-	memset(tmp, 0, strlen(str2));
-	strcpy(tmp, str2);
+    char tmp[strlen(str2)];    // = NULL;
+    int  i;
 
-	for(; *str1 != '\0'; str1++)
-	{		
-		for(i = 0; i < strlen(tmp); i++)
-		{
-			if(*str1 == tmp[i])
-			{
-				memmove(tmp + i, tmp + i + 1, strlen(str2));
-				break;
-			}
-		}
-	}
-	return tmp[0];
+    memset(tmp, 0, strlen(str2));
+    strcpy(tmp, str2);
+
+    for ( ; *str1 != '\0'; str1++)
+    {
+        for (i = 0; i < strlen(tmp); i++)
+        {
+            if (*str1 == tmp[i])
+            {
+                memmove(tmp + i, tmp + i + 1, strlen(str2));
+                break;
+            }
+        }
+    }
+    return tmp[0];
 }
 
 int main(void)
 {
-	char *str1 = (char *)malloc(20);
-	strcpy(str1, "abcdea");
-	
-	char *str2 = (char *)malloc(20);
-	strcpy(str2, "eacdbae");
+    char *str1 = (char *)malloc(20);
 
-	char x = findit(str1, str2);
-	printf("x = %c\n", x);
-		
-	return 0;
+    strcpy(str1, "abcdea");
+
+    char *str2 = (char *)malloc(20);
+    strcpy(str2, "eacdbae");
+
+    char x = findit(str1, str2);
+    printf("x = %c\n", x);
+
+    return 0;
 }
 
 
@@ -579,208 +664,213 @@ int main(void)
 
 typedef struct stu
 {
-	int id;
-	char *name;
-	struct stu *next;
+    int        id;
+    char       *name;
+    struct stu *next;
 } STU;
 
-#define LEN sizeof(struct stu)
+#define LEN    sizeof(struct stu)
 
 STU *create_Linklist(int data[], int number)
 {
-	STU *head = NULL, *p = NULL;
+    STU *head = NULL, *p = NULL;
 
-	for(int i = number; i >= 0; i--)
-	{
-		p = (STU *)malloc(LEN);
-		p->id = data[i];
-		p->next = head;
-		head = p;
-	}
-	
-	return head;
+    for (int i = number; i >= 0; i--)
+    {
+        p       = (STU *)malloc(LEN);
+        p->id   = data[i];
+        p->next = head;
+        head    = p;
+    }
+
+    return head;
 }
 
 void ins_Linklist_Front(STU **head, int id, int new_id)
 {
-	STU **p = head;
+    STU **p = head;
 
-	while(*p && ((*p)->id != id))
-	{
-		p = &((*p)->next);
-	}
+    while (*p && ((*p)->id != id))
+    {
+        p = &((*p)->next);
+    }
 
-	STU *tmp = *p;
-	*p = (STU *)malloc(LEN);
-	(*p)->id = new_id;
-	(*p)->next = tmp;
+    STU *tmp = *p;
+    *p         = (STU *)malloc(LEN);
+    (*p)->id   = new_id;
+    (*p)->next = tmp;
 }
 
 void ins_Linklist_Behind(STU **head, int id, int new_id)
 {
-	STU **p = head;
+    STU **p = head;
 
-	while(*p && ((*p)->id != id))
-	{
-		p = &((*p)->next);
-	}
+    while (*p && ((*p)->id != id))
+    {
+        p = &((*p)->next);
+    }
 
-	STU *tmp = (*p)->next;
-	(*p)->next = (STU *)malloc(LEN);
-	(*p)->next->id = new_id;
-	(*p)->next->next = tmp;
+    STU *tmp = (*p)->next;
+    (*p)->next       = (STU *)malloc(LEN);
+    (*p)->next->id   = new_id;
+    (*p)->next->next = tmp;
 }
 
 void del_Linklist(STU **head, int id)
 {
-	STU **p = head;
+    STU **p = head;
 
-	while(*p && (*p)->id != id)
-	{
-		p = &((*p)->next);
-	}
+    while (*p && (*p)->id != id)
+    {
+        p = &((*p)->next);
+    }
 
-	STU *tmp = *p;
-	*p = tmp->next;
-	free(tmp);
-	tmp->next = NULL;	
+    STU *tmp = *p;
+    *p = tmp->next;
+    free(tmp);
+    tmp->next = NULL;
 }
 
 void swap(int *p1, int *p2)
 {
-	int tmp = 0;
-	tmp = *p1;
-	*p1 = *p2;
-	*p2 = tmp;
+    int tmp = 0;
+
+    tmp = *p1;
+    *p1 = *p2;
+    *p2 = tmp;
 }
 
 
 void bubleSort_Linklist(STU *head)
 {
-	int length = 0;	
-	int i, j;
-	STU *p = head;
+    int length = 0;
+    int i, j;
+    STU *p = head;
 
-	while(p != NULL)
-	{
-		length++;
-		p = p->next;
-	}
-	
-	p = head;
+    while (p != NULL)
+    {
+        length++;
+        p = p->next;
+    }
 
-	for(i = 0; i < length; i++)
-	{
-		p = head;
-		while(p->next != NULL)
-		{
-			if(p->id > p->next->id)
-			{
-				swap(&(p->id), &(p->next->id));
-			}
-			p = p->next;
-		}
-	}
+    p = head;
+
+    for (i = 0; i < length; i++)
+    {
+        p = head;
+        while (p->next != NULL)
+        {
+            if (p->id > p->next->id)
+            {
+                swap(&(p->id), &(p->next->id));
+            }
+            p = p->next;
+        }
+    }
 }
 
 void showme(STU *head)
 {
-	while(head)
-	{
-		printf("%d\t", head->id);
-		head = head->next;
-	}
+    while (head)
+    {
+        printf("%d\t", head->id);
+        head = head->next;
+    }
 
-	printf("\n");
+    printf("\n");
 }
 
 int main(void)
 {
-	int data[] = {102, 45, 876, 8, 21};
-	int number = sizeof(data) / sizeof(data[0]) - 1;
-	STU *head = create_Linklist(data, number);
+    int data[] = { 102, 45, 876, 8, 21 };
+    int number = sizeof(data) / sizeof(data[0]) - 1;
+    STU *head  = create_Linklist(data, number);
+
 //	ins_Linklist_Front(&head, 8, 1000);
-	
-	ins_Linklist_Front(&head, 102, 7666);	
-	showme(head);
-	
-	ins_Linklist_Behind(&head, 21, 22222);
-	showme(head);
 
-	del_Linklist(&head, 21);
-	showme(head);
-	
-	del_Linklist(&head, 7666);
-	showme(head);
-	
-	del_Linklist(&head, 22222);
-	showme(head);
+    ins_Linklist_Front(&head, 102, 7666);
+    showme(head);
 
-	bubleSort_Linklist(head);	
-	showme(head);
-	return 0;
+    ins_Linklist_Behind(&head, 21, 22222);
+    showme(head);
+
+    del_Linklist(&head, 21);
+    showme(head);
+
+    del_Linklist(&head, 7666);
+    showme(head);
+
+    del_Linklist(&head, 22222);
+    showme(head);
+
+    bubleSort_Linklist(head);
+    showme(head);
+    return 0;
 }
-#elif defined d_06	//fast sorting
+#elif defined d_06      //fast sorting
 
 void swap(int *p1, int *p2)
 {
-	int tmp;
-	tmp = *p1;
-	*p1 = *p2;
-	*p2 = tmp;
+    int tmp;
+
+    tmp = *p1;
+    *p1 = *p2;
+    *p2 = tmp;
 }
 
 void fastsorting(int arr[], int start, int end)
 {
-	int left, right;
-	if(start < end)
-	{
-		left = start + 1;
-		right = end;
+    int left, right;
 
-		while(left <= right)
-		{
-			while(arr[left] <= arr[start])
-			{
-				left++;
-			}
+    if (start < end)
+    {
+        left  = start + 1;
+        right = end;
 
-			while(arr[right] > arr[start])
-			{
-				right--;
-			}
+        while (left <= right)
+        {
+            while (arr[left] <= arr[start])
+            {
+                left++;
+            }
 
-			if(left < right)
-			{
-				swap(&arr[left], &arr[right]);
-			}
-		}
-		swap(&arr[start], &arr[right]);
-		
-		fastsorting(arr, start, right - 1);
-		fastsorting(arr, right, end);
-	}
+            while (arr[right] > arr[start])
+            {
+                right--;
+            }
+
+            if (left < right)
+            {
+                swap(&arr[left], &arr[right]);
+            }
+        }
+        swap(&arr[start], &arr[right]);
+
+        fastsorting(arr, start, right - 1);
+        fastsorting(arr, right, end);
+    }
 }
 
 void showme(int *arr, int length)
 {
-	int i;
-	for(i = 0; i < length; i++)
-	{
-		printf("%d\t", *(arr + i));
-	}
-	printf("\n");
+    int i;
+
+    for (i = 0; i < length; i++)
+    {
+        printf("%d\t", *(arr + i));
+    }
+    printf("\n");
 }
 
 int main(void)
 {
-	int arr[] = {22, 112, 763, 98, 766};
-	int length = sizeof(arr) / sizeof(arr[0]);
+    int arr[]  = { 22, 112, 763, 98, 766 };
+    int length = sizeof(arr) / sizeof(arr[0]);
 
-	fastsorting(arr, 0, length - 1);
-	showme(arr, length);
+    fastsorting(arr, 0, length - 1);
+    showme(arr, length);
 
-	return 0;
+    return 0;
 }
 
 #elif defined w_02                                      // strncpy, pointer cross-border
