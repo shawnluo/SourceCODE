@@ -30,8 +30,8 @@
 //#define d_05	//linklist and sorting
 //#define d_06	//quick sorting
 
-//#define test_pre
-#define test
+#define test_pre
+//#define test
 //#define test_2
 //#define test_3
 
@@ -46,12 +46,8 @@ float grades_average(float grades[7]);
 
 int main(void)
 {
-    float grades[7] = { 98.8, 97.9, 99.3, 99.8, 99.6, 99.4, 99.9 };
-    float average;
-
-    average = grades_average(grades);
-    printf("Average is: %.2f\n", average);
-
+	int *data[5] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+	create_Linklist(data[0],int number);
 
     return 0;
 }
@@ -156,12 +152,10 @@ STU *sum_Linklist(STU *l1, STU *l2)
     if (len_l1 < len_l2)
     {
         insert_linklist_tail(&l1, len_ret - len_l1, 0);
-//		showme(l1);
     }
     else
     {
         insert_linklist_tail(&l2, len_ret - len_l2, 0);
-//		showme(l2);
     }
 
     for (int i = 0; i < len_ret; i++)
