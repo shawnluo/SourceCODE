@@ -26,12 +26,12 @@
 //#define d_01	//show the usage of strcpy and strncpy
 //#define d_02	//find and return the substring
 //#define d_03	//bit operations
-//#define d_04	//find the addtional charater
+#define d_04	//find the addtional charater
 //#define d_05	//linklist and sorting
 //#define d_06	//quick sorting
 //#define d_07	//2 linklists adding with carry bit
 
-#define test_pre
+//#define test_pre
 //#define test
 //#define test_2
 //#define test_3
@@ -44,94 +44,7 @@ void print_trace()
 
 #ifdef test_pre
 
-typedef struct stu
-{
-	int id;
-	struct stu *next;
-}STU;
 
-#define LEN sizeof(STU)
-
-STU *create_Linklist(int data[],int number)
-{
-	STU *head = NULL, *p = NULL;
-	number--;
-	
-	while(number >= 0)
-	{
-		p = (STU *)malloc(LEN);
-		p->id = data[number];
-		p->next = head;
-		head = p;
-		number--;
-	}
-	return head;
-}
-
-void swap(int *x, int *y)
-{
-	int tmp = 0;
-	tmp = *x;
-	*x = *y;
-	*y = tmp;
-}
-
-void sort_Linklist(STU *head)
-{
-	STU *p = head, *p1 = NULL;
-
-	for(; p != NULL; p = p->next)
-	{
-		for(p1 = p->next; p1 != NULL; p1 = p1->next)
-		{
-			if(p->id > p1->id)
-			{
-				swap(&(p->id), &(p1->id));
-			}
-		}
-	}
-}
-
-void merge_Linklist(STU **head1, STU **head2)
-{
-	assert(*head1 || *head2);
-
-	STU **p = head1;
-	while(*p != NULL)
-	{
-		p = &((*p)->next);
-	}
-
-	*p = *head2;
-
-	sort_Linklist(*head1);
-}
-
-void showme(STU *head)
-{
-	while(head != NULL)
-	{
-		printf("%d\t", head->id);
-		head = head->next;
-	}
-	printf("\n");
-}
-
-int main(void)
-{
-	STU *head1 = NULL, *head2 = NULL;
-	int data[2][5] = {{11, 12, 3, 2314, 5}, {216, 71, 8, 9}};
-	head1 = create_Linklist(data[0], 5);
-	showme(head1);
-	
-	head2 = create_Linklist(data[1], 5);
-	showme(head2);	
-
-	merge_Linklist(&head1, &head2);
-	showme(head1);
-	
-    return 0;
-}
 #elif defined test
 
 
@@ -184,7 +97,7 @@ void insert_linklist_tail(STU **head, int len, int num)
 
 STU *sum_Linklist(STU *l1, STU *l2)
 {
-    assert(l1 || l2);
+    assert(l1 && l2);
 
     STU *ret = NULL, *p = NULL, *p1 = NULL, *tmp = NULL;
     int len_l1 = 1, len_l2 = 1, len_ret = 0, flag = 0;
@@ -471,9 +384,32 @@ char findit(char *str1, char *str2)
     return tmp[0];
 }
 
+char find_The_Extra_Char(char *str1, char *str2)
+{
+	int len = strlen(str2);
+	char *tmp = (char *)malloc(len);
+	memset(tmp, 0, len);
+	strcpy(tmp, str2);
+	char *p = tmp;
+
+	for(; *str1 != '\0'; str1++)
+	{
+		for(; *tmp != '\0'; tmp++)
+		{
+			if(*str1 == *tmp)
+			{
+				printf("%c\n", *tmp);
+				memmove(tmp, tmp + 1, len);
+				break;
+			}
+		}
+	}
+	return *p;
+}
+
 int main(void)
 {
-    char *str1 = (char *)malloc(20);
+ /*   char *str1 = (char *)malloc(20);
 
     strcpy(str1, "abcdea");
 
@@ -482,6 +418,14 @@ int main(void)
 
     char x = findit(str1, str2);
     printf("x = %c\n", x);
+*/
+//========
+	char *str1 = "abcdea";
+	char *str2 = "eacdbae";
+//	char x = findit(str1, str2);
+//    printf("x = %c\n", x);
+	char x = find_The_Extra_Char(str1, str2);
+	printf("x = %c\n", x);
 
     return 0;
 }
@@ -963,6 +907,23 @@ int main(void)
     printf("%s\n", pos);
 
     return 0;
+}
+
+#elif defined w_04
+void sort_Linklist(STU *head)
+{
+	STU *p = head, *p1 = head->next;	
+	for(; p != NULL; p = p->next)
+	{
+		for(; p1 != NULL; p1 = p1->next)				//wrong! the p won't get updated after every loop!
+		for(p1 = p->next; p1 != NULL; p1 = p1->next)	//should like this!
+		{
+			if((p->id) > (p1->id))
+			{
+				swap(&(p->id), &(p1->id));
+			}
+		}
+	}
 }
 
 #endif
