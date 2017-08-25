@@ -46,12 +46,35 @@ void print_trace()
 
 #ifdef test
 
+void quickSorting(int arr[], int start, int end)
+{
+	int pivot = start;
+	int i;
+	if(start < end)
+	{
+		for(i = 1; i < (end + 1) / 2; i++)
+		{
+			while(arr[i] < arr[pivot])
+			{
+			}
+			while(arr[end - i] > arr[pivot])
+			{
+			}
+
+			swap(&arr[i], &arr[end - i]);
+			swap();
+		}
+		quickSorting(arr, 0, end)
+	}
+}
+
 int main(void)
 {
-	char s[] = "goiday";
-//	char k[10];
-	memmove(s + 1, s + 2, 5);
-	printf("%s\n", s);
+	int arr[] = {1, 221, 8, 0, 32, 322};
+
+	quickSorting(arr, 0, sizeof(arr) / sizeof(arr[0]) - 1);
+//	memmove(s + 1, s + 2, 5);
+	printf("%c\n", x);
 	return 0;
 }
 
@@ -458,7 +481,7 @@ char findit(char *str1, char *str2)
         {
             if (*str1 == tmp[i])
             {
-                memmove(tmp + i, tmp + i + 1, strlen(str2));
+                memmove(tmp + i, tmp + i + 1, strlen(tmp) - i);	//the number of moving is "strlen(tmp) - i"
                 break;
             }
         }
@@ -992,6 +1015,39 @@ int main(void)
 }
 
 #elif defined w_04
+
+typedef struct stu
+{
+	int id;
+	struct stu *next;
+}STU;
+
+#define LEN sizeof(STU)
+
+STU *creat_Linklist(int data[], int num)
+{
+	STU *head = NULL, *p = NULL;
+//	num--;
+	
+	while(--num >= 0)
+	{
+		p = (STU *)malloc(LEN);
+		p->id = data[num];
+		p->next = head;
+		head = p;
+	}
+
+	return head;
+}
+
+void swap(int *x, int *y)
+{
+	int tmp;
+	tmp = *x;
+	*x = *y;
+	*y = tmp;
+}
+
 void sort_Linklist(STU *head)
 {
 	STU *p = head, *p1 = head->next;	
@@ -1006,6 +1062,28 @@ void sort_Linklist(STU *head)
 			}
 		}
 	}
+}
+
+void showme(STU *head)
+{
+	while(head)
+	{
+		printf("%d\t", head->id);
+		head = head->next;
+	}
+	printf("\n");
+}
+
+int main(void)
+{
+	int data[5] = {11, 534, 0, 877, 1};
+	STU *head = creat_Linklist(data, 5);
+	showme(head);
+	
+	sort_Linklist(head);
+	showme(head);
+	
+	return 0;
 }
 
 #endif
