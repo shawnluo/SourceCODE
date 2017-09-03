@@ -26,11 +26,11 @@
 //#define d_01	//show the usage of strcpy and strncpy
 //#define d_02	//find and return the substring
 //#define d_03	//bit operations
-//#define d_04	//find the addtional charater
+#define d_04	//find the addtional charater
 //#define d_05	//linklist and sorting
 //#define d_06	//quick sorting
 
-#define test_pre
+//#define test_pre
 //#define test
 //#define test_2
 //#define test_3
@@ -42,33 +42,64 @@ void print_trace()
 }
 
 #ifdef test_pre
-float grades_average(float grades[7]);
+
+int Is_SubStr(char *s, char *sub)
+{
+	assert(s && sub);
+
+	char *p, *tmp;
+	int num = 0;
+	
+	for(; *s != '\0'; s++)
+	{
+		tmp = s;
+
+		for(p = sub; *p != '\0'; p++)
+		{
+			if(*tmp == *p)
+			{
+				num++;
+				tmp++;
+				
+				if(num == strlen(sub))
+					return 1;
+			}
+			else
+			{
+				num = 0;
+				break;
+			}
+		}		
+	}
+
+	return 0;
+}
+
+int Is_huiwen(char *s)
+{
+	assert(s);
+	
+	int num = strlen(s);
+	int i = 0;
+
+	for(i = 0; i < (num + 1) / 2; i++)
+	{
+		if(*(s + i) != *(s + num - 1 - i))
+		{
+			return 0;
+		}
+	}
+	return 1;
+}
 
 int main(void)
 {
-	int *data[5] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-	create_Linklist(data[0],int number);
+	char *s = "01140t04110";//"are you ok?";
 
-    return 0;
-}
-
-float grades_average(float grades[7])
-{
-    int   i;
-    float sum     = 0;
-    float average = 0.0;
-
-    /* calculate the sum of grades using for loop*/
-
-    /*Changed here to <7 because i takes 0,1,2,3,4,5,6 which are 7 elements, your code is <=7 which takes 0.......7 which are 8 elements */
-    for (i = 0; i < 7; i++)
-    {
-        /*Changed here to i from 7, your code everytime sums out of bound element, Garbage value since grades[7] does not exist*/
-        sum = sum + grades[i];
-    }
-    average = sum / 7.f;
-
-    return average;
+	int flag = Is_huiwen(s);
+	printf("flag = %d\n", flag);
+	
+	return 0;
 }
 
 #elif defined test
@@ -128,7 +159,7 @@ void insert_linklist_tail(STU **head, int len, int num)
 
 STU *sum_Linklist(STU *l1, STU *l2)
 {
-    assert(l1 || l2);
+    assert(l1 && l2);
 
     STU *ret = NULL, *p = NULL, *p1 = NULL, *tmp = NULL;
     int len_l1 = 1, len_l2 = 1, len_ret = 0, flag = 0;
@@ -418,9 +449,32 @@ char findit(char *str1, char *str2)
     return tmp[0];
 }
 
+char find_The_Extra_Char(char *str1, char *str2)
+{
+	int len = strlen(str2);
+	char *tmp = (char *)malloc(len);
+	memset(tmp, 0, len);
+	strcpy(tmp, str2);
+	char *p = tmp;
+
+	for(; *str1 != '\0'; str1++)
+	{
+		for(; *tmp != '\0'; tmp++)
+		{
+			if(*str1 == *tmp)
+			{
+				printf("%c\n", *tmp);
+				memmove(tmp, tmp + 1, len);
+				break;
+			}
+		}
+	}
+	return *p;
+}
+
 int main(void)
 {
-    char *str1 = (char *)malloc(20);
+ /*   char *str1 = (char *)malloc(20);
 
     strcpy(str1, "abcdea");
 
@@ -429,6 +483,14 @@ int main(void)
 
     char x = findit(str1, str2);
     printf("x = %c\n", x);
+*/
+//========
+	char *str1 = "abcdea";
+	char *str2 = "eacdbae";
+//	char x = findit(str1, str2);
+//    printf("x = %c\n", x);
+	char x = find_The_Extra_Char(str1, str2);
+	printf("x = %c\n", x);
 
     return 0;
 }
@@ -910,6 +972,23 @@ int main(void)
     printf("%s\n", pos);
 
     return 0;
+}
+
+#elif defined w_04
+void sort_Linklist(STU *head)
+{
+	STU *p = head, *p1 = head->next;	
+	for(; p != NULL; p = p->next)
+	{
+		for(; p1 != NULL; p1 = p1->next)				//wrong! the p won't get updated after every loop!
+		for(p1 = p->next; p1 != NULL; p1 = p1->next)	//should like this!
+		{
+			if((p->id) > (p1->id))
+			{
+				swap(&(p->id), &(p1->id));
+			}
+		}
+	}
 }
 
 #endif
