@@ -26,13 +26,12 @@
 //#define d_01	//show the usage of strcpy and strncpy
 //#define d_02	//find and return the substring
 //#define d_03	//bit operations
-#define d_04	//find the addtional charater
+//define d_04	//find the addtional charater
 //#define d_05	//linklist and sorting
 //#define d_06	//quick sorting
 //#define d_07	//Is_Palindrome
-//#define d_08	//2 linklists adding with carry bit
 
-//#define test_pre
+#define test_pre
 //#define test
 //#define test_2
 //#define test_3
@@ -107,8 +106,7 @@ int main(void)
 	return 0;
 }
 
-
-#elif defined d_08
+#elif defined test
 typedef struct stu
 {
     int        num;
@@ -138,8 +136,12 @@ void insert_linklist_tail(STU **head, int len, int num)
     STU **p = head, *newNode;
     int i = 0;
 
+//	printf("len = %d\n", len);
+
     while ((*head != NULL) && (*p != NULL))
     {
+//		printf("(*p)->num = %d\n", (*p)->num);
+
         p = &((*p)->next);
     }
 
@@ -147,12 +149,16 @@ void insert_linklist_tail(STU **head, int len, int num)
     {
         newNode      = (STU *)malloc(LEN);
         newNode->num = num;
+//		printf("xx = %d\n", newNode->num);
 
         *p      = newNode;
         newNode = newNode->next;
+//		p = &newNode;
         p = &((*p)->next);
     }
     newNode = NULL;
+//	printf("len = %d\n", len);
+//	showme(*head);
 }
 
 STU *sum_Linklist(STU *l1, STU *l2)
@@ -248,10 +254,13 @@ void showme(STU *head)
 int main(void)
 {
     int data[][5] = { { 1, 8, 4, 8, 5, 9 }, { 9, 3, 9, 9 } };
+//	int data2[] = {1, 66, 987, 7};
     int len = sizeof(data[0]) / sizeof(data[0][0]);
+//	printf("%d\n", sizeof(data[0]) / sizeof(data[0][0]));
 
     STU *l1 = create_Linklist(data[0], 6);
     STU *l2 = create_Linklist(data[1], 4);
+
 
     showme(l1);
     showme(l2);
