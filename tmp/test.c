@@ -36,12 +36,12 @@
 //#define d_07	//Is_Palindrome
 //#define d_08	//2 linklists adding with carry bit
 //#define d_09	//substring or not
-#define d_10	//the linked lists with circular
+//#define d_10	//the linked lists with circular
 //#define Demos_ArraysStrings
 //#define Demo_semaphore
 
 //#define test_pre
-//#define test
+#define test
 //#define test_2
 //#define test_3
 
@@ -51,7 +51,37 @@ void print_trace()
 //    my_trace(BRIGHT, GREEN, BLACK, "good\n");
 }
 
-#ifdef test
+#if defined test
+
+void mydemo(char *str, int len)
+{
+	int i = 0;
+
+	for(i = 0; i < len; i++)
+	{
+		switch(*(str + i))
+		{
+			case 'a':
+				printf("a\n");
+				break;
+
+			default:
+				printf("xxx\n");
+		}
+	}
+}
+
+int main(void)
+{
+	char *str = "showmeathe";
+	int len = strlen(str);
+	mydemo(str, len);
+	return 0;
+}
+
+#elif defined bit_operations
+
+#elif defined xx
 
 #elif defined d_10
 typedef struct stu
@@ -217,6 +247,44 @@ void insert_Linkedlist_Behind(STU *head, int target, int newId)
 	newNode->next = tmp;
 }
 
+void insert_Linkedlist_Front(STU **head, int target, int newId)
+{
+	STU **p = head, *newNode = NULL;
+
+	while((*p != NULL) && ((*p)->id != target))
+	{
+		p = &(*p)->next;
+	}
+
+	STU *tmp = *p;
+	newNode = (STU *)malloc(LEN);
+	newNode->id = newId;
+	*p = newNode;
+	newNode->next = tmp;
+	
+}
+
+void del_Node(STU **head, int target)
+{
+	STU **p = head;
+
+	while(*p && (*p)->id != target)
+	{
+		p = &(*p)->next;
+	}
+
+	if(*p == NULL)
+	{
+		printf("Cannot find the node!\n");
+		return;
+	}
+
+	STU *tmp = *p;
+	*p = (*p)->next;
+	tmp = NULL;
+	free(tmp);
+}
+
 void showme(STU *head)
 {
 	while(head)
@@ -232,16 +300,21 @@ int main(void)
 	int data[] = {10, 222, 13, 14, 5, 6};
 	int len = sizeof(data) / sizeof(data[0]);
 	STU *head = NULL;
-#if 1
+
 	head = create_Linkedlist(data, len);
 	showme(head);
 
 	insert_Linkedlist_Behind(head, 6, 666);	
 	showme(head);
-	
+
+	insert_Linkedlist_Front(&head, 10, 9999);	
+	showme(head);
+
+	del_Node(&head, 666);
+	showme(head);
+
 //	head = create_Linkedlist_Circular(data, len);
 //	showme(head);
-#endif
 
 //	head = create_Linkedlist_EXT_Circular(data, len);
 //	showme(head);
