@@ -21,6 +21,7 @@
 //#define w_01	//wrong case NO.01		strcpy before malloc
 //#define w_02	//wrong case NO.02		strncpy pointer cross-border
 //#define w_03	//wrong case NO.03		try to get the length of a interger pointer array.
+//#define w_05	//trying to change the data which were stored in RO data segment.
 
 /*************************
 *		demo
@@ -52,6 +53,7 @@ void print_trace()
 
 #ifdef test
 
+#elif defined d_10
 typedef struct stu
 {
 	int id;
@@ -132,7 +134,7 @@ STU *create_Linkedlist_EXT_Circular(int data[], int len)
 	STU *head = NULL, *p = NULL, **tmp = NULL;
 
 	len--;
-	int sum = len;
+	int sum = 0;
 
 	while(len >= 0)
 	{
@@ -140,7 +142,7 @@ STU *create_Linkedlist_EXT_Circular(int data[], int len)
 		p->id = data[len];
 		p->next = head;
 		head = p;
-		if(sum-- == len)
+		if(sum-- == 0)
 		{
 			tmp = &(p->next);
 		}
@@ -150,6 +152,52 @@ STU *create_Linkedlist_EXT_Circular(int data[], int len)
 	*tmp = head;
 
 	return head;
+}
+
+int Has_Circular(STU *head)
+{
+	STU **p, **p1 = NULL;
+
+	for(p = &head; ; p = &(*p)->next)
+	{
+		if(p == NULL)
+		{
+			return 0;
+		}
+
+		for(p1 = &head; *p1 != p; p1 = &(*p1)->next)
+		{
+			if((*p)->next == *p1)
+			{
+				return 1;
+			}
+		}
+	}
+
+//	return 0;	//has NOT circular!
+}
+
+STU *Has_Circular_EXT(STU *head)
+{
+	STU *p, *prev = NULL;
+
+	for(p = head; ; p = p->next)
+	{
+		if(p == NULL)
+		{
+			return NULL;
+		}
+
+		for(prev = head; prev != p; prev = prev->next)
+		{
+			if(p->next == prev)
+			{
+				return p->next;
+			}
+		}
+	}
+	
+//	return head;
 }
 
 void showme(STU *head)
@@ -167,17 +215,23 @@ int main(void)
 	int data[] = {10, 222, 13, 14, 5, 6};
 	int len = sizeof(data) / sizeof(data[0]);
 	STU *head = NULL;
-#if 0
-	head = create_Linkedlist(data, len);
-	showme(head);
+#if 1
+//	head = create_Linkedlist(data, len);
+//	showme(head);
 	
 	head = create_Linkedlist_Circular(data, len);
-	showme(head);
+//	showme(head);
 #endif
 
-	head = create_Linkedlist_EXT_Circular(data, len);
-	showme(head);
+//	head = create_Linkedlist_EXT_Circular(data, len);
+//	showme(head);
 
+	int flag = Has_Circular(head);
+	printf("flag = %d\n", flag);
+
+	STU *Circular = Has_Circular_EXT(head);
+	printf("Circular Node is: %d\n", Circular->id);
+	
 	return 0;
 }
 
@@ -406,136 +460,6 @@ int main(void)
 
 //	myReverse(str);
 //	printf("%s\n", str);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#elif defined d_10
-
-//create a linklist with a circular
-
-typedef struct stu
-{
-	int id;
-	struct stu *next;
-} STU;
-
-#define LEN sizeof(STU)
-
-int Has_Circular(STU *head)
-{
-	STU **p = NULL, **pre = NULL;
-
-	for(p = &head; ; p = &(*p)->next)
-	{
-		if(*p == NULL)
-		{
-			return 0;	//no circular
-		}
-		
-		for(pre = &head; pre != p; pre = &(*pre)->next)
-		{
-			if(*pre == *p)
-			{
-				printf("pre = %p pre->id = %d\tp = %p p->id = %d\n", pre, (*pre)->id, p, (*p)->id);
-				return 1;
-			}
-		}
-	}
-}
-
-
-STU *create_Linkedlist(int data[], int length)
-{
-	STU *head = NULL, *p = NULL, **tmp = NULL;
-	int i = 0;
-	
-	while(length-- > 0)
-	{
-		p = (STU *)malloc(LEN);
-		p->id = data[length];
-		p->next = head;
-		
-		if(i++ == 0)	//only for saving the last node address.
-		{
-//			i = 1;
-			tmp = &(p->next);	/*in order to change "p->next", we have to use double pointer
-								to save the address of "p->next".*/
-		}
-		head = p;
-	}
-	*tmp = head->next->next;
-	
-	return head;
-}
-
-STU *create_Linkedlist_EXT(int *data, int len)
-{
-	STU *head = NULL, *p = NULL, *p1 = NULL, *tmp = NULL;
-
-	head = (STU *)malloc(LEN);
-	p1 = head;
-	head->id = data[0];
-	head->next = NULL;
-
-	for(int i = 1; i < len; i++)
-	{
-		p = (STU *)malloc(LEN);
-		p->id = data[i];
-		p->next = NULL;
-		p1->next = p;
-		p1 = p;
-		if(i == 3)
-		{
-			tmp = p;
-		}
-	}
-	p->next = tmp;
-
-	return head;
-}
-
-void showme(STU *head)
-{
-//	STU *p = head, *pre = head;
-#if 1
-	for(int i = 0; i < 15; i++)
-	{
-		printf("%d-%p\t", head->id, head);
-		head = head->next;
-	}
-	printf("\n");
-#endif
-}
-
-int main(void)
-{
-	int data[5] = {1, 2, 3, 4, 5};
-
-	STU *head = create_Linkedlist(data, 5);
-	showme(head);
-
-	int flag = Has_Circular(head);
-	printf("flag = %d\n", flag);
-
-	return 0;
 }
 
 #elif defined sorting_02
@@ -1462,17 +1386,6 @@ int main(void)
     return 0;
 }
 
-#elif defined w_05
-
-int main(void)
-{
-	char *str = "gqday";	//strings store in RO data zone.
-	*str = 'x';
-	printf("%c\n", *str++);
-
-	return 0;
-}
-
 #elif defined w_02                                      // strncpy, pointer cross-border
 int main(void)
 {
@@ -1488,6 +1401,17 @@ int main(void)
 
     strncpy(str, "NMK", 3);                     //wrong
     printf("%s\n", str);
+}
+
+#elif defined w_05
+
+int main(void)
+{
+	char *str = "gqday";	//strings store in RO data zone.
+	*str = 'x';
+	printf("%c\n", *str++);
+
+	return 0;
 }
 
 #elif defined d_01                                      //show strcpy, strncpy, strstr
