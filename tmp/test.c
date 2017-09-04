@@ -26,14 +26,15 @@
 //#define d_01	//show the usage of strcpy and strncpy
 //#define d_02	//find and return the substring
 //#define d_03	//bit operations
-#define d_04	//find the addtional charater
+//#define d_04	//find the addtional charater
 //#define d_05	//linklist and sorting
 //#define d_06	//quick sorting
 //#define d_07	//Is_Palindrome
 //#define d_08	//2 linklists adding with carry bit
+//#define d_09	//substring or not
 
 //#define test_pre
-//#define test
+#define test
 //#define test_2
 //#define test_3
 
@@ -45,42 +46,63 @@ void print_trace()
 
 #ifdef test
 
-#elif defined d_07
-#define TRUE 1
-#define FALSE 0
-int Is_SubStr(char *s, char *sub)
+int main(void)
 {
-	assert(s && sub);
+	char s[] = "goiday";
+//	char k[10];
+	memmove(s + 1, s + 2, 5);
+	printf("%s\n", s);
+	return 0;
+}
 
-	char *p, *tmp;
-	int num = 0;
+#elif defined d_09
+int Is_SubStr(const char *s, const char *sub)
+{
+	assert(s != NULL && sub != NULL);
+	if(strlen(sub) > strlen(s))
+	{
+		return 0;
+	}
+	
+	const char *tmp = NULL, *p = NULL;
 	
 	for(; *s != '\0'; s++)
 	{
 		tmp = s;
-
 		for(p = sub; *p != '\0'; p++)
 		{
 			if(*tmp == *p)
 			{
-				num++;
 				tmp++;
-				
-				if(num == strlen(sub))
-					return 1;
 			}
 			else
 			{
-				num = 0;
 				break;
 			}
-		}		
+		}
+		if(*p == '\0')
+		{
+			return 1;
+		}
 	}
 
 	return 0;
 }
 
 
+int main(void)
+{
+	char *s = "gooday!";
+	char *sub = "dayq";
+	int i = Is_SubStr(s, sub);
+
+	printf("i = %d\n", i);
+	return 0;
+}
+
+#elif defined d_07
+#define TRUE 1
+#define FALSE 0
 int Is_Palindrome(char *s)
 {
 	assert(s);
