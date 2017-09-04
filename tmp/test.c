@@ -60,7 +60,12 @@ void print_trace()
 }
 
 #ifdef test
-
+int main(void)
+{
+	int *p = NULL;
+	printf("%d\n", *p);
+	return 0;
+}
 #elif defined d_16
 #if 0
 int main(void)
