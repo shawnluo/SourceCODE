@@ -44,7 +44,7 @@
 //#define d_14	//find the onlyone
 //#define d_15	//reverse a interger, beware of overflow
 //#define d_16	//dynamically allocate a 2D array
-
+//#define d_17	//thread demo
 //#define Demos_ArraysStrings
 //#define Demo_semaphore
 
@@ -60,10 +60,158 @@ void print_trace()
 }
 
 #ifdef test
+
+Is_Uniq(char *s1)
+{
+	
+}
+
 int main(void)
 {
-	int *p = NULL;
-	printf("%d\n", *p);
+	return 0;
+}
+
+#elif defined test_1
+
+typedef struct stu
+{
+	int id;
+	struct stu *next;
+} STU;
+
+#define LEN sizeof(STU)
+
+STU *create_Linkedlist(int data[], int len)
+{
+	STU *head = NULL, *p = NULL;
+
+	while(--len >= 0)
+	{
+		p = (STU *)malloc(LEN);
+		p->id = data[len];
+		p->next = head;
+		head = p;
+	}
+
+	return head;
+}
+
+void insert_Node_Front(STU **head, int Target, int New)
+{
+	STU **p = head;
+	STU *newNode = NULL;
+
+	while(*p && (*p)->id != Target)
+	{
+		p = &(*p)->next;
+	}
+
+	STU *tmp = *p;
+	newNode = (STU *)malloc(LEN);
+	newNode->id = New;
+	*p = newNode;
+	newNode->next = tmp;
+}
+
+void insert_Node_Behind(STU **head, int Target, int New)
+{
+	STU **p = head;
+	STU *newNode = NULL;
+
+	while(*p && (*p)->id != Target)
+	{
+		p = &(*p)->next;
+	}
+
+	STU *tmp = (*p)->next;
+	newNode = (STU *)malloc(LEN);
+	newNode->id = New;
+	(*p)->next = newNode;
+	newNode->next = tmp;
+}
+
+void showme(STU *head)
+{
+	while(head)
+	{
+		printf("%d\t", head->id);
+		head = head->next;
+	}
+	printf("\n");
+}
+
+int main(void)
+{
+	int data[3][5] = {{1, 2, 3, 4, 5},
+					{6, 7, 8, 9, 10}, 
+					{11, 12, 13, 14, 15}};
+
+	STU *head = create_Linkedlist(data[0], sizeof(data[0]) / sizeof(data[0][0]));
+	insert_Node_Front(&head, 5, 100);
+	showme(head);
+	insert_Node_Behind(&head, 1, 300);
+	showme(head);	
+	return 0;
+}
+
+#elif defined d_17
+pthread_t tid1, tid2;
+
+void printids(const char *s)
+{
+	pid_t pid;
+	pthread_t tid;
+
+	pid = getpid();
+	tid = pthread_self();
+
+	printf("%s pid %u tid %u (0x%x)\n", s, (unsigned int)pid, \
+		(unsigned int)tid, (unsigned int)tid);
+}
+
+void *thr_fn1(void *arg)
+{
+	printf("thread 1 returning\n");
+//	return ((void *)0);
+	sleep(50);
+	pthread_exit((void *)1);
+//	exit(1);
+}
+
+void *thr_fn2(void *arg)
+{
+	printf("thread 2 exiting\n");
+	pthread_cancel(tid1);
+	pthread_exit((void *)2);
+}
+
+int main(void)
+{
+	int err;
+	void *tret;
+	
+	err = pthread_create(&tid1, NULL, thr_fn1, NULL);
+	if(err != 0)
+	{
+		perror("can't create thread");
+	}
+
+	err = pthread_create(&tid2, NULL, thr_fn2, NULL);
+	if(err != 0)
+	{
+		perror("can't create thread");
+	}
+
+//	printids("main thread: ");
+	sleep(2);
+
+	err = pthread_join(tid1, &tret);
+	if(err)
+	{
+		error("can't join with thread1\n");
+	}
+	printf("thread1 exit code %d\n", (int)tret);
+	
 	return 0;
 }
 #elif defined d_16
@@ -381,8 +529,6 @@ void showme(int mat[][5], int n)
         printf("\n");
     }
 }
-
-//void tt(int )
 
 int main(void)
 {
