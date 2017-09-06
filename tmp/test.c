@@ -45,12 +45,12 @@
 //#define d_15	//reverse a interger, beware of overflow
 //#define d_16	//dynamically allocate a 2D array
 //#define d_17	//thread demo
-#define d_18	//select usage
+//#define d_18	//select usage
 //#define Demos_ArraysStrings
 //#define Demo_semaphore
 
 //#define test_pre
-//#define test
+#define test
 //#define test_2
 //#define test_3
 
@@ -62,6 +62,128 @@ void print_trace()
 
 #ifdef test
 
+char *my_strstr2(const char *haystack, const char *needle)
+{
+    assert(haystack && needle);
+
+    const char *p_h = NULL, *p_n = NULL;
+
+    for ( ; *haystack != '\0'; haystack++)
+    {
+        p_h = haystack;
+
+        for (p_n = needle; *p_n != '\0'; p_n++)
+        {
+//			printf("p_h = %s\tp_n = %s\n", p_h, p_n);
+
+            if (*p_h++ != *p_n)
+            {
+                break;
+            }
+        }
+
+        if (*p_n == '\0')
+        {
+            return (char *)haystack;
+        }
+    }
+	
+    return NULL;
+}
+
+char *findsub(const char *str, const char *sub)
+{
+	const char *p_str = NULL, *p_sub = NULL;
+	
+	for( ; *str != '\0'; str++)
+	{
+		p_str = str;
+
+		for(p_sub = sub; *p_sub != '\0'; p_sub++)
+		{
+			if(*p_str++ != *p_sub)
+			{
+				break;
+			}
+		}
+
+		if(*p_sub == '\0')
+		{
+			return (char *)str;
+		}
+	}
+
+	return NULL;
+}
+
+char find_additional(char *str1, char *str2)
+{
+//	char *tmp = (char *)malloc(strlen(str1));
+	char tmp[];		//should use array, malloc leads to memory leaking!
+	char *p = NULL;
+	memset(tmp, 0, strlen(str2));
+
+	strcpy(tmp, str2);
+	
+	for(; *tmp != '\0'; tmp++)
+	{
+		for(p = str1; *p != '\0'; p++)
+		{
+			if(*tmp == *p++)
+			{
+				memmove(tmp, tmp + 1, strlen(tmp + 1) + 1);
+				break;
+			}
+		}
+	}
+
+	
+//	printf("y = %s, %d\n", y, strlen(p + 2));
+	return tmp[0];
+}
+
+int main(void)
+{
+	const char *str = "ddxgooday";
+	const char *sub = "xgood";
+	
+    char *str1 = "abcdea";
+    char *str2 = "eacdbae";
+
+	char *x = findsub(str, sub);
+	char y = find_additional(str1, str2);
+		
+	printf("y = %s\n", y);
+	return 0;
+}
+
+#elif defined d_01                                      //show strcpy, strncpy, strstr
+int main(void)
+{
+    char *p1 = (char *)malloc(100);
+
+    assert(p1);
+
+    strcpy(p1, "showmethe");                    //strcpy
+    printf("%s\n", p1);
+    strcpy(p1, "dd");
+    printf("%s\n", p1);
+
+
+    strncpy(p1, "NMk", 2);                      //strncpy
+    printf("%s\n", p1);
+
+    strncpy(p1, "NMk", 3);                      //wrong code
+    printf("%s\n", p1);
+
+    char *p2   = "gooday";                      //strstr
+    char *find = "da";
+    char *pos  = NULL;
+    pos = strstr(p2, find);
+    printf("%s\n", pos);
+
+    return 0;
+}
 
 #elif defined d_18
 
@@ -2014,8 +2136,7 @@ char *my_strstr2(const char *haystack, const char *needle)
             return (char *)haystack;
         }
     }
-//    char *ret = "(null)";
-
+	
     return NULL;
 }
 
@@ -2041,14 +2162,14 @@ int main(void)
 {
 #if 1
     const char *p1 = "htt p://dd. ae";
-    const char *p2 = "tx p";    //"/dd. a";
+    const char *p2 = "txt p";    //"/dd. a";
 
     char       *x = my_strstr2(p1, p2);
 
-    char       *p = strstr(p1, p2);
+//    char       *p = strstr(p1, p2);
 
 
-    printf("x = %s\n", p);
+    printf("x = %s\n", x);
 #else
 //step2: use array[]
 
@@ -2066,20 +2187,6 @@ int main(void)
     return 0;
 }
 
-#elif defined w_01                                      // strcpy string, before malloc
-int main(void)
-{
-    char *p1 = "happy";
-
-    strcpy(p1, "showmethe");                    //wrong	"happy" in static/initialized zone, it cannot be changed!
-    printf("%s\n", p1);
-
-    char text[] = "This is a list of lists";            //right
-    strcpy(text, "good");
-    printf("%s\n", text);
-
-    return 0;
-}
 #elif defined d_05
 
 typedef struct stu
@@ -2293,6 +2400,26 @@ int main(void)
     return 0;
 }
 
+
+
+
+
+
+#elif defined w_01                                      // strcpy string, before malloc
+int main(void)
+{
+    char *p1 = "happy";
+
+    strcpy(p1, "showmethe");                    //wrong	"happy" in static/initialized zone, it cannot be changed!
+    printf("%s\n", p1);
+
+    char text[] = "This is a list of lists";            //right
+    strcpy(text, "good");
+    printf("%s\n", text);
+
+    return 0;
+}
+
 #elif defined w_02                                      // strncpy, pointer cross-border
 int main(void)
 {
@@ -2306,50 +2433,9 @@ int main(void)
     strcpy(str, "ab");
     printf("%s\n", str);
 
-    strncpy(str, "NMK", 3);                     //wrong
+    strncpy(str, "NMK", 3);                     //wrong?
     printf("%s\n", str);
 }
-
-#elif defined w_05
-
-int main(void)
-{
-    char *str = "gqday";        //strings store in RO data zone.
-
-    *str = 'x';
-    printf("%c\n", *str++);
-
-    return 0;
-}
-
-#elif defined d_01                                      //show strcpy, strncpy, strstr
-int main(void)
-{
-    char *p1 = (char *)malloc(100);
-
-    assert(p1);
-
-    strcpy(p1, "showmethe");                    //strcpy
-    printf("%s\n", p1);
-    strcpy(p1, "dd");
-    printf("%s\n", p1);
-
-
-    strncpy(p1, "NMk", 2);                      //strncpy
-    printf("%s\n", p1);
-
-    strncpy(p1, "NMk", 3);                      //wrong code
-    printf("%s\n", p1);
-
-    char *p2   = "gooday";                      //strstr
-    char *find = "da";
-    char *pos  = NULL;
-    pos = strstr(p2, find);
-    printf("%s\n", pos);
-
-    return 0;
-}
-
 #elif defined w_04
 
 typedef struct stu
@@ -2424,6 +2510,18 @@ int main(void)
 
     sort_Linklist(head);
     showme(head);
+
+    return 0;
+}
+
+#elif defined w_05
+
+int main(void)
+{
+    char *str = "gqday";        //strings store in RO data zone.
+
+    *str = 'x';				//WRONG! CANNOT change the data in RO section!
+    printf("%c\n", *str++);		
 
     return 0;
 }
