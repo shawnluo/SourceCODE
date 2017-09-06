@@ -176,34 +176,58 @@ void bit_op(int number, int x, int n)
 }
 
 
+int Is_Anagrams(char *str1, char *str2)
+{
+	assert(str1 && str2);
+	
+	if(strlen(str1) != strlen(str2))
+	{
+		return 0;	//no
+	}
+
+	int len = strlen(str1);
+	int x = 0;
+	while(len-- >= 0)
+	{
+		x ^= *(str1 + len);
+		x ^= *(str2 + len);
+	}
+
+	if(x == 0)
+	{
+		return 1;	//yes
+	}
+	else
+		return 0;	//no
+}
+
+void myReplace(char *str, char *rep)
+{
+	char *p = str;
+	while(*str != '\0')
+	{
+		if(*str == ' ')
+		{
+			memmove(str + 2, str, strlen(str) + 1);
+			memmove(str, rep, strlen(rep));
+		}
+		str = str + 2;
+	}
+//	memmove(str + 4, str + 2, strlen(str + 2) + 1);
+}
 
 int main(void)
 {
-	char *str = (char *)malloc(20);;
-	strcpy(str, "shohwmethe");
+	char *str1 = "showme";
+	char *str2 = "mesxxw";
 
-	char ss[] = "shohwmethe";
-//	char *x = removeDup(ss);
-//	printf("x = %s\n", x);
+	int x = Is_Anagrams(str1, str2);
+//	printf("%d\n", x);
 
-	int x = verseInter(-123);
-	printf("x = %d\n", x);
-	printf("%d\n", x>>31);
-
-	int y = 0x7d;
-	y |= 1 << 7;
-	printf("%x\n", y);
-
-	y &= ~(1 << 7);
-	printf("%x\n", y);
-
-	y ^= (1 << 7);
-	printf("%x\n", y);
-
-	int bit = (y >> 7) & 1;
-	printf("%d\n", bit);
-
-	int *arr[5];
+	char str[] = "show m e";
+	char *rep  = "%20";
+	myReplace(str, rep);
+	printf("%s\n", str);
 }
 
 #elif defined d_22	//double LinkedList
