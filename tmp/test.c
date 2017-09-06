@@ -119,9 +119,10 @@ char *findsub(const char *str, const char *sub)
 char find_additional(char *str1, char *str2)
 {
 //	char *tmp = (char *)malloc(strlen(str1));
-	char tmp[];		//should use array, malloc leads to memory leaking!
+	char tmp[strlen(str2)];		//should use array, malloc leads to memory leaking!
+//	memset(tmp, 0, strlen(str2));
+	
 	char *p = NULL;
-	memset(tmp, 0, strlen(str2));
 
 	strcpy(tmp, str2);
 	
@@ -137,6 +138,10 @@ char find_additional(char *str1, char *str2)
 		}
 	}
 
+	for( ; *str1 != '\0'; str1++)
+	{
+		for()
+	}
 	
 //	printf("y = %s, %d\n", y, strlen(p + 2));
 	return tmp[0];
