@@ -46,35 +46,61 @@ void print_trace()
 
 #ifdef test
 
+void swap(int *x, int *y)
+{
+	int tmp;
+	tmp = *x;
+	*x =*y;
+	*y = tmp;
+}
+
 void quickSorting(int arr[], int start, int end)
 {
-	int pivot = start;
-	int i;
+//	int pivot = start;
+	int left;
+	int right;
+
 	if(start < end)
 	{
-		for(i = 1; i < (end + 1) / 2; i++)
+		left = start + 1;
+		right = end;
+			
+		while(left <= right)
 		{
-			while(arr[i] < arr[pivot])
+			while(arr[left] <= arr[start])
 			{
+				left++;
 			}
-			while(arr[end - i] > arr[pivot])
+			while(arr[right] > arr[start])
 			{
+				right--;
 			}
 
-			swap(&arr[i], &arr[end - i]);
-			swap();
+			if(left < right)
+			{
+				swap(&arr[left], &arr[right]);
+			}
 		}
-		quickSorting(arr, 0, end)
+		
+		swap(&arr[start], &arr[right]);
+		quickSorting(arr, start, right - 1);
+		quickSorting(arr, right + 1, end);
 	}
 }
 
 int main(void)
 {
-	int arr[] = {1, 221, 8, 0, 32, 322};
+	int arr[] = {1, 5, 221, 8, 0, 32, 322, 8};
 
 	quickSorting(arr, 0, sizeof(arr) / sizeof(arr[0]) - 1);
 //	memmove(s + 1, s + 2, 5);
-	printf("%c\n", x);
+
+	for(int i = 0; i < sizeof(arr) / sizeof(arr[0]); i++)
+	{
+		printf("%d\t", arr[i]);
+	}
+	printf("\n");
+	
 	return 0;
 }
 
@@ -943,7 +969,7 @@ void fastsorting(int arr[], int start, int end)
         swap(&arr[start], &arr[right]);
 
         fastsorting(arr, start, right - 1);
-        fastsorting(arr, right, end);
+        fastsorting(arr, right + 1, end);
     }
 }
 
