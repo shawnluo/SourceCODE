@@ -29,12 +29,15 @@
 //#define d_04	//find the addtional charater
 //#define d_05	//linklist and sorting
 //#define d_06	//quick sorting
+//#define sorting_02	//insertion sorting
 //#define d_07	//Is_Palindrome
 //#define d_08	//2 linklists adding with carry bit
 //#define d_09	//substring or not
+//#define d_10	//the linked lists with circular
+#define Demos_ArraysStrings
 
 //#define test_pre
-#define test
+//#define test
 //#define test_2
 //#define test_3
 
@@ -46,45 +49,243 @@ void print_trace()
 
 #ifdef test
 
-void swap(int *x, int *y)
-{
-	int tmp;
-	tmp = *x;
-	*x =*y;
-	*y = tmp;
-}
 
-void quickSorting(int arr[], int start, int end)
-{
-//	int pivot = start;
-	int left;
-	int right;
 
-	if(start < end)
+#elif defined Demos_ArraysStrings
+typedef struct stu
+{
+	int id;
+	struct stu *next;
+}STU;
+
+int Has_Circular(STU *head)
+{
+	STU **p, **pre;
+
+	for(p = &head; ; p = &((*p)->next))
 	{
-		left = start + 1;
-		right = end;
-			
-		while(left <= right)
+		if(*p == NULL)
 		{
-			while(arr[left] <= arr[start])
-			{
-				left++;
-			}
-			while(arr[right] > arr[start])
-			{
-				right--;
-			}
-
-			if(left < right)
-			{
-				swap(&arr[left], &arr[right]);
-			}
+			return 0;
 		}
 		
-		swap(&arr[start], &arr[right]);
-		quickSorting(arr, start, right - 1);
-		quickSorting(arr, right + 1, end);
+		for(pre = &head; pre != p; pre = (&(*pre)->next))
+		{
+			if(*pre == *p)
+			{
+				return 1;
+			}
+		}
+	}
+}
+
+int Is_unique(char *str)
+{
+	assert(str != NULL);
+
+	int i, j;
+	
+	for(i = 0; *(str + i) != '\0'; i++)
+	{
+		for(j = i + 1; *(str + j) != '\0'; j++)
+		{
+			if(*(str + i) == *(str + j))
+			{
+				return 0;	//not unique
+			}
+		}
+	}
+
+	return 1;	//unique
+}
+
+char *mystrstr(char *str, char *substr)
+{
+	assert((str != NULL) && (substr != NULL));
+	char *p = NULL, *tmp = NULL;
+
+	for(; *str != '\0'; str++)
+	{
+		tmp = str;
+		for(p = substr; *p != '\0'; p++)
+		{
+			if(*tmp++ != *p)
+			{
+				break;
+			}
+		}
+
+		if(*p == '\0')
+		{
+			return str;
+		}
+	}
+
+	return NULL;
+}
+
+void myReverse(char *str)
+{	
+	char *end = str;
+	char tmp;
+	
+	if(str)
+	{
+		while(*end)
+		{
+			end++;
+		}
+		end--;
+		while(str < end)
+		{
+			tmp = *str;
+			*str++ = *end;
+			*end-- = tmp;
+		}
+	}
+}
+
+int main(void)
+{
+	char *str = "gqday";
+	char *substr = "da";
+
+	printf("%p\n", str);
+	printf("%p\n", str);
+	printf("%c\n", *str++);
+	*str = 'x';
+	printf("%c\n", *str++);
+	
+
+
+//	char *ret = mystrstr(str, substr);
+//	printf("%s\n", ret);
+
+//	int ret = Is_unique(str);
+//	printf("%d\n", ret);
+
+//	myReverse(str);
+//	printf("%s\n", str);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#elif defined d_10
+
+//create a linklist with a circular
+
+typedef struct stu
+{
+	int id;
+	struct stu *next;
+} STU;
+
+#define LEN sizeof(STU)
+
+int Has_Circular(STU *head)
+{
+	STU **p = NULL, **pre = NULL;
+
+	for(p = &head; ; p = &(*p)->next)
+	{
+		if(*p == NULL)
+		{
+			return 0;	//no circular
+		}
+		
+		for(pre = &head; pre != p; pre = &(*pre)->next)
+		{
+			if(*pre == *p)
+			{
+				printf("pre = %p pre->id = %d\tp = %p p->id = %d\n", pre, (*pre)->id, p, (*p)->id);
+				return 1;
+			}
+		}
+	}
+}
+
+
+STU *create_Linkedlist(int data[], int length)
+{
+	STU *head = NULL, *p = NULL, **tmp = NULL;
+	int i = 0;
+	
+	while(length-- > 0)
+	{
+		p = (STU *)malloc(LEN);
+		p->id = data[length];
+		p->next = head;
+		
+		if(i == 0)
+		{
+			i = 1;
+			tmp = &(p->next);
+		}
+		head = p;
+	}
+	*tmp = head->next->next;
+	
+	return head;
+}
+
+void showme(STU *head)
+{
+//	STU *p = head, *pre = head;
+#if 1
+	for(int i = 0; i < 5; i++)
+	{
+		printf("%d-%p\t", head->id, head);
+		head = head->next;
+	}
+	printf("\n");
+#endif
+}
+
+int main(void)
+{
+	int data[5] = {1, 2, 3, 4, 5};
+
+	STU *head = create_Linkedlist(data, 5);
+	showme(head);
+
+	int flag = Has_Circular(head);
+	printf("flag = %d\n", flag);
+
+	return 0;
+}
+
+#elif defined sorting_02
+void insertion_sort(int arr[], int len)
+{
+	int i, j, tmp;
+
+	for(i = 1; i < len; i++)
+	{
+		tmp = arr[i];
+		j = i - 1;
+
+		for(; j >= 0 && arr[j] > tmp; j--)
+		{
+			arr[j + 1] = arr[j];
+		}
+		arr[j + 1] = tmp;
 	}
 }
 
@@ -92,8 +293,7 @@ int main(void)
 {
 	int arr[] = {1, 5, 221, 8, 0, 32, 322, 8};
 
-	quickSorting(arr, 0, sizeof(arr) / sizeof(arr[0]) - 1);
-//	memmove(s + 1, s + 2, 5);
+	insertion_sort(arr, sizeof(arr) / sizeof(arr[0]));
 
 	for(int i = 0; i < sizeof(arr) / sizeof(arr[0]); i++)
 	{
