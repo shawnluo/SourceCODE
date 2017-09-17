@@ -8,6 +8,8 @@
 #include <sys/stat.h>
 #include <assert.h>
 #include "math.h"
+#include <pthread.h>
+#include <semaphore.h>
 
 #include <stdbool.h>
 //#include "color.h"
@@ -34,10 +36,10 @@
 //#define d_08	//2 linklists adding with carry bit
 //#define d_09	//substring or not
 //#define d_10	//the linked lists with circular
-#define Demos_ArraysStrings
+//#define Demos_ArraysStrings
 
 //#define test_pre
-//#define test
+#define test
 //#define test_2
 //#define test_3
 
@@ -50,6 +52,33 @@ void print_trace()
 #ifdef test
 
 
+//semaphore usage
+
+int glob = 0;
+sem_t mutex1;
+sem_t mutex2;
+
+void function(void)
+{
+	static int count1 = 0;
+
+	while(count1 < 100)
+	{
+		sem_wait(&mutex1);
+		glob++;
+		printf("%d\n", glob);
+		sem_post(&mutex2);
+		count1++;
+	}
+}
+
+
+
+int main(void)
+{
+	
+	return 0;
+}
 
 #elif defined Demos_ArraysStrings
 typedef struct stu
@@ -145,16 +174,68 @@ void myReverse(char *str)
 	}
 }
 
+
+// remove the duplicate characters in a string without using any additional buffer.
+void removeDup(char *str)
+{
+	int i;
+	int j;
+
+	for(i = 0; i < strlen(str) - 1; i++)
+	{
+		printf("hhhhhhhhhh\n");
+		for(j = i + 1; j < strlen(str); j++)
+		{
+			if(*(str + i) == *(str + j))
+			{
+				memmove(str + j, str + j + 1, strlen(str) - j);
+				j--;
+			}
+		}
+	}
+}
+
+void removeDup_ext(char *str)
+{
+	int i, j, tail = 1;
+	int len = strlen(str);
+
+	if(len < 2)
+	{
+		return;
+	}
+
+	for(i = 1; i < len; i++)
+	{
+		printf("kkkkkkkkk\n");
+		for(j = 0; j < tail; j++)
+		{
+			if(str[i] == str[j])
+			{
+				break;
+			}
+		}
+
+		if(j == tail)
+		{
+			str[tail++] = str[i];
+		}
+	}
+
+	str[tail] = '\0';
+}
+
+
+
 int main(void)
 {
-	char *str = "gqday";
+	char str[] = "gooday";
 	char *substr = "da";
 
 	printf("%p\n", str);
-	printf("%p\n", str);
-	printf("%c\n", *str++);
+//	printf("%c\n", *str++);
 	*str = 'x';
-	printf("%c\n", *str++);
+//	printf("%c\n", *str++);
 	
 
 
@@ -1193,6 +1274,17 @@ int main(void)
     showme(arr, length);
 
     return 0;
+}
+
+#elif defined w_05
+
+int main(void)
+{
+	char *str = "gqday";	//strings store in RO data zone.
+	*str = 'x';
+	printf("%c\n", *str++);
+
+	return 0;
 }
 
 #elif defined w_02                                      // strncpy, pointer cross-border
