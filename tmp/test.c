@@ -36,12 +36,12 @@
 //#define d_07	//Is_Palindrome
 //#define d_08	//2 linklists adding with carry bit
 //#define d_09	//substring or not
-//#define d_10	//the linked lists with circular
+#define d_10	//the linked lists with circular
 //#define Demos_ArraysStrings
 //#define Demo_semaphore
 
 //#define test_pre
-#define test
+//#define test
 //#define test_2
 //#define test_3
 
@@ -200,6 +200,23 @@ STU *Has_Circular_EXT(STU *head)
 //	return head;
 }
 
+void insert_Linkedlist_Behind(STU *head, int target, int newId)
+{
+	STU *newNode = NULL;
+
+	while((head != NULL) && (head->id != target))
+	{
+		head = head->next;
+	}
+
+	STU *tmp = head->next;
+
+	newNode = (STU *)malloc(LEN);
+	newNode->id = newId;
+	head->next = newNode;
+	newNode->next = tmp;
+}
+
 void showme(STU *head)
 {
 	while(head)
@@ -216,21 +233,24 @@ int main(void)
 	int len = sizeof(data) / sizeof(data[0]);
 	STU *head = NULL;
 #if 1
-//	head = create_Linkedlist(data, len);
-//	showme(head);
+	head = create_Linkedlist(data, len);
+	showme(head);
+
+	insert_Linkedlist_Behind(head, 6, 666);	
+	showme(head);
 	
-	head = create_Linkedlist_Circular(data, len);
+//	head = create_Linkedlist_Circular(data, len);
 //	showme(head);
 #endif
 
 //	head = create_Linkedlist_EXT_Circular(data, len);
 //	showme(head);
 
-	int flag = Has_Circular(head);
-	printf("flag = %d\n", flag);
+//	int flag = Has_Circular(head);
+//	printf("flag = %d\n", flag);
 
-	STU *Circular = Has_Circular_EXT(head);
-	printf("Circular Node is: %d\n", Circular->id);
+//	STU *Circular = Has_Circular_EXT(head);
+//	printf("Circular Node is: %d\n", Circular->id);
 	
 	return 0;
 }
