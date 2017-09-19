@@ -12,7 +12,7 @@
 #include <semaphore.h>
 
 #include <stdbool.h>
-//#include "color.h"
+#include "color.h"
 
 
 /*************************
@@ -37,6 +37,7 @@
 //#define d_09	//substring or not
 //#define d_10	//the linked lists with circular
 //#define Demos_ArraysStrings
+//#define Demo_semaphore
 
 //#define test_pre
 #define test
@@ -51,31 +52,189 @@ void print_trace()
 
 #ifdef test
 
+typedef struct stu
+{
+	int id;
+	struct stu *next;
+} STU;
 
+#define LEN sizeof(STU)
+
+STU *create_Linkedlist(int data[ ], int len)
+{
+	STU *head = NULL, *p = NULL, *p1 = NULL;
+
+	head = (STU *)malloc(LEN);
+	head->id = data[0];
+	head->next = NULL;
+	p1 = head;
+
+	for(int i = 1; i < len; i++)
+	{
+		p = (STU *)malloc(LEN);
+		p->id = data[i];
+		p->next = NULL;
+		p1->next = p;
+		p1 = p;
+	}
+
+	return head;
+}
+
+STU *create_Linkedlist_Circular(int data[], int len)
+{
+	STU *head = NULL, *p = NULL, *p1 = NULL;
+	STU *tmp = NULL;
+
+	head = (STU *)malloc(LEN);
+	head->id = data[0];
+	head->next = NULL;
+	p1 = head;
+
+	for(int i = 1; i < len; i++)
+	{
+		p = (STU *)malloc(LEN);
+		p->id = data[i];
+		p->next = NULL;
+		p1->next = p;
+		p1 = p;
+		
+		if(i == 3)
+		{
+			tmp = p;
+		}
+	}
+	p->next = tmp;
+
+	return head;
+}
+
+STU *create_Linkedlist_EXT(int data[], int len)
+{
+	STU *head = NULL, *p = NULL;
+	len--;
+	
+	while(len >= 0)
+	{
+		p = (STU *)malloc(LEN);
+		p->id = data[len];
+		p->next = head;
+		head = p;
+		
+		len--;
+	}
+
+	return head;
+}
+
+STU *create_Linkedlist_EXT_Circular(int data[], int len)
+{
+	STU *head = NULL, *p = NULL, **tmp = NULL;
+
+	len--;
+	int sum = len;
+
+	while(len >= 0)
+	{
+		p = (STU *)malloc(LEN);
+		p->id = data[len];
+		p->next = head;
+		head = p;
+		if(sum-- == len)
+		{
+			tmp = &(p->next);
+		}
+
+		len--;
+	}
+	*tmp = head;
+
+	return head;
+}
+
+void showme(STU *head)
+{
+	while(head)
+	{
+		printf("%d\t", head->id);
+		head = head->next;
+	}
+	printf("\n");
+}
+
+int main(void)
+{
+	int data[] = {10, 222, 13, 14, 5, 6};
+	int len = sizeof(data) / sizeof(data[0]);
+	STU *head = NULL;
+#if 0
+	head = create_Linkedlist(data, len);
+	showme(head);
+	
+	head = create_Linkedlist_Circular(data, len);
+	showme(head);
+#endif
+
+	head = create_Linkedlist_EXT_Circular(data, len);
+	showme(head);
+
+	return 0;
+}
+
+#elif defined Demo_semaphore
 //semaphore usage
-
 int glob = 0;
 sem_t mutex1;
 sem_t mutex2;
 
-void function(void)
+void function1(void)
 {
-	static int count1 = 0;
+	int count1 = 0;
 
-	while(count1 < 100)
+	while(count1++ < 100)
 	{
-		sem_wait(&mutex1);
+		sem_wait(&mutex1);	//if(mutex1 > 0), sem_wait() will return immediately, mutex1--;
+							//if(mutex1 == 0), sem_wait() will block!
 		glob++;
-		printf("%d\n", glob);
+		my_trace(BRIGHT, RED, BLACK, "- 1: %4d\t", glob);
+		
 		sem_post(&mutex2);
-		count1++;
 	}
 }
 
-
+void function2(void)
+{
+	int count1 = 0;
+	
+	while(count1++ < 100)
+	{
+		sem_wait(&mutex2);
+		glob++;
+		my_trace(BRIGHT, GREEN, BLACK, "- 2: %4d\n", glob);
+		sem_post(&mutex1);
+	}
+}
 
 int main(void)
 {
+	int rc1, rc2;
+	pthread_t thread1, thread2;
+
+	sem_init(&mutex1, 0, 1);
+	sem_init(&mutex2, 0, 0);
+
+	if(rc1 = pthread_create(&thread1, NULL, &function1, NULL))
+	{
+		printf("Thread creation failed: %d\n", rc1);
+	}
+
+	if(rc2 = pthread_create(&thread2, NULL, &function2, NULL))
+	{
+		printf("Thread creation failed: %d\n", rc2);
+	}
+
+	pthread_join(thread1, NULL);
+	pthread_join(thread2, NULL);
 	
 	return 0;
 }
@@ -314,10 +473,11 @@ STU *create_Linkedlist(int data[], int length)
 		p->id = data[length];
 		p->next = head;
 		
-		if(i == 0)
+		if(i++ == 0)	//only for saving the last node address.
 		{
-			i = 1;
-			tmp = &(p->next);
+//			i = 1;
+			tmp = &(p->next);	/*in order to change "p->next", we have to use double pointer
+								to save the address of "p->next".*/
 		}
 		head = p;
 	}
@@ -326,11 +486,37 @@ STU *create_Linkedlist(int data[], int length)
 	return head;
 }
 
+STU *create_Linkedlist_EXT(int *data, int len)
+{
+	STU *head = NULL, *p = NULL, *p1 = NULL, *tmp = NULL;
+
+	head = (STU *)malloc(LEN);
+	p1 = head;
+	head->id = data[0];
+	head->next = NULL;
+
+	for(int i = 1; i < len; i++)
+	{
+		p = (STU *)malloc(LEN);
+		p->id = data[i];
+		p->next = NULL;
+		p1->next = p;
+		p1 = p;
+		if(i == 3)
+		{
+			tmp = p;
+		}
+	}
+	p->next = tmp;
+
+	return head;
+}
+
 void showme(STU *head)
 {
 //	STU *p = head, *pre = head;
 #if 1
-	for(int i = 0; i < 5; i++)
+	for(int i = 0; i < 15; i++)
 	{
 		printf("%d-%p\t", head->id, head);
 		head = head->next;
