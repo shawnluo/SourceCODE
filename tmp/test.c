@@ -45,11 +45,12 @@
 //#define d_15	//reverse a interger, beware of overflow
 //#define d_16	//dynamically allocate a 2D array
 //#define d_17	//thread demo
+#define d_18	//select usage
 //#define Demos_ArraysStrings
 //#define Demo_semaphore
 
 //#define test_pre
-#define test
+//#define test
 //#define test_2
 //#define test_3
 
@@ -61,97 +62,143 @@ void print_trace()
 
 #ifdef test
 
+
+#elif defined d_18
+
+#include <fcntl.h>
+#include <sys/select.h>
+
+int main(void)
+{
+    int            keyboard;
+    int            ret, i;
+    char           c;
+    fd_set         readfd;
+    struct timeval timeout;
+
+    keyboard = open("/dev/tty", O_RDONLY | O_NONBLOCK);
+    assert(keyboard > 0);
+    while (1)
+    {
+        timeout.tv_sec  = 1;
+        timeout.tv_usec = 0;
+        FD_ZERO(&readfd);
+        FD_SET(keyboard, &readfd);
+        ret = select(keyboard + 1, &readfd, NULL, NULL, &timeout);
+        if (FD_ISSET(keyboard, &readfd))
+        {
+            i = read(keyboard, &c, 1);
+            if ('\n' == c)
+            {
+                continue;
+            }
+            printf("hehethe input is %c\n", c);
+
+            if ('q' == c)
+            {
+                break;
+            }
+        }
+
+		printf("show\n");
+    }
+
+	return 0;
+}
+
+
+#elif defined xx
 Is_Uniq(char *s1)
 {
-	
 }
 
 int main(void)
 {
-	return 0;
+    return 0;
 }
 
 #elif defined test_1
 
 typedef struct stu
 {
-	int id;
-	struct stu *next;
+    int        id;
+    struct stu *next;
 } STU;
 
-#define LEN sizeof(STU)
+#define LEN    sizeof(STU)
 
 STU *create_Linkedlist(int data[], int len)
 {
-	STU *head = NULL, *p = NULL;
+    STU *head = NULL, *p = NULL;
 
-	while(--len >= 0)
-	{
-		p = (STU *)malloc(LEN);
-		p->id = data[len];
-		p->next = head;
-		head = p;
-	}
+    while (--len >= 0)
+    {
+        p       = (STU *)malloc(LEN);
+        p->id   = data[len];
+        p->next = head;
+        head    = p;
+    }
 
-	return head;
+    return head;
 }
 
 void insert_Node_Front(STU **head, int Target, int New)
 {
-	STU **p = head;
-	STU *newNode = NULL;
+    STU **p      = head;
+    STU *newNode = NULL;
 
-	while(*p && (*p)->id != Target)
-	{
-		p = &(*p)->next;
-	}
+    while (*p && (*p)->id != Target)
+    {
+        p = &(*p)->next;
+    }
 
-	STU *tmp = *p;
-	newNode = (STU *)malloc(LEN);
-	newNode->id = New;
-	*p = newNode;
-	newNode->next = tmp;
+    STU *tmp = *p;
+    newNode       = (STU *)malloc(LEN);
+    newNode->id   = New;
+    *p            = newNode;
+    newNode->next = tmp;
 }
 
 void insert_Node_Behind(STU **head, int Target, int New)
 {
-	STU **p = head;
-	STU *newNode = NULL;
+    STU **p      = head;
+    STU *newNode = NULL;
 
-	while(*p && (*p)->id != Target)
-	{
-		p = &(*p)->next;
-	}
+    while (*p && (*p)->id != Target)
+    {
+        p = &(*p)->next;
+    }
 
-	STU *tmp = (*p)->next;
-	newNode = (STU *)malloc(LEN);
-	newNode->id = New;
-	(*p)->next = newNode;
-	newNode->next = tmp;
+    STU *tmp = (*p)->next;
+    newNode       = (STU *)malloc(LEN);
+    newNode->id   = New;
+    (*p)->next    = newNode;
+    newNode->next = tmp;
 }
 
 void showme(STU *head)
 {
-	while(head)
-	{
-		printf("%d\t", head->id);
-		head = head->next;
-	}
-	printf("\n");
+    while (head)
+    {
+        printf("%d\t", head->id);
+        head = head->next;
+    }
+    printf("\n");
 }
 
 int main(void)
 {
-	int data[3][5] = {{1, 2, 3, 4, 5},
-					{6, 7, 8, 9, 10}, 
-					{11, 12, 13, 14, 15}};
+    int data[3][5] = { {  1,  2,  3,  4,  5 },
+                       {  6,  7,  8,  9, 10 },
+                       { 11, 12, 13, 14, 15 } };
 
-	STU *head = create_Linkedlist(data[0], sizeof(data[0]) / sizeof(data[0][0]));
-	insert_Node_Front(&head, 5, 100);
-	showme(head);
-	insert_Node_Behind(&head, 1, 300);
-	showme(head);	
-	return 0;
+    STU *head = create_Linkedlist(data[0], sizeof(data[0]) / sizeof(data[0][0]));
+
+    insert_Node_Front(&head, 5, 100);
+    showme(head);
+    insert_Node_Behind(&head, 1, 300);
+    showme(head);
+    return 0;
 }
 
 #elif defined d_17
@@ -159,291 +206,294 @@ pthread_t tid1, tid2;
 
 void printids(const char *s)
 {
-	pid_t pid;
-	pthread_t tid;
+    pid_t     pid;
+    pthread_t tid;
 
-	pid = getpid();
-	tid = pthread_self();
+    pid = getpid();
+    tid = pthread_self();
 
-	printf("%s pid %u tid %u (0x%x)\n", s, (unsigned int)pid, \
-		(unsigned int)tid, (unsigned int)tid);
+    printf("%s pid %u tid %u (0x%x)\n", s, (unsigned int)pid, \
+           (unsigned int)tid, (unsigned int)tid);
 }
 
 void *thr_fn1(void *arg)
 {
-	printf("thread 1 returning\n");
+    printf("thread 1 returning\n");
 //	return ((void *)0);
-	sleep(50);
-	pthread_exit((void *)1);
+    sleep(50);
+    pthread_exit((void *)1);
 //	exit(1);
 }
 
 void *thr_fn2(void *arg)
 {
-	printf("thread 2 exiting\n");
-	pthread_cancel(tid1);
-	pthread_exit((void *)2);
+    printf("thread 2 exiting\n");
+    pthread_cancel(tid1);
+    pthread_exit((void *)2);
 }
 
 int main(void)
 {
-	int err;
-	void *tret;
-	
-	err = pthread_create(&tid1, NULL, thr_fn1, NULL);
-	if(err != 0)
-	{
-		perror("can't create thread");
-	}
+    int  err;
+    void *tret;
 
-	err = pthread_create(&tid2, NULL, thr_fn2, NULL);
-	if(err != 0)
-	{
-		perror("can't create thread");
-	}
+    err = pthread_create(&tid1, NULL, thr_fn1, NULL);
+    if (err != 0)
+    {
+        perror("can't create thread");
+    }
+
+    err = pthread_create(&tid2, NULL, thr_fn2, NULL);
+    if (err != 0)
+    {
+        perror("can't create thread");
+    }
 
 //	printids("main thread: ");
-	sleep(2);
+    sleep(2);
 
-	err = pthread_join(tid1, &tret);
-	if(err)
-	{
-		error("can't join with thread1\n");
-	}
-	printf("thread1 exit code %d\n", (int)tret);
-	
-	return 0;
+    err = pthread_join(tid1, &tret);
+    if (err)
+    {
+        error("can't join with thread1\n");
+    }
+    printf("thread1 exit code %d\n", (int)tret);
+
+    return 0;
 }
 #elif defined d_16
 #if 0
 int main(void)
 {
-	int r = 3, c = 4;
-	int *arr = (int *)malloc(r * c * sizeof(int));
-	
-	int i, j, count = 0;
+    int r = 3, c = 4;
+    int *arr = (int *)malloc(r * c * sizeof(int));
 
-	for(i = 0; i < r; i++)
-	{
-		for(j = 0; j < c; j++)
-		{
-			*(arr + i * c + j) = ++count;
-		}
-	}
-	
-	for(i = 0; i < r; i++)
-	{
-		for(j = 0; j < c; j++)
-		{
-			printf("%d ", *(arr + i * c + j));
-		}
-	}
+    int i, j, count = 0;
 
-	return 0;
+    for (i = 0; i < r; i++)
+    {
+        for (j = 0; j < c; j++)
+        {
+            *(arr + i * c + j) = ++count;
+        }
+    }
+
+    for (i = 0; i < r; i++)
+    {
+        for (j = 0; j < c; j++)
+        {
+            printf("%d ", *(arr + i * c + j));
+        }
+    }
+
+    return 0;
 }
 #endif
 
 #if 0
 int main(void)
 {
-	int r = 3, c = 4, i, j, count;
-	int *arr[r];
+    int r = 3, c = 4, i, j, count;
+    int *arr[r];
 
-	for(i = 0; i < r; i++)
-	{
-		arr[i] = (int *)malloc(c * sizeof(int));
-	}
+    for (i = 0; i < r; i++)
+    {
+        arr[i] = (int *)malloc(c * sizeof(int));
+    }
 
-	count = 0;
+    count = 0;
 
-	for(i = 0; i < r; i++)
-	{
-		for(j = 0; j < c; j++)
-		{
-			arr[i][j] = ++count;	//*(*(arr + i) + j) = ++count;
-		}
-	}
+    for (i = 0; i < r; i++)
+    {
+        for (j = 0; j < c; j++)
+        {
+            arr[i][j] = ++count;                //*(*(arr + i) + j) = ++count;
+        }
+    }
 
-	for(i = 0; i < r; i++)
-	{
-		for(j = 0; j < c; j++)
-		{
-			printf("%d ", arr[i][j]);
-		}
-	}
+    for (i = 0; i < r; i++)
+    {
+        for (j = 0; j < c; j++)
+        {
+            printf("%d ", arr[i][j]);
+        }
+    }
 
-	return 0;
+    return 0;
 }
 #endif
 
 #if 0
 int main()
 {
-	int r = 3, c = 4, i, j, count;
+    int r = 3, c = 4, i, j, count;
 
 //	int (*arr)[c];
-	int **arr = (int **)malloc(r * sizeof(int *));
-	for(i = 0; i < r; i++)
-	{
-		arr[i] = (int *)malloc(c * sizeof(int));
-	}
+    int **arr = (int **)malloc(r * sizeof(int *));
 
-	count = 0;	
-	for(i = 0; i < r; i++)
-	{
-		for(j = 0; j < c; j++)
-		{
-			arr[i][j] = ++count;
-		}
-	}
+    for (i = 0; i < r; i++)
+    {
+        arr[i] = (int *)malloc(c * sizeof(int));
+    }
 
-	for(i = 0; i < r; i++)
-	{
-		for(j = 0; j < c; j++)
-		{
-			printf("%d ", arr[i][j]);
-		}
-	}
-	return 0;
+    count = 0;
+    for (i = 0; i < r; i++)
+    {
+        for (j = 0; j < c; j++)
+        {
+            arr[i][j] = ++count;
+        }
+    }
+
+    for (i = 0; i < r; i++)
+    {
+        for (j = 0; j < c; j++)
+        {
+            printf("%d ", arr[i][j]);
+        }
+    }
+    return 0;
 }
 #endif
 
 int main(void)
 {
-	int r = 3, c = 4;
-	int **arr;
-	int count = 0, i, j;
+    int r = 3, c = 4;
+    int **arr;
+    int count = 0, i, j;
 
-	arr = (int **)malloc(sizeof(int *) * r);
-	arr[0] = (int *)malloc(sizeof(int) * c * r);
+    arr    = (int **)malloc(sizeof(int *) * r);
+    arr[0] = (int *)malloc(sizeof(int) * c * r);
 
-	for(i = 0; i < r; i++)
-	{
-		arr[i] = (*arr + c * i);
-	}
+    for (i = 0; i < r; i++)
+    {
+        arr[i] = (*arr + c * i);
+    }
 
-	for(i = 0; i < r; i++)
-	{
-		for(j = 0; j < c; j++)
-		{
-			arr[i][j] = ++count;
-		}
-	}
+    for (i = 0; i < r; i++)
+    {
+        for (j = 0; j < c; j++)
+        {
+            arr[i][j] = ++count;
+        }
+    }
 
-	for(i = 0; i < r; i++)
-	{
-		for(j = 0; j < c; j++)
-		{
-			printf("%d ", arr[i][j]);
-		}
-
-	}
-	return 0;
+    for (i = 0; i < r; i++)
+    {
+        for (j = 0; j < c; j++)
+        {
+            printf("%d ", arr[i][j]);
+        }
+    }
+    return 0;
 }
 
 #elif defined d_15
 int My_Reverse(int num)
 {
-	int ret = 0, sign = num >> 31;
-	
-	while(num != 0)
-	{
-		ret = ret * 10 + num % 10;
-		num = num / 10;
-	}
+    int ret = 0, sign = num >> 31;
 
-	if(sign != (ret >> 31))
-	{
-		printf("overflow!\n");
-		exit(1);
-	}
-	
-	return ret;
+    while (num != 0)
+    {
+        ret = ret * 10 + num % 10;
+        num = num / 10;
+    }
+
+    if (sign != (ret >> 31))
+    {
+        printf("overflow!\n");
+        exit(1);
+    }
+
+    return ret;
 }
 
-int main(void)
-{
-	int num = My_Reverse(100100);
-	printf("%d\n", num);
+int main(void)
 
-	int i = 1000000003;
-	printf("i >> 31: %d\n%d\n", i>>31, INT_MAX);
-	printf("%d\n", CHAR_BIT);
-	printf("%llu\n", ((unsigned long long)1 << 32) - 1);
-	return 0;
+{
+    int num = My_Reverse(100100);
+
+    printf("%d\n", num);
+
+    int i = 1000000003;
+    printf("i >> 31: %d\n%d\n", i >> 31, INT_MAX);
+    printf("%d\n", CHAR_BIT);
+    printf("%llu\n", ((unsigned long long)1 << 32) - 1);
+    return 0;
 }
 
 #elif defined d_14
 
 int Find_OnlyOne(int arr[], int len)
 {
-	int tmp = arr[0];
-	
-	for(int i = 1; i < len; i++)
-	{
-		tmp ^= arr[i];
-	}
-	return tmp;
+    int tmp = arr[0];
+
+    for (int i = 1; i < len; i++)
+    {
+        tmp ^= arr[i];
+    }
+    return tmp;
 }
 
 int main(void)
 {
-	int arr[] = {1, 1, 2, 2, 30};
-	int ret = Find_OnlyOne(arr, sizeof(arr) / sizeof(arr[0]));
+    int arr[] = { 1, 1, 2, 2, 30 };
+    int ret   = Find_OnlyOne(arr, sizeof(arr) / sizeof(arr[0]));
 
-	printf("ret = %d\n", ret);
+    printf("ret = %d\n", ret);
 }
 
 #elif defined d_13
 int Is_Samestring(char *str1, char *str2)
 {
-	assert(str1 && str2);
+    assert(str1 && str2);
 
-	int Len1 = strlen(str1);
-	int Len2 = strlen(str2);
+    int Len1 = strlen(str1);
+    int Len2 = strlen(str2);
 
-	if(Len1 != Len2)
-	{
-		return 0;	//NO
-	}
-	
-	int i, j;
-	char *tmp = (char *)malloc(Len2);
-	tmp = strcpy(tmp, str2);
+    if (Len1 != Len2)
+    {
+        return 0;               //NO
+    }
 
-	for(i = 0; i < Len1; i++)
-	{
+    int  i, j;
+    char *tmp = (char *)malloc(Len2);
+    tmp = strcpy(tmp, str2);
+
+    for (i = 0; i < Len1; i++)
+    {
 //		tmp = str1 + i;
-		for(j = 0; j < Len2; j++)
-		{
-			if(*(str1 + i) == *(tmp + j))
-			{
-				memmove(tmp + j, tmp + j + 1, strlen(tmp + j + 1) + 1);
-				break;
-			}
-		}
-		if(j == Len2)
-		{
-			return 0;
-		}
-	}
+        for (j = 0; j < Len2; j++)
+        {
+            if (*(str1 + i) == *(tmp + j))
+            {
+                memmove(tmp + j, tmp + j + 1, strlen(tmp + j + 1) + 1);
+                break;
+            }
+        }
+        if (j == Len2)
+        {
+            return 0;
+        }
+    }
 
-	if(i == Len1)
-	{
-		return 1;	//YES
-	}
+    if (i == Len1)
+    {
+        return 1;               //YES
+    }
 }
 
 int main(void)
 {
-	int i, j;
+    int  i, j;
 
-	char *str1 = "showme";
-	char *str2 = "ewomsh";
+    char *str1 = "showme";
+    char *str2 = "ewomsh";
 
-	int ret = Is_Samestring(str1, str2);
-	printf("%d\n", ret);
-	
+    int  ret = Is_Samestring(str1, str2);
+
+    printf("%d\n", ret);
+
     return 0;
 }
 
@@ -1753,7 +1803,7 @@ char findit(char *str1, char *str2)
         {
             if (*str1 == tmp[i])
             {
-                memmove(tmp + i, tmp + i + 1, strlen(tmp + i + 1) + 1; //the number of moving is "strlen(tmp) - i"
+                memmove(tmp + i, tmp + i + 1, strlen(tmp + i + 1) + 1); //the number of moving is "strlen(tmp) - i"
                 break;
             }
         }
