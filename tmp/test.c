@@ -46,6 +46,10 @@
 //#define d_16	//dynamically allocate a 2D array
 //#define d_17	//thread demo
 //#define d_18	//select usage
+//#define d_19	//reverse string
+//#define d_20	//recursion
+//#define d_21	//small or big endian
+//#define d_22	//double LinkedList
 //#define Demos_ArraysStrings
 //#define Demo_semaphore
 
@@ -62,90 +66,359 @@ void print_trace()
 
 #ifdef test
 
-char *my_strstr2(const char *haystack, const char *needle)
+int IsUniq(char *str)
 {
-    assert(haystack && needle);
+	int i, j;
 
-    const char *p_h = NULL, *p_n = NULL;
-
-    for ( ; *haystack != '\0'; haystack++)
-    {
-        p_h = haystack;
-
-        for (p_n = needle; *p_n != '\0'; p_n++)
-        {
-//			printf("p_h = %s\tp_n = %s\n", p_h, p_n);
-
-            if (*p_h++ != *p_n)
-            {
-                break;
-            }
-        }
-
-        if (*p_n == '\0')
-        {
-            return (char *)haystack;
-        }
-    }
+	assert(str);
 	
-    return NULL;
-}
-
-char *findsub(const char *str, const char *sub)
-{
-	const char *p_str = NULL, *p_sub = NULL;
-	
-	for( ; *str != '\0'; str++)
+	if(strlen(str) == 1)
 	{
-		p_str = str;
-
-		for(p_sub = sub; *p_sub != '\0'; p_sub++)
-		{
-			if(*p_str++ != *p_sub)
-			{
-				break;
-			}
-		}
-
-		if(*p_sub == '\0')
-		{
-			return (char *)str;
-		}
+		return 1;	//yes
 	}
-
-	return NULL;
-}
-
-char find_additional(char *str1, char *str2)
-{
-//	char *tmp = (char *)malloc(strlen(str1));
-	char tmp[strlen(str2)];		//should use array, malloc leads to memory leaking!
-//	memset(tmp, 0, strlen(str2));
 	
-	char *p = NULL;
-
-	strcpy(tmp, str2);
-	
-	for(; *tmp != '\0'; tmp++)
+	for(i = 0; i < strlen(str) - 1; i++)
 	{
-		for(p = str1; *p != '\0'; p++)
+		for(j = i + 1; j < strlen(str); j++)
 		{
-			if(*tmp == *p++)
+			if(*(str + i) == *(str + j))
 			{
-				memmove(tmp, tmp + 1, strlen(tmp + 1) + 1);
-				break;
+				return 0;	//no
 			}
 		}
 	}
 
-	for( ; *str1 != '\0'; str1++)
+	return 1;	//yes
+}
+
+void reverse(char *str)
+{
+	assert(str);
+	
+	if(strlen(str) == 1)
 	{
-		for()
+		return;
 	}
 	
-//	printf("y = %s, %d\n", y, strlen(p + 2));
-	return tmp[0];
+	char *start = str;
+	char *end = str + strlen(str) - 1;	//watch out!   -1
+	while(start < end)
+	{
+		char c = *start;
+		*start++ = *end;
+		*end-- = c;
+	}
 }
+
+int findSingle(int arr[], int num)
+{
+	int i = 0, value = 0;
+	for(i = 0; i < num; i++)
+	{
+		value ^= arr[i];
+	}
+	return value;
+}
+
+int verseInter(int num)
+{
+	int x = 0, flag = 0;
+
+	flag = num > 0 ? 1 : 0;
+
+	num = abs(num);
+	while(num > 0)
+	{
+		x = num % 10 + x * 10;
+		num = num / 10;
+	}
+
+	if(!flag)
+	{
+		x = 0 - x;
+	}
+	return x;
+}
+
+char *removeDup(char *str)
+{
+	int i, j;
+	int *p = str;
+
+	for(i = 0; *(str + i) != '\0'; i++)
+	{
+		for(j = i + 1; *(str + j) != '\0'; j++)
+		{
+			if(*(str + i) == *(str + j))
+			{
+				memmove(str + j, str + j + 1, strlen(str + j + 1) + 1);
+			}
+		}
+	}
+
+	return str;
+}
+
+char *removeDup_ext(char *str)
+{
+	
+}
+
+int main(void)
+{
+	char *str = (char *)malloc(20);;
+	strcpy(str, "shohwmethe");
+
+	char ss[] = "shohwmethe";
+//	char *x = removeDup(ss);
+//	printf("x = %s\n", x);
+
+	reverse(ss);
+	printf("x = %s\n", ss);
+}
+
+#elif defined d_22	//double LinkedList
+typedef struct stu
+{
+	int id;
+	struct stu *pre;
+	struct stu *next;
+}STU;
+
+#define LEN sizeof(STU)
+
+STU *create_Linklist(int data[], int num)
+{
+	STU *head = (STU *)malloc(LEN);
+	STU *preNode = NULL;
+	STU *newNode = NULL;
+	
+	head->id = data[0];
+	head->pre = NULL;
+	head->next = NULL;
+	preNode = head;
+
+	for(int i = 1; i < num; i++)
+	{
+		newNode = (STU *)malloc(LEN);
+		newNode->id = data[i];
+		newNode->next = NULL;
+		newNode->pre = preNode;		//only difference
+		preNode->next = newNode;
+		preNode = newNode;
+	}
+
+	return head;
+}
+
+void insertNode_Front(STU **head, int target, int newData)
+{
+	STU **p = head;
+	while(*p != NULL && (*p)->id != target)		//*p != NULL need be put on front
+	{
+		p = &(*p)->next;
+	}
+
+	if(*p == NULL)		//if node is not exist, then return.
+	{
+		return;
+	}
+
+	STU *tmp = *p;
+	STU *NewNode = (STU *)malloc(LEN);
+	NewNode->id = newData;
+
+	//for newNode
+	NewNode->next = tmp;
+	if(p == head)
+	{
+		NewNode->pre = NULL;
+	}
+	else
+	{
+		NewNode->pre = tmp->pre;
+	}
+
+	//for prev Node 
+	if(p == head)
+	{
+		*p = NewNode;
+	}
+	else
+	{
+		tmp->pre->next = NewNode;
+	}
+	
+	//for next Node
+	tmp->pre = NewNode;	
+}
+
+void insertNode_Behind(STU **head, int target, int newData)
+{
+	STU **p = head;
+
+	while(*p && (*p)->id != target)
+	{
+		p = &(*p)->next;
+	}
+
+	if(!*p)		//if node is not exist, then return.
+	{
+		return;
+	}
+
+	STU *tmp = (*p)->next;
+
+	STU *newNode = (STU *)malloc(LEN);
+	newNode->id = newData;
+	
+	//for previous Node
+	(*p)->next = newNode;
+	
+	//for newNode
+	if(tmp == NULL)
+	{
+		newNode->next = NULL;
+	}
+	else
+	{
+		newNode->next = tmp;
+	}
+	newNode->pre = *p;
+
+	//for next Node
+	if(tmp != NULL)
+	{
+		tmp->pre = newNode;
+	}
+}
+
+void delNode(STU **head, int target)
+{
+	STU **p = head;
+
+	while(*p && (*p)->id != target)
+	{
+		p = &(*p)->next;
+	}
+
+	if(!*p)		//if the node isn't exist!
+	{
+		printf("The node isn't exist!");
+		return;
+	}
+
+	//check if there is only one Node, then just del it and return.
+	if((*head)->next == NULL)
+	{
+		free(*head);
+		return;
+	}
+
+	//for pre Node
+	*p = (*p)->next;
+
+	//for next Node
+	(*p)->next->pre = (*p)->pre;
+}
+
+void showme(STU *head)
+{
+	printf("%d\t %d\n", head->id, head->next->id);
+	head = head->next;
+	while(head->next != NULL)
+	{
+//		printf("%d\n", head->id);
+		printf("%d\t pre = %d\t next = %d\n", head->id, head->pre->id, head->next->id);
+//		printf("%d\t next = %d\n", head->id, head->next->id);
+
+		head = head->next;
+	}
+	printf("%d\t pre = %d\n", head->id, head->pre->id);
+}
+
+int main(void)
+{
+	int data[] = {1, 2, 3, 4, 5};
+
+	STU *head = create_Linklist(data, sizeof(data) / sizeof(data[0]));
+	showme(head);
+	
+	printf("----------------\n");
+	
+	insertNode_Front(&head, 10, 200);
+	showme(head);
+
+	printf("----------------\n");
+
+	insertNode_Behind(&head, 50, 800);
+	showme(head);
+	
+	return 0;
+}
+
+#elif defined d_21	//small or big endian
+int main(void)
+{
+	unsigned int i = 1;
+	char *c = (char *)&i;
+
+	if(*c)
+	{
+		printf("Little endian\n");
+	}
+	else
+	{
+		printf("Big endian");
+	}	
+}
+
+#elif defined d_20	//recursion
+void printnum(int num)
+{
+	printf("1 - %d\n", num);
+	if(num < 9)
+	{
+		printnum(num + 1);
+	}
+	printf("2 - %d\n", num);
+}
+
+int main(void)
+{
+	printnum(5);
+}
+
+#elif defined d_19
+void reverse(char *str)
+{
+	int len = strlen(str);
+	int i;
+	char tmp;
+	
+	for(i = 0; i < len / 2; i++)
+	{
+		tmp = *(str + i);
+		*(str + i) = *(str + len - 1 - i);
+		*(str + len - 1 - i) = tmp;
+	}
+}
+
+void reverse_2(char *str)
+{
+	char tmp;
+	char *start = str;
+	char *end = str + strlen(str) - 1;
+
+	printf("%d\t%d\n", start, end);
+	while(start < end)
+	{
+		tmp = *start;
+		*start++ = *end;
+		*end-- = tmp;
+	}
+}
+
 
 int main(void)
 {
@@ -153,12 +426,20 @@ int main(void)
 	const char *sub = "xgood";
 	
     char *str1 = "abcdea";
-    char *str2 = "eacdbae";
+    char *str2 = "eacdbac";
 
-	char *x = findsub(str, sub);
-	char y = find_additional(str1, str2);
-		
-	printf("y = %s\n", y);
+
+	int arr[5] = {11, 33, 22, 66, 2};
+
+	char *strr = (char *)malloc(20);
+	memset(strr, 0, 20);
+	strcpy(strr, "gooday!");
+//	reverse(strr);
+
+	reverse_2(strr);
+	
+	printf("%s\n", strr);
+			
 	return 0;
 }
 
@@ -233,16 +514,6 @@ int main(void)
 	return 0;
 }
 
-
-#elif defined xx
-Is_Uniq(char *s1)
-{
-}
-
-int main(void)
-{
-    return 0;
-}
 
 #elif defined test_1
 
