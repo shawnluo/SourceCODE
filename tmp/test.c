@@ -122,21 +122,23 @@ int findSingle(int arr[], int num)
 
 int verseInter(int num)
 {
-	int x = 0, flag = 0;
+	int x = 0, sign = 0;
 
-	flag = num > 0 ? 1 : 0;
+//	sign = num >= 0 ? 1 : 0;
+	sign = num >>31;
 
-	num = abs(num);
-	while(num > 0)
+	while(num != 0)
 	{
 		x = num % 10 + x * 10;
 		num = num / 10;
 	}
 
-	if(!flag)
+	if(sign != (x >> 31))
 	{
-		x = 0 - x;
+		printf("overflow...\n");
+		exit(1);
 	}
+
 	return x;
 }
 
@@ -164,6 +166,17 @@ char *removeDup_ext(char *str)
 	
 }
 
+void bit_op(int number, int x, int n)
+{
+    number |= 1 << x;                   //set bit x
+    number &= ~(1 << x);                //clear bit x
+    number ^= 1 << x;                   //toggling bit x   (XOR)
+    int bit     = (number >> x) & 1;        //checking a bit -- this will put the value of bit x into the variable bit.
+    number ^= (-x ^ number) & (1 << n); //bit n will be set if x is 1, and cleared if x is 0.
+}
+
+
+
 int main(void)
 {
 	char *str = (char *)malloc(20);;
@@ -173,8 +186,24 @@ int main(void)
 //	char *x = removeDup(ss);
 //	printf("x = %s\n", x);
 
-	reverse(ss);
-	printf("x = %s\n", ss);
+	int x = verseInter(-123);
+	printf("x = %d\n", x);
+	printf("%d\n", x>>31);
+
+	int y = 0x7d;
+	y |= 1 << 7;
+	printf("%x\n", y);
+
+	y &= ~(1 << 7);
+	printf("%x\n", y);
+
+	y ^= (1 << 7);
+	printf("%x\n", y);
+
+	int bit = (y >> 7) & 1;
+	printf("%d\n", bit);
+
+	int *arr[5];
 }
 
 #elif defined d_22	//double LinkedList
@@ -1220,8 +1249,6 @@ int main(void)
 
     return 0;
 }
-
-#elif defined bit_operations
 
 #elif defined d_11
 void rotate(int mat[][5], int n)
