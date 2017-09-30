@@ -27,6 +27,17 @@
 /*************************
 *		demo
 *************************/
+
+/***	LinkedList
+1.0 Basic operations on single linked list
+1.1 Create a single linked list
+1.2 Traverse a single linked list
+1.3 Find a node in a single linked list
+1.4 Insert a new node in a given single linked list
+1.5 Delete a node in a given single linked list
+***/
+
+
 //#define d_01	//show the usage of strcpy and strncpy
 //#define d_02	//find and return the substring
 //#define d_03	//bit operations
@@ -53,6 +64,8 @@
 //#define Demos_ArraysStrings
 //#define Demo_semaphore
 
+//#define interview
+
 //#define test_pre
 #define test
 //#define test_2
@@ -64,7 +77,397 @@ void print_trace()
 //    my_trace(BRIGHT, GREEN, BLACK, "good\n");
 }
 
-#ifdef test
+#if defined test
+
+typedef struct node
+{
+	int id;
+	struct node *next;
+} NODE, *pNODE;
+
+#define LEN sizeof(NODE)
+
+pNODE *Swap(pNODE *p1, pNODE *p2)
+{
+	pNODE pTmp = NULL;
+
+	pTmp = *p1;
+	*p1 = *p2;
+	*p2 = pTmp;
+	
+	return p1;
+}
+
+pNODE Create_LinkedList(int Data[], int Num)
+{
+	pNODE pHead = NULL;
+	pNODE p = NULL;
+
+	while(Num-- > 0)
+	{
+		p = (pNODE)malloc(LEN);
+		p->id = Data[Num];
+		p->next = pHead;
+		pHead = p;
+	}
+
+	return pHead;
+}
+
+pNODE Reverse_LinkedList(pNODE pHead)
+{
+	assert(pHead);
+	
+	pNODE pCur = pHead, pNext = NULL, pSaved = NULL;
+
+	while(pCur)
+	{
+		pNext = pCur->next;
+
+		if(pCur == pHead)
+		{
+			pCur->next = NULL;
+		}
+		else
+		{
+			pCur->next = pSaved;
+		}
+		
+		pSaved = pCur;
+		pCur = pNext;
+	}
+	pHead = pSaved;
+}
+
+int *Node(pNODE pHead, int i)
+{
+	int x = 0;
+	pNODE p = pHead;
+
+	for(x = 0; x < i; x++)
+	{
+		p = p->next;
+	}
+
+	return &(p->id);
+}
+
+void Swap_Node(int *id1, int *id2)
+{
+	int tmp = 0;
+
+	tmp = *id1;
+	*id1 = *id2;
+	*id2 = tmp;
+}
+
+void Reverse_LinkedList_ext(pNODE pHead)
+{
+	assert(pHead);
+	
+	int Len = 0;	//length of linkedlist
+	pNODE p = pHead;
+	
+	while(p)
+	{
+		Len++;
+		p = p->next;
+	}
+	
+	for(int i = 0; i < Len / 2; i++)
+	{
+		Swap_Node(Node(pHead, i), Node(pHead, Len - i - 1));
+	}
+}
+
+pNODE Find_Node(pNODE pHead, int id)
+{
+	assert(pHead);
+	
+	pNODE p = pHead;
+
+	while(p && p->id != id)
+	{
+		p = p->next;
+	}
+
+	if(p == NULL)
+	{
+		printf("Cannot find it\n");	//Cannot find it
+		return NULL;
+	}
+	else
+	{
+		return p;
+	}
+}
+
+void Insert_Node_Front(pNODE *ppHead, int target, int NewID)
+{
+	assert(*ppHead);
+	
+	pNODE *p = ppHead;
+
+	while(*p && (*p)->id != target)
+	{
+		p = &(*p)->next;
+	}
+
+	if(NULL == *p)
+	{
+		perror("Target isn't exist!");
+		return;
+	}
+	
+	pNODE pNew = (pNODE)malloc(LEN);	//NewNode	
+	pNew->id = NewID;	
+	pNew->next = *p;
+
+	*p = pNew;	//previous Node 
+}
+
+void Insert_Node_Behind(pNODE pHead, int target, int NewID)
+{
+	assert(pHead);
+
+	pNODE p = pHead;
+
+	while(p && p->id != target)
+	{
+		p = p->next;
+	}
+
+	pNODE pNew = (pNODE)malloc(LEN);
+	pNew->id = NewID;
+	pNew->next = p->next;		//NewNode
+
+	p->next = pNew;		//current Node
+}
+
+void Del_Node(pNODE *ppHead, int target)
+{
+	assert(*ppHead);
+
+	pNODE *p = ppHead;
+
+	while(*p && target != (*p)->id)
+	{
+		p = &(*p)->next;
+	}
+
+	if(!*p)
+	{
+		perror("Cannot find it!");
+		return;
+	}
+	
+	pNODE pTmp = *p;
+	*p = (*p)->next;
+
+	free(pTmp);
+	pTmp = NULL;
+}
+
+void Create_Circular(pNODE pHead, int num)
+{
+	assert(pHead);
+	
+	pNODE p = pHead;
+
+	while(p && p->id != num)
+	{
+		p = p->next;
+	}
+
+	pNODE pEnd = pHead;
+
+	while(pEnd->next)
+	{
+		pEnd = pEnd->next;
+	}
+
+	pEnd->next = p;
+}
+
+int Has_Circular(pNODE pHead)
+{
+	assert(pHead);
+
+	pNODE p, p2;
+
+	for(p = pHead; ; p = p->next)
+	{		
+		if(NULL == p)
+		{
+			return 0;	//NO
+		}
+		
+		if(p->next == pHead)	//YES	tail points to head
+		{
+			return 1;
+		}
+		
+		for(p2 = pHead; p2 != p; p2 = p2->next)
+		{
+		
+			if(p->next == p2->next)
+			{
+				return 1;	//YES
+			}
+		}
+	}
+}
+
+//int Has_Circular_EXT(LINKLIST * head)
+
+void showme(pNODE pHead)
+{
+	while(pHead)
+	{
+		printf("%d\t", pHead->id);
+		pHead = pHead->next;
+	}
+
+	printf("\n");
+}
+
+int main(void)
+{
+	pNODE p1 = (pNODE)malloc(LEN);
+	p1->id = 100;
+	
+	pNODE p2 = (pNODE)malloc(LEN);	
+	p2->id = 200;
+	
+	Swap(&p1, &p2);
+	
+//	printf("p1: %d\n", p1->id);
+//	printf("p2: %d\n", p2->id);
+
+	int Data[][6] = {	{1, 2, 3, 4, 5, 6},
+						{6, 7, 8, 9, 0}
+					};
+
+	pNODE pHead = Create_LinkedList(Data[0], sizeof(Data[0]) / sizeof(Data[0][0]));
+	showme(pHead);
+	
+//	pHead = Reverse_LinkedList(pHead);
+//	showme(pHead);
+
+	Reverse_LinkedList_ext(pHead);
+	showme(pHead);
+
+	Insert_Node_Behind(pHead, 1, 300);
+	showme(pHead);
+
+	Insert_Node_Front(&pHead, 6, 400);
+	showme(pHead);
+	
+	Del_Node(&pHead, 300);
+	showme(pHead);
+
+	Create_Circular(pHead, 400);
+//	showme(head);
+
+	int x = Has_Circular(pHead);
+	printf("x = %d\n", x);
+	
+	return 0;
+}
+
+#elif tet
+typedef struct LinkList
+{
+	int id;
+	struct stu *next;
+} LINKLIST;
+
+LINKLIST *ReverseLinkedList(pLinkedList *pHead)
+{
+	if(pHead == NULL)
+	{
+		return NULL;
+	}
+
+	pLinkedList *p1=NULL,*p2=NULL, *p3=NULL;
+	p1 = pHead;
+	while((p1 != NULL) && (p1->next != NULL))
+	{
+		p2=p1->next;
+
+		p3=p2->next;
+
+		p2->next=p1;
+		if(p1 == pHead)
+		{
+			p1->next = NULL;
+		}
+
+		p1=p2;
+	}
+
+	if(p1!=NULL)
+	pHead = p1;
+	
+	return pHead;		
+}
+
+
+#elif defined test1
+void fun(char *arr, int m, int n)
+{
+	int i, j;
+
+	for(i = 0; i < m; i++)
+	{
+		for(j = 0; j < n; j++)
+		{
+			printf("%d\t", *(arr + i * n + j));
+		}
+		printf("\n");
+	}
+}
+
+#if 0
+int main(void)
+{
+	int i;
+	char *arr;
+	arr = (int *)malloc(3 * 4 * sizeof(int));
+	for(i = 0; i < 3 * 4; i++)
+	{
+		arr[i] = i;
+	}
+	
+	fun(arr, 3, 4);
+	
+	return 0;
+}
+#endif
+
+int main(int argc, char *argv[])
+{
+	if(argc < 3)
+	{
+		printf("Please input: ");
+	}
+	
+	int i, j;
+	int m = atoi(argv[1]);
+	int n = atoi(argv[2]);
+	char *arr;
+	arr = (int *)malloc(m * n * sizeof(int));
+	for(i = 0; i < m * n; i++)
+	{
+		arr[i] = i;
+	}
+
+	fun(arr, m, n);
+	
+	return 0;
+}
+
+#elif defined interview
 
 int IsUniq(char *str)
 {
@@ -2897,7 +3300,7 @@ int main(void)
     strcpy(p1, "showmethe");                    //wrong	"happy" in static/initialized zone, it cannot be changed!
     printf("%s\n", p1);
 
-    char text[] = "This is a list of lists";            //right
+    char text[] = "This is a list of lists";            //OK
     strcpy(text, "good");
     printf("%s\n", text);
 
@@ -2911,7 +3314,7 @@ int main(void)
 
     assert(str);
 
-    strcpy(str, "showmethe");
+//    strcpy(str, "showmethe");
     printf("%s\n", str);
 
     strcpy(str, "ab");
@@ -3003,10 +3406,12 @@ int main(void)
 int main(void)
 {
     char *str = "gqday";        //strings store in RO data zone.
+    *str = 'x';					//WRONG! CANNOT change the data in RO section!
 
-    *str = 'x';				//WRONG! CANNOT change the data in RO section!
-    printf("%c\n", *str++);		
 
+	char str2[] = "good";		//array strings store in stack.
+	*str2 = 'x';				//OK
+	
     return 0;
 }
 
