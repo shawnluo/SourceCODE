@@ -74,10 +74,27 @@
 
 //insertion sorting
 
+int Same_Char(char *str1, char *str2)
+{
+	assert(str1 && str2);
+	
+	if(strlen(str1) != strlen(str2))
+	{
+		return 0;	//no
+	}
+
+	printf("k = %d\n", 'k' - '0');
+}
 
 int main(int argc, char *argv[])
 {
+	char *str1 = "dgod1";
+	char *str2 = "1gdod";
+
+	int ret = Same_Char(str1, str2);
+	printf("ret = %d\n", ret);
 	
+	return 0;
 }
 
 #elif defined D_xx	//sorting
@@ -227,30 +244,6 @@ int Is_Palindrome(char *str)
 	return 1;
 }
 
-int Is_Palindrome(char *str)
-{
-	assert(str);
-
-	if(strlen(str) <= 1)
-	{
-		return 1;
-	}
-	
-	char *start, *end;
-	start = str;
-	end = str + strlen(str) - 1;
-	
-	while(start < end)
-	{
-		if(*start++ != *end--)
-		{
-			return 0;	
-		}
-	}
-
-	return 1;
-}
-
 // 2 strings, there is 1 additional character in the one string.
 char Find_Additional(char *str1, char *str2)
 {
@@ -311,6 +304,62 @@ char *Find_Substring(char *str1, char *str2)
 	printf("Cannot find it\n");
 	
 	return NULL;
+}
+
+void Remove_Dup(char *str)
+{
+	assert(str);
+
+	if(1 == strlen(str))
+	{
+		return;
+	}
+	
+	int len = strlen(str);
+	int new = 0;
+	int i, j;
+	
+	for(i = 0; i < len; i++)
+	{
+		for(j = i + 1; j < len; j++)
+		{
+			if(str[i] == str[j])
+			{
+				break;
+			}
+		}
+		
+		if(str[j] == '\0')
+		{
+			str[new++] = str[i];
+		}
+	}
+	
+	str[new] = '\0';
+}
+
+void Remove_Dup_Ext(char *str)
+{
+	assert(str);
+	
+	if(1 == strlen(str))
+	{
+		return;
+	}
+	
+	int i, j;
+	
+	for(i = 0; i < strlen(str); i++)
+	{
+		for(j = i + 1; j < strlen(str); j++)
+		{
+			if(str[i] == str[j])
+			{
+				memmove(str + j, str + j + 1, strlen(str + j + 1) + 1);
+				j--;
+			}
+		}
+	}
 }
 
 int main(int argc, char *argv[])
