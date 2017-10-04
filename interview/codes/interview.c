@@ -365,8 +365,12 @@ int Is_Substring_Ext(char *str1, char *str2)
 	else
 		return no;
 }
-//=======================================
 
+//5.1=======================================
+
+
+
+//==========================================
 #define BIG_ENDIAN		1
 #define LITTLE_ENDIAN	0
 int Big_Or_Little()
