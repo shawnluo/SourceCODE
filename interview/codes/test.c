@@ -1506,7 +1506,7 @@ int main(void)
 #elif defined d_12
 int num = 5;
 
-void rotate_1(int (*mat)[num], int n)   //40 degree mirror from left up to right down
+void rotate_1(int (*mat)[num], int n)   //90 degree mirror from left up to right down
 {
     int i = 0, j = 0, tmp;
 

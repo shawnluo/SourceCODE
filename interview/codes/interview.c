@@ -72,26 +72,533 @@
 
 #if defined test
 
-//insertion sorting
+//1.1================
 
-int Same_Char(char *str1, char *str2)
+int Is_Uniq(char *str)
 {
+	assert(str);
+
+	if(1 == strlen(str) || 0 == strlen(str))
+	{
+		return 1;	//yes
+	}
+	
+	char *p = NULL, *p1 = NULL;
+
+	for(p = str; p != '\0'; p++)
+	{
+		for(p1 = p + 1; p1 != '\0'; p1++)
+		{
+			if(*p == *p1)
+			{
+				return 0;	//no
+			}
+		}
+	}
+	return 1;	//yes
+}
+//1.2=================
+
+void My_Reverse(char *str)
+{
+	assert(str);
+
+	if((0 == strlen(str) || (1 == strlen(str)))
+	{
+		return;
+	}
+	
+	char *start = str;
+	char *end = str + strlen(str) - 1;
+	char tmp = NULL;
+	
+	while(start < end)
+	{
+		tmp = *start;
+		*start = *end;
+		*end = tmp;
+	}
+}
+
+//1.3================
+
+void Remove_Dup(char *str)
+{
+	assert(str);
+	if((2 < strlen(str))
+	{
+		return;
+	}
+	
+	int i, j;
+	int len = strlen(str), tail = 1;
+	
+	for(i = 1; i < len; i++)
+	{
+		for(j = 0; j < tail; j++)
+		{
+			if(str[i] == str[j])
+			{
+				break;
+			}
+		}
+		if(j == tail)
+		{
+			str[tail++] = str[i];
+		}
+	}
+	str[tail] = '\0';
+}
+
+//1.4================
+
+void swap(char *p, char *q)
+{
+	char tmp = NULL;
+
+	tmp = *p;
+	*p = *q;
+	*q = tmp;
+}
+
+void My_Sorting(char *str)
+{
+	int len = strlen(str);
+
+	for(i = 0; i < strlen - 1; i++)
+	{
+		for(j = 1; j < strlen; j++)
+		{
+			if(str[i] > str[j])
+				swap(str + i, str + j);
+		}
+	}
+}
+
+int Is_Anagrams(char *str1, char *str2)
+{
+	assert(str1, str2);
+
+	int len1 = strlen(str1);
+	int len2 = strlen(str2);	
+	if(len1 != len2)
+	{
+		return no;
+	}
+	
+	My_Sorting(str1);
+	My_Sorting(str2);
+
+#if 0
+	if(strcmp(str1, str2))
+	{
+		return yes;
+	}
+	else
+		return no;
+#endif
+
+	while(len1++ != 0)
+	{
+		if(*str1++ != *str2++)
+		{
+			return no;
+		}
+	}
+	
+	return yes;
+}
+
+int Is_Anagrams_Ext(char *str1, char *str2)
+{
+	assert(str1 && str2);
+
+	len1 = strlen(str1);	
+	len2 = strlen(str2);
+	
+	if(0 == len1) && (0 == len2))
+	{
+		return 1;	//yes
+	}
+	
+	int arr[128] = {0}, i;
+
+	while(*str1 != '\0')
+	{
+		for(i = 0; i < 128; i++)
+		{
+			if(*str1 == i)
+			{
+				arr[i]++;
+				break;
+			}
+		}
+		str1++;
+	}
+
+	while(*str2 != '\0')
+	{
+		for(i = 0; i < 128; i++)
+		{
+			if(*str2 == i)
+			{
+				arr[i]--;
+				break;
+			}
+		}
+		str2++;
+	}
+
+	for(i = 0; i < 128; i++)
+	{
+		if(0 != arr[i])
+		{
+			return 0;	//no
+		}
+	}
+
+	return 1;	//yes;
+}
+//1.5================
+
+void Replace_Character(char *str)
+{
+	assert(str);
+	
+	int len = strlen(str);
+	int num = 0;	//number of space
+	char *p = str;
+	
+	while(*p)
+	{
+		if(*p == ' ')
+			num++;
+		p++;
+	}
+
+	new_len = len + 2 * num;
+		
+	str[new_end] = '\0';
+
+	for(i = len - 1; i >= 0; i--)
+	{
+		if(p[end] == ' ')
+		{
+			str[new_len - 1] = '0';
+			str[new_len - 2] = '2';
+			str[new_len - 3] = '%';
+			
+			new_len = new_len - 3;
+		}
+		else
+		{
+			str[new_len - 1] = str[end];
+			new_len = new_len - 1;
+		}
+	}
+
+}
+//1.6=========================
+
+void Rotate_Image(int matrix[n][n], int n)
+{
+	int layer, i, first, last, top, offset;
+
+	for(i = 0; i <= (n - 1) / 2; i++)
+	{
+		for(j = i; j < n - 1 - i; j++)
+		{
+			temp = matrix[i][i];
+
+			matrix[i][j] = matrix[n - 1 - j][i]
+			matrix[n - 1 - j][i] = 
+		}
+	}
+}
+
+//1.7============================
+
+void Set_Matrix(int matrix[m][n], int m, int n)
+{
+	Copy_Matrix(matrix, matrix2, m, n);
+
+	for(i = 0; i < m; i++)
+	{
+		for(j = 0; j < n; j++)
+		{
+			if(0 == matrix[i][j])
+			{
+				for(x = 0; x < m; x++)
+				{
+					matrix2[x][j] = 0;
+				}
+				
+				for(y = 0; y < n; y++)
+				{
+					matrix2[i][y] = 0;
+				}
+			}
+		}
+	}
+
+	Copy_Matrix(matrix2, matrix, m, n);
+}
+
+//1.8=================================
+
+int Is_Substring_Ext(char *str1, char *str2)
+{
+	assert();
+
+	len1 = strlen(str1);
+	len2 = strlen(str2);
+
+	if(len1 != len2)	return no;
+	if(len1 == 0 && len2 == 0)	return yes;
+
+	char *str2_ext = (char *)malloc(len2 * 2);
+	strcpy(str2_ext);
+	strcat(str2_ext, str2);
+
+	if(Is_Substring(str2_ext, str1))
+		return yes;
+	else
+		return no;
+}
+//=======================================
+
+#define BIG_ENDIAN		1
+#define LITTLE_ENDIAN	0
+int Big_Or_Little()
+{
+	short int WORD;
+	char *c = (char *)&WORD;
+
+	if(*c == 1)
+	{
+		LITTLE_ENDIAN;
+	}
+	else
+	{
+		BIG_ENDIAN;
+	}
+}
+
+int volatile *reg = (int *)0x8000000;
+
+if(Enable == TRUE)
+{
+	*reg |= (1 << ENABLE_BIT);
+}
+else
+{
+	*reg &= ~(1 << ENABLE_BIT);
+}
+
+int volatile *reg = (int *)0x80000000;
+
+if(Enable == TRUE)
+{
+	*reg |= (1 << ENABLE_BIT);
+}
+else
+{
+	*reg &= ~(1 << ENABLE_BIT);
+}
+
+
+//set the volume
+//1. clear the bits first
+mask = 0;
+mask = (0xff) << 8;
+*reg &= ~mask;
+
+//2. set the bits
+*reg |= data;
+
+reverse(char *str)
+{
+	assert();
+
+	char *start = str;
+	*end = str + strlen;
+
+	while(start < end)
+	{
+
+		start++;
+		end--;
+	}
+}
+
+bit = (num >> x) & 1;
+num ^= 1 << x;
+
+Quick_Sorting(int arr [ ],int start,int end)
+{
+	if(start < end)
+	{
+		left = start + 1;
+		right = end;
+
+		while(left <= right)
+		{
+			
+		}
+	}
+}
+
+strstr(string, substring)
+{
+	assert();
+	
+	char *p = string;
+	
+	for(p = string; *p != '\0'; p++)
+	{
+		tmp = p;
+		
+		for(p_sub = substring; p_sub != '\0'; p_sub++)
+		{
+			if(*p++ != *p_sub)
+				break;
+		}
+
+		if(*p_sub == '\0')
+			return yes;
+	}
+
+	return no;
+}
+
+Insert_Node_Front(pNODE * ppHead,int target_id,int new_id)
+{
+	assert();
+	
+	pNODE *pp = ppHead;
+
+	while(*pp && (*pp)->id != target_id)
+	{
+		pp = &(*pp)->next;
+	}
+
+	pNODE newNode = (pNODE)malloc(LEN);
+	newNode->next = (*pp)->next;
+	newNode->id = new_id;
+	*pp = newNode;
+}
+
+int Power(int m, int n)
+{
+	if(n == 0)
+	{
+		return 1;
+	}
+	else if(n == 1)
+	{
+		return m;
+	}
+
+	if((n % 2) == 0)
+	{
+		ret = Power(m, n / 2);
+		result = ret * ret;
+	}
+	else
+	{
+		ret = Power(m, n / 2);
+		result = ret * ret *m;
+	}
+
+	return result;
+}
+
+
+int main(void)
+{
+	for(int i = 0; i <= (n - 1) / 2; i++)
+	{
+		for(j = 1; j < n - 1 - i; j++)
+		{
+			int tmp = arr[i][j];
+
+			arr[i][j] 					= arr[n - 1 - j][i];
+			arr[n - 1 - j][i] 			= arr[n - 1 - i][n - 1 - j];
+			arr[n - 1 - i][n - 1 - j]	= arr[n - 1 - n + 1 + j][n - 1 - i];
+			arr[j][n - 1 - i]			= tmp;
+		}
+	}
+	
+	return 0;
+}
+
+#elif defined bigEnd_littleEnd
+
+int main(void)
+{
+	unsigned char i = 1;
+	char *c = (char *)&i;
+
+	if(*c)
+	{
+		little;
+	}
+	else
+		big;
+
+	return 0;
+}
+
+#elif defined xx
+//" " be replaced with "%20"
+void Replace_char(char *str)
+{
+//	assert();
+
+	int len_str = strlen(str);
+	int num = 0;
+	int new_len;
+	
+	char *p = str;
+	
+	while(*p != '\0')
+	{
+		if(*p == ' ')
+		{
+			num++;
+		}
+		p++;
+	}
+	new_len = len_str + 2 * num;
+	*(p + new_len + 1) = '\0';
+
+	int i = 0;
+	p = str;
+
+	for(i = len_str - 1; i >= 0; i--)
+	{
+		if(*(p + i) == ' ')
+		{
+			str[new_len - 1] = '0';
+			str[new_len - 2] = '2';
+			str[new_len - 3] = '%';
+			new_len -= 3;
+		}
+		else
+		{
+			str[new_len - 1] = str[i];
+			new_len -= 1;
+		}
+	}
 }
 
 int main(int argc, char *argv[])
 {
-	char *str1 = "dgod1";
-	char *str2 = "1gdod";
-
-	int arr[128] = {0};
-
-	char *p = 'k';
-	int x = *p;
-
-	arr[x] = 2;
-	printf("x = %d\n", x);
-	printf("'k' = %d\t, arr['k'] = %d\n", x, arr[x]);
-
+	char *str = (char *)malloc(20);
+	strcpy(str,	"a b");
+	
+	Replace_char(str);
+	printf("%s\n", str);
 	
 	return 0;
 }
@@ -359,6 +866,54 @@ void Remove_Dup_Ext(char *str)
 			}
 		}
 	}
+}
+
+//anagrams: aabc  abac
+int Same_Char(char *str1, char *str2)
+{
+	assert(str1 && str2);
+
+	if(length is not the same)
+		return 0;
+	
+	int i = 0;
+	int arr[128] = {0};
+	char *p = str1;	
+	
+	while(*p != '\0')
+	{
+		for(i = 0; i < 128; i++)
+		{
+			if(i == *p)
+			{
+				arr[i]++;
+			}
+		}
+		p++;
+	}
+
+	p = str2;
+	while(*p != '\0')
+	{
+		for(i = 0; i < 128; i++)
+		{
+			if(i == *p)
+			{
+				arr[i]--;
+			}
+		}
+		p++;
+	}
+
+	for(i = 0; i < 128; i++)
+	{
+		if(arr[i] != 0)
+		{
+			return 0;	//no
+		}
+	}
+	
+	return 1;	//yes
 }
 
 int main(int argc, char *argv[])

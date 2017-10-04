@@ -67,7 +67,7 @@
 //#define interview
 
 //#define test_pre
-#define test
+#define d_12
 //#define test_2
 //#define test_3
 
