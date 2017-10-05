@@ -367,7 +367,6 @@ int Is_Substring_Ext(char *str1, char *str2)
 }
 
 //5.1=======================================
-
 n: 32bit
 m = 10101
 i = 6
@@ -390,6 +389,18 @@ int Set_Bits(int n, int m, int i, int j)
 }
 
 //5.2=======================================
+int updateBits(int n, int m, int i, int j)
+{
+	//1. need clear the bits
+	int left = ~0 - ((1 << (j + 1)) - 1)
+	
+	int mask = left | right;
+
+	n = n & mask;
+	
+	//2. need set the bits
+	n = n | m << i;
+}
 
 int Print_Binary(char *str)
 {
@@ -508,6 +519,7 @@ void Resorting(char *str[], int num)
 {
 	//find the anagrams and exchange the position.
 }
+
 //9.3========================================
 int search(int a[], int l, int u, int x)
 {
@@ -528,6 +540,13 @@ int search(int a[], int l, int u, int x)
 		}
 	}
 }
+
+//9.4========================================
+
+
+
+
+
 //=========================================
 #define BIG_ENDIAN		1
 #define LITTLE_ENDIAN	0
