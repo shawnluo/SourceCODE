@@ -168,3 +168,85 @@ while(x != 0)     \
     x <<= 1;
     printf("count=%d",count);
 }
+
+
+
+Your function receives 10 numbers one after the other. You need to check whether each number is a palindrome.
+Maintain a queue where you need to push the number if it is a palindrome. Disregard the number if it not a palindrome.
+Use linked list.
+
+For eg: 12321
+    34265
+    56765
+    36266
+    66666
+    .....
+The queue should have <12321> <56765> <66666>
+
+
+
+#define YES 1
+#define NO 0
+int checkPalindrome(unsigned int number)
+{
+    int ret = 0, sign = number >> 31;
+    int save = number;
+      
+    //reverse the number
+    
+    while(number != 0)
+    {
+        ret = ret * 10 + number % 10;
+        number = number / 10;
+    }
+    
+    if(sign != (ret >> 31))
+    {
+        exit(1);
+    }
+    
+    if(save != ret)
+    {
+        return NO;
+    }
+    else
+    {
+        return YES;
+    }
+}
+
+int My_Sorting(int array[], int muber)
+{
+    
+}
+
+
+
+typedef struct node
+{
+    int num;
+    struct node *next;
+} Node, *pNode;
+
+#define LEN sizeof(struct node)
+
+//Node *Create_Linkedlist(int arrary[], int number)
+pNode Create_Linkedlist(int arrary[], int number)
+{
+    pNode pHead = NULL, p = NULL;
+    
+    while(number--)
+    {
+        p = (pNode)malloc(LEN);
+        p->num = number;
+        p->next = pHead;
+        phead = p;
+    }
+    
+    return pHead;
+}
+
+
+//1. put all the numbers into a array;
+//2. check  the number is palindrome or not one by one.
+
