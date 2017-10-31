@@ -237,10 +237,37 @@ int **rotate(int arr[][4])
 	return new;
 }
 
+int Is_sub(char *str1, char *str2)	//suppose str1 longer than str2
+{
+	assert(str1 && str2);
+	
+	char *p_str1 = NULL, *p_str2 = NULL;
+
+	for(; *str1; str1++)
+	{
+		p_str1 = str1;
+
+		for(p_str2 = str2; *p_str2; p_str2++)
+		{
+			if(*p_str1++ != *p_str2)
+			{
+				break;
+			}
+		}
+
+		if(*p_str2 == '\0')
+		{
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
 int main(void)
 {
 	char *str1 = "showme";
-	char *str2 = "mesxxw";
+	char *str2 = "showme";
 	int i = 0, j = 0;
 
 #if 0
@@ -251,7 +278,6 @@ int main(void)
 	char *rep  = "%20";
 	myReplace(str, rep);
 	printf("%s\n", str);
-#endif
 	int arr[4][4] = {{1, 2, 3, 4}, {10, 20, 30, 40}, {100, 200, 300, 400}, {1000, 2000, 3000, 4000}};
 	int **new = rotate(arr);
 	
@@ -263,6 +289,10 @@ int main(void)
 		}
 	}
 	printf("\n");
+#endif
+
+	int x = Is_sub(str1, str2);
+	printf("%d\n", x);
 	return 0;
 }
 
