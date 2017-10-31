@@ -145,7 +145,6 @@ int verseInter(int num)
 char *removeDup(char *str)
 {
 	int i, j;
-	int *p = str;
 
 	for(i = 0; *(str + i) != '\0'; i++)
 	{
@@ -216,11 +215,35 @@ void myReplace(char *str, char *rep)
 //	memmove(str + 4, str + 2, strlen(str + 2) + 1);
 }
 
+int **rotate(int arr[][4])
+{
+	int i = 0, j = 0;
+
+	int **new = (int **)malloc(sizeof(int*) * 4);
+	for(i = 0; i < 4; i++)
+	{
+		new[i] = (int *)malloc(sizeof(int) * 4);
+	}
+	
+	for(i = 0; i < 4; i++)
+	{
+		for(j = 0; j < 4; j++)
+		{
+			new[i][j] = arr[4 - 1 - j][i];
+			
+//			printf("%d\t", arr[i][j]);
+		}
+	}
+	return new;
+}
+
 int main(void)
 {
 	char *str1 = "showme";
 	char *str2 = "mesxxw";
+	int i = 0, j = 0;
 
+#if 0
 	int x = Is_Anagrams(str1, str2);
 //	printf("%d\n", x);
 
@@ -228,6 +251,19 @@ int main(void)
 	char *rep  = "%20";
 	myReplace(str, rep);
 	printf("%s\n", str);
+#endif
+	int arr[4][4] = {{1, 2, 3, 4}, {10, 20, 30, 40}, {100, 200, 300, 400}, {1000, 2000, 3000, 4000}};
+	int **new = rotate(arr);
+	
+	for(i = 0; i < 4; i++)
+	{
+		for(j = 0; j < 4; j++)
+		{
+			printf("%d\t", new[i][j]);
+		}
+	}
+	printf("\n");
+	return 0;
 }
 
 #elif defined d_22	//double LinkedList
@@ -712,7 +748,8 @@ int main(void)
 
     return 0;
 }
-#elif defined d_16
+
+#elif defined d_16		//1. pass 2D array as parameter. 2. initilize a 2D array
 #if 0
 int main(void)
 {
@@ -807,6 +844,96 @@ int main()
 }
 #endif
 
+
+void Pass_2DArray_way1(int *arr, int m, int n)	//1. alloc in stack  2. pass 2D array as a parameter
+{
+	int i, j;
+	for(i = 0; i < m; i++)
+	{
+		for(j = 0; j < n; j++)
+		{
+			printf("%d\t", *(arr + i * n + j));
+		}
+	}
+}
+
+void Pass_2DArray_way2(int **array,int m,int n)
+{
+    ...
+    printf("%d ", *(*(array+i)+j));
+    ...
+}
+
+int Pass_2DArray_way3(int *array, int m, int n) 
+{
+    int i,j;
+    for(i=0;i<m;i++) 
+	{
+        for(j=0;j<n;j++)
+            printf("\t%d",*(array+i*n+j));
+        printf("\n");
+    }
+    return 0;
+}
+
+void Pass_2DArray_way4(int arr[][4])	//1. alloc in stack  2. pass 2D array as a parameter
+{
+	int i, j;
+	for(i = 0; i < 4; i++)
+	{
+		for(j = 0; j < 4; j++)
+		{
+			printf("%d\t", arr[i][j]);
+		}
+	}
+}
+
+int main(void)
+{
+	/*------------way 1----------------------------
+	 *		
+	 *---------------------------------------------*/
+	int arr[4][4] = {{1, 2, 3, 4}, {10, 20, 30, 40}, {100, 200, 300, 400}, {1000, 2000, 3000, 4000}};
+	int m = 4, n = 4;	
+	Pass_2DArray_way1(*arr, m, n);
+
+	/*------------way 2----------------------------
+	 *		
+	 *---------------------------------------------*/
+
+	int **array;
+	array = (int **)malloc(m *sizeof(int *));
+	for(i=0;i<M;i++)
+	{
+    	array[i] = (int *)malloc(n *sizeof(int));
+	}
+	Pass_2DArray_way2(array, m, n);
+	/*------------way 3----------------------------
+	 *		Best way
+	 *---------------------------------------------*/
+	int m,n,i;
+	int *array;
+	assert(argc == 3);
+	m = atoi(argv[1]);
+	n = atoi(argv[2]);
+	array = (int*)malloc(m*n*sizeof(int));
+	for(i=0;i<m*n;i++)
+	{
+		array[i] = i;
+	}
+	Pass_2DArray_way3(array,m,n);
+
+	 
+	/*------------way 4----------------------------
+	 *		
+	 *---------------------------------------------*/
+	int arr[4][4] = {{1, 2, 3, 4}, {10, 20, 30, 40}, {100, 200, 300, 400}, {1000, 2000, 3000, 4000}};
+	int m = 4, n = 4;	
+	Pass_2DArray_way4(*arr, m, n);
+	
+	return 0;
+}
+#if 0
 int main(void)
 {
     int r = 3, c = 4;
@@ -838,7 +965,7 @@ int main(void)
     }
     return 0;
 }
-
+#endif
 #elif defined d_15
 int My_Reverse(int num)
 {
@@ -2852,5 +2979,30 @@ int main(void)
 
     return 0;
 }
+
+#elif defined w_06		//pass 2D array as parament
+
+int **malloc_2D_Array(int **arr)		//it will not work. it will be translate to int (*)[] when it serve as a right side value. but here we can use arr[][4]
+{
+	int i, j;
+	for(i = 0; i < 4; i++)
+	{
+		for(j = 0; j < 4; j++)
+		{
+			printf("%d\t", *(*arr + i) + j);
+		}
+	}
+	return NULL;
+}
+
+int main(void)
+{
+	int arr[4][4] = {{1, 2, 3, 4}, {10, 20, 30, 40}, {100, 200, 300, 400}, {1000, 2000, 3000, 4000}};
+
+	malloc_2D_Array(arr);
+	
+	return 0;
+}
+
 
 #endif
