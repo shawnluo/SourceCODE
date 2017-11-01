@@ -41,7 +41,7 @@
 //#define d_01	//show the usage of strcpy and strncpy
 //#define d_02	//find and return the substring
 //#define d_03	//bit operations
-//#define d_04	//find the addtional charater
+//#define d_04	//find the addtional character
 //#define d_05	//linklist and sorting
 //#define d_06	//quick sorting
 //#define sorting_02	//insertion sorting
@@ -3232,7 +3232,7 @@ void swap(int *p1, int *p2)
     *p2 = tmp;
 }
 
-void fastsorting(int arr[], int start, int end)
+void Quick_Sorting(int arr[], int start, int end)
 {
     int left, right;
 
@@ -3260,8 +3260,8 @@ void fastsorting(int arr[], int start, int end)
         }
         swap(&arr[start], &arr[right]);
 
-        fastsorting(arr, start, right - 1);
-        fastsorting(arr, right + 1, end);
+        Quick_Sorting(arr, start, right - 1);
+        Quick_Sorting(arr, right + 1, end);
     }
 }
 
@@ -3281,16 +3281,11 @@ int main(void)
     int arr[]  = { 22, 112, 763, 98, 766 };
     int length = sizeof(arr) / sizeof(arr[0]);
 
-    fastsorting(arr, 0, length - 1);
+    Quick_Sorting(arr, 0, length - 1);
     showme(arr, length);
 
     return 0;
 }
-
-
-
-
-
 
 #elif defined w_01                                      // strcpy string, before malloc
 int main(void)

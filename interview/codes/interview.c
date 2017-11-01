@@ -72,74 +72,12 @@
 
 #if defined test
 
-int Is_Palindrome(char *str)
-{
-	assert(str);
+//insertion sorting
 
-	if(strlen(str) <= 1)
-	{
-		return 1;
-	}
-	
-	char *start, *end;
-	start = str;
-	end = str + strlen(str) - 1;
-	
-	while(start < end)
-	{
-		if(*start++ != *end--)
-		{
-			return 0;	
-		}
-	}
-
-	return 1;
-}
-
-char Find_Additional(char *str1, char *str2)
-{
-	int len1 = strlen(str1);
-	int len2 = strlen(str2);
-	
-	if((len1 == len2) || (abs(len1 - len2) > 1))
-	{
-		perror("wrong strings!");
-		exit(-1);
-	}
-	
-	char *p1 = str1;
-	char *p2 = str2;
-	char ret = NULL;
-
-	strcat(p1, p2);
-	printf("%s\n", p1);
-
-	int len = len1 + len2;
-	
-	while(len--)
-	{
-		ret ^= *p1++;
-		
-		printf("%c\n", ret);
-	}
-
-	return ret;
-}
 
 int main(int argc, char *argv[])
 {
-	char *str = "ababx";
-
-	int ret = Is_Palindrome(str);
-
-//	printf("ret = %d\n", ret);
-
-	char *str1 = (char*)malloc(20);
-	strcpy(str1, "show321me");
-	char *str2 = "sh!ow123me";
-
-	char addi = Find_Additional(str1, str2);
-	printf("addi = %c\n", addi);
+	
 }
 
 #elif defined D_xx	//sorting
@@ -289,6 +227,92 @@ int Is_Palindrome(char *str)
 	return 1;
 }
 
+int Is_Palindrome(char *str)
+{
+	assert(str);
+
+	if(strlen(str) <= 1)
+	{
+		return 1;
+	}
+	
+	char *start, *end;
+	start = str;
+	end = str + strlen(str) - 1;
+	
+	while(start < end)
+	{
+		if(*start++ != *end--)
+		{
+			return 0;	
+		}
+	}
+
+	return 1;
+}
+
+// 2 strings, there is 1 additional character in the one string.
+char Find_Additional(char *str1, char *str2)
+{
+	int len1 = strlen(str1);
+	int len2 = strlen(str2);
+	
+	if((len1 == len2) || (abs(len1 - len2) > 1))
+	{
+		perror("wrong strings!");
+		exit(-1);
+	}
+	
+	char *p1 = str1;
+	char *p2 = str2;
+	char ret = NULL;
+
+	strcat(p1, p2);
+	printf("%s\n", p1);
+
+	int len = len1 + len2;
+	
+	while(len--)
+	{
+		ret ^= *p1++;
+		
+		printf("%c\n", ret);
+	}
+
+	return ret;
+}
+
+
+// Is str2 substring of str1?
+char *Find_Substring(char *str1, char *str2)
+{
+	assert(str1 && str2);
+	
+	char *pTmp = NULL;
+	
+	for( ; *str1 != '\0'; str1++)
+	{
+		pTmp = str1;
+
+		for( ; *str2 != '\0'; str2++)
+		{
+			if(*str2 != *pTmp++)
+			{
+				break;
+			}
+		}
+
+		if(*str2 == '\0')
+		{
+			return str1;
+		}
+	}
+
+	printf("Cannot find it\n");
+	
+	return NULL;
+}
+
 int main(int argc, char *argv[])
 {
 	char *str = (char *)malloc(20);
@@ -300,7 +324,28 @@ int main(int argc, char *argv[])
 
 	int ret_2 = Is_Palindrome(str);
 	printf("ret = %d\n", ret2);
-	
+
+//=========================
+	char *strx = "ababx";
+
+	int ret = Is_Palindrome(strx);
+
+//	printf("ret = %d\n", ret);
+
+	char *str1 = (char*)malloc(20);
+	strcpy(str1, "show321me");
+	char *str2 = "sh!ow123me";
+
+	char addi = Find_Additional(str1, str2);
+	printf("addi = %c\n", addi);
+
+//==================================
+	char *str1 = "showmethemoney";
+	char *str2 = "tdhe";
+
+	char *Sub = Find_Substring(str1, str2);
+	printf("Sub is %s\n", Sub);
+
 	return 0;
 }
 
