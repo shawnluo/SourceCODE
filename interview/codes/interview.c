@@ -56,13 +56,281 @@
 ***************************************************************/
 
 //#define D_04
+/******************** Recursion ******************************
+01. Power
+02. 
+03. 
+***************************************************************/
+
+//#define D_10
 /******************** others ******************************
 01. rotate the image by 90 degrees, and do it in place
 
 ***************************************************************/
+#define test
 
 
-#if defined D_01
+#if defined test
+
+int Is_Palindrome(char *str)
+{
+	assert(str);
+
+	if(strlen(str) <= 1)
+	{
+		return 1;
+	}
+	
+	char *start, *end;
+	start = str;
+	end = str + strlen(str) - 1;
+	
+	while(start < end)
+	{
+		if(*start++ != *end--)
+		{
+			return 0;	
+		}
+	}
+
+	return 1;
+}
+
+char Find_Additional(char *str1, char *str2)
+{
+	int len1 = strlen(str1);
+	int len2 = strlen(str2);
+	
+	if((len1 == len2) || (abs(len1 - len2) > 1))
+	{
+		perror("wrong strings!");
+		exit(-1);
+	}
+	
+	char *p1 = str1;
+	char *p2 = str2;
+	char ret = NULL;
+
+	strcat(p1, p2);
+	printf("%s\n", p1);
+
+	int len = len1 + len2;
+	
+	while(len--)
+	{
+		ret ^= *p1++;
+		
+		printf("%c\n", ret);
+	}
+
+	return ret;
+}
+
+int main(int argc, char *argv[])
+{
+	char *str = "ababx";
+
+	int ret = Is_Palindrome(str);
+
+//	printf("ret = %d\n", ret);
+
+	char *str1 = (char*)malloc(20);
+	strcpy(str1, "show321me");
+	char *str2 = "sh!ow123me";
+
+	char addi = Find_Additional(str1, str2);
+	printf("addi = %c\n", addi);
+}
+
+#elif defined D_xx	//sorting
+void Swap(int *x, int *y)
+{
+	int tmp;
+	
+	tmp = *x;
+	*x = *y;
+	*y = tmp;
+}
+
+void Bubble_Sorting(int arr[], int len)
+{
+	int i, j;
+
+	for(i = 0; i < len - 1; i++)
+	{
+		for(j = i + 1; j < len; j ++)
+		{
+			if(arr[i] < arr[j])
+			{
+				Swap(&arr[i], &arr[j]);
+			}
+		}
+	}
+}
+
+//star, end, left, right: All are orders of array member
+void Quick_Sorting(int arr[], int start, int end)
+{
+	int left, right;
+	
+	if(start < end)
+	{
+		left = start + 1;
+		right = end;
+
+		while(left <= right)
+		{
+			while(arr[left] <= arr[start])
+			{
+				left++;
+			}
+
+			while(arr[right] > arr[start])
+			{
+				right--;
+			}
+
+			if(left < right)
+			{
+				Swap(&arr[left], &arr[right]);
+			}
+		}
+		Swap(&arr[start], &arr[right]);
+		
+		Quick_Sorting(arr, start, right - 1);
+		Quick_Sorting(arr, right + 1, end);
+	}
+}
+
+int main(int argc, char *argv[])
+{
+	int arr[] = {1, 22, 3, 111, 76,54};
+	int len = sizeof(arr) / sizeof(arr[0]);
+	
+	Bubble_Sorting(arr, len);
+
+	for(int i = 0; i < len; i++)
+	{
+		printf("%d\t", arr[i]);
+	}
+	printf("\n");
+	
+	return 0;
+}
+
+#elif defined D_02
+char *reverse(char *str)
+{
+	assert(str);
+
+	if(strlen(str) <= 1)
+	{
+		return str;
+	}
+	
+	char tmp;
+	char *start = str, *end = NULL;
+	end = str + strlen(str) - 1;
+	
+	while(start < end)
+	{
+		tmp = *start;
+		*start++ = *end;
+		*end-- = tmp;
+	}
+
+	return str;
+}
+
+char *reverse_ext(char *str)
+{
+	assert(str);
+	
+	if(strlen(str) <= 1)
+	{
+		return str;
+	}
+	
+	int i, len = strlen(str);
+	char tmp = NULL;
+	char *p = str;
+	
+	for(i = 0; i < len / 2; i++)
+	{
+		tmp = *(p + i);
+		*(p + i) = *(p + len - 1 - i);
+		*(p + len - 1 - i) = tmp;
+	}
+	
+	return str;
+}
+
+int Is_Palindrome(char *str)
+{
+	assert(str);
+
+	if(strlen(str) <= 1)
+	{
+		return 1;
+	}
+	
+	char *start, *end;
+	start = str;
+	end = str + strlen(str) - 1;
+	
+	while(start < end)
+	{
+		if(*start++ != *end--)
+		{
+			return 0;	
+		}
+	}
+
+	return 1;
+}
+
+int main(int argc, char *argv[])
+{
+	char *str = (char *)malloc(20);
+	memset(str, 0, 20);
+	strcpy(str, "");
+
+	char *ret = reverse_ext(str);
+	printf("%s\n", ret);
+
+	int ret_2 = Is_Palindrome(str);
+	printf("ret = %d\n", ret2);
+	
+	return 0;
+}
+
+#elif defined test1
+
+int main(int argc, char *argv[])
+{
+	pid_t childPID;
+	int var_lcl = 0;
+
+	childPID = fork();
+
+	if(childPID >= 0)
+	{
+		if(0 == childPID)	//child process
+		{
+			
+		}
+		else				//parent process
+		{
+
+		}
+	}
+	else					//fork failed
+	{
+		exit(-1);
+	}
+}
+
+#elif defined D_01
 
 typedef struct Node
 {
@@ -267,30 +535,99 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-#elif defined D_02
-
-#elif defined D_0x
-
-#define ENABLE_BIT 0x07
-#define VOLUME_START_BIT 0x0
-#define VOLUME_END_BIT 0x7
-
-void Control_Sound(int Volume, bool Enable)
+#elif defined D_04
+int Power(int m, int n)
 {
-	int i = 0, data = 0;
+	int ret = 0;
+	int result = 0;
 
-	int volatile *reg = (int *)0x80000000;
-	*reg |= 1 << 0x7;
-
-	if(TRUE == Enable)
+	if(0 == n)
 	{
-		*reg |= (1 << );
+		return 1;
+	}
+
+	if(1 == n)
+	{
+		return m;
+	}
+
+	if((n % 2) == 0)
+	{
+		ret = Power(m, n / 2);
+		result = ret * ret;
+	}
+	else
+	{
+		ret = Power(m, n / 2);
+		result = ret * ret *m;
+	}
+	
+	return result;
+}
+
+void rec(int x)
+{
+	if(x > 0)
+	{
+		printf("before: %d\n", x);
+		rec(x - 1);
+		rec(x - 1);
+		printf("after: %d\n", x);		
 	}
 }
 
 int main(int argc, char *argv[])
 {
 	
+	int x = Power(3, 4);
+	printf("x = %d\n", x);
+
+	rec(3);
+	
+	return 0;
+}
+#elif defined D_0x
+
+#define ENABLE_BIT 0x07			//bit7
+#define VOLUME_START_BIT 0x1f	//bit8
+#define VOLUME_END_BIT 0xf0		//bit15
+
+void Control_Sound(int Volume, bool Enable)
+{
+	int i = 0, data = 0, mask = 0;
+
+	int volatile *reg = (int *)0x80000000;
+
+	//enable the control
+	if(TRUE == Enable)
+	{
+		*reg |= 1 << ENABLE_BIT;
+	}
+	else
+	{
+		*reg &= ~(1 << ENABLE_BIT);
+	}
+
+	//set the volume
+	if((Volume >= 0) && (Volume <= 255))
+	{
+		data = Volume;
+		data <<= 8;
+
+		//clear bit8-15
+		mask = 0;
+		mask = 0xff << 8;
+
+		*reg &= ~mask;
+
+		//set bit8-15
+		*reg |= data;
+	}
+}
+
+int main(int argc, char *argv[])
+{
+	Control_Sound(5, 1);
 }
 
 #else
