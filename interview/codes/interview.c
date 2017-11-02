@@ -76,14 +76,6 @@
 
 int Same_Char(char *str1, char *str2)
 {
-	assert(str1 && str2);
-	
-	if(strlen(str1) != strlen(str2))
-	{
-		return 0;	//no
-	}
-
-	printf("k = %d\n", 'k' - '0');
 }
 
 int main(int argc, char *argv[])
@@ -91,8 +83,15 @@ int main(int argc, char *argv[])
 	char *str1 = "dgod1";
 	char *str2 = "1gdod";
 
-	int ret = Same_Char(str1, str2);
-	printf("ret = %d\n", ret);
+	int arr[128] = {0};
+
+	char *p = 'k';
+	int x = *p;
+
+	arr[x] = 2;
+	printf("x = %d\n", x);
+	printf("'k' = %d\t, arr['k'] = %d\n", x, arr[x]);
+
 	
 	return 0;
 }
