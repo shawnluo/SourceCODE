@@ -374,9 +374,8 @@ int main(void)
 
     return 0;
 }
+#elif defined d_23
 
-#elif defined d_23	//binary search
-//	it can only be used for sorted array! If you want to use it on unsorted array, you have to sort the array first.
 int main()
 {
     int c, first, last, middle, n, search, array[100];

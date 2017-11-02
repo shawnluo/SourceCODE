@@ -368,9 +368,167 @@ int Is_Substring_Ext(char *str1, char *str2)
 
 //5.1=======================================
 
+n: 32bit
+m = 10101
+i = 6
+j = 2
 
+int Set_Bits(int n, int m, int i, int j)
+{
+	//1. get mask
+	int left = ~0 - ((1 << (i + 1)) - 1);
+	int right = (1 << j) - 1;
+	int mask = left | right;
+		
+	//2. set mask
+	n = n & mask;
+	
+	//3. set bits
+	n = n | (m << j)
 
-//==========================================
+	return n;
+}
+
+//5.2=======================================
+
+int Print_Binary(char *str)
+{
+	assert(str);
+
+	char *p = str;
+	char *p_intPart = (char *)malloc(200);
+	memset(p_intPart, 0, 200);
+	
+	while(*p != '\0')
+	{
+		if(*p == '.')
+		{			
+			*p_intPart = '\0';
+			break;
+		}
+
+		*p_intPart++ = *p;
+		p++;
+	}
+
+	p = str;
+	while(*p != '\0' && *p != '.')
+	{
+		p++;
+	}
+
+	char *p_Dec = (char *)malloc(200);
+
+	int intPart = My_Atoi(p_intPart);
+	
+	while(intPart > 0)
+	{
+		r = intPart % 2;
+		intPart >>= 1;
+		int_string = strcat(r, int_string);
+	}
+}
+//5.3==========================================
+
+void Print_Number_Max_Min(int num)
+{
+	int MAX = int((unsigned)~0) >> 1;
+	int MIN = -(int)((unsigned)(~0) >> 1) - 1;
+	if(0 == num)
+	{
+		return;
+	}
+
+	int num_ext = num;
+	int num_of_one = 0;
+
+	while(num_ext > 0)
+	{
+		if(num_ext % 2 == 1)
+		{
+			num_of_one++;
+		}
+		num_ext >>= 1;
+	}
+
+	num_ext = num;
+	while(num_ext <= MAX)
+	{
+		num_ext++;
+
+		if(num_of_one == xx)
+		{
+			printf(num_ext);
+		}
+	}
+}
+//5.4==========================================
+//1. way1 - just caculate the number of the 2 integers.
+//2. way2 - using Exclusive or
+int bitSwapRequired(int a, int b)
+{
+	int count = 0;
+
+	for(int c = a ^ b; c != 0; c = c >> 1)
+	{
+		count += c & 1;
+	}
+	return count;
+}
+//9.1=========================================
+void My_Merge(char *str1, char *str2)
+{
+	int len1 = strlen(str1);
+	int len2 = strlen(str2);
+
+	int new_index = len1 + len2 - 1;
+	len1--;
+	len2--;
+
+	while(len1 >= 0 && len2 >= 0)
+	{
+		if(str1[len1] > str2[len2])
+		{
+			str1[new_index--] = str1[len1--];
+		}
+		else
+		{
+			str1[new_index--] = str2[len2--];
+		}
+	}
+
+	while(len2 >= 0)
+	{
+		str1[new_index--] = str2[len2--];
+	}
+}
+
+//9.2========================================
+void Resorting(char *str[], int num)
+{
+	//find the anagrams and exchange the position.
+}
+//9.3========================================
+int search(int a[], int l, int u, int x)
+{
+	while(l <= u)
+	{
+		int m = (1 + u) / 2;
+
+		if(x == a[m])
+		{
+			return m;
+		}
+		else if(a[l] <= a[m])
+		{
+			if(x > a[m])
+			{
+				l = m + 1;
+			}
+		}
+	}
+}
+//=========================================
 #define BIG_ENDIAN		1
 #define LITTLE_ENDIAN	0
 int Big_Or_Little()
