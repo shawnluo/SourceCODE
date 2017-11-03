@@ -365,6 +365,9 @@ int Is_Substring_Ext(char *str1, char *str2)
 	else
 		return no;
 }
+//3.0========================================
+
+
 
 //5.1=======================================
 
@@ -509,25 +512,51 @@ void Resorting(char *str[], int num)
 	//find the anagrams and exchange the position.
 }
 //9.3========================================
-int search(int a[], int l, int u, int x)
+int search(int a[], int first, int last, int target)
 {
-	while(l <= u)
+	while(first <= last)
 	{
-		int m = (1 + u) / 2;
+		int mid = (first + last) / 2;
 
-		if(x == a[m])
+		if(target == a[mid])
 		{
-			return m;
+			return mid;
 		}
-		else if(a[l] <= a[m])
+		else if(a[first] <= a[mid])		// case 1
 		{
-			if(x > a[m])
+			if(target > a[mid])
 			{
-				l = m + 1;
+				first = mid + 1;
+			}
+			else if(target >= a[first])
+			{
+				last = mid - 1;
+			}
+			else
+			{
+				first = mid + 1;
 			}
 		}
+		else if(target < a[mid])	// case 2
+		{
+			last = mid - 1;
+		}
+		else if(target <= a[last])
+		{
+			first = mid + 1;
+		}
+		else
+		{
+			last = mid - 1;
+		}
 	}
+	
+	return -1;
 }
+//9.4========================================
+
+
+
 //=========================================
 #define BIG_ENDIAN		1
 #define LITTLE_ENDIAN	0
