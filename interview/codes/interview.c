@@ -72,6 +72,58 @@
 
 #if defined test
 
+int fun(int arr[], int len)
+{
+	int i;
+	
+	if(len < 2)
+	{
+		return -1;
+	}
+	
+	int *arr_new = (int *)malloc(len + 1);
+	if(!arr_new)
+	{
+		perror("Malloc failed!");
+		exit(-1);
+	}
+	
+	memset(arr_new, 0, len);
+	
+	
+	for(i = 0; i <= len; i++)
+	{
+		
+		if(arr[i] == i)
+		{
+			arr_new[i]++;
+		}
+		
+		if(2 == arr_new[i])
+		{
+			return i;
+		}
+	}
+
+	for(i = 0; i <= len; i++)
+	{
+		printf("%d\n", arr_new[i]);
+	}
+	
+	return -1;
+}
+
+int main(int argc, char *argv[])
+{
+	int arr[5] = {1, 2, 4, 1, 2};
+	int len = 5;
+	
+	printf("%d\n", fun(arr, len));
+
+}
+
+
+#elif defined TT
 //1.1================
 
 int Is_Uniq(char *str)
