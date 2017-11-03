@@ -422,7 +422,6 @@ int Is_Substring_Ext(char *str1, char *str2)
 
 
 //5.1=======================================
-
 n: 32bit
 m = 10101
 i = 6
@@ -445,6 +444,18 @@ int Set_Bits(int n, int m, int i, int j)
 }
 
 //5.2=======================================
+int updateBits(int n, int m, int i, int j)
+{
+	//1. need clear the bits
+	int left = ~0 - ((1 << (j + 1)) - 1)
+	
+	int mask = left | right;
+
+	n = n & mask;
+	
+	//2. need set the bits
+	n = n | m << i;
+}
 
 int Print_Binary(char *str)
 {
@@ -563,6 +574,7 @@ void Resorting(char *str[], int num)
 {
 	//find the anagrams and exchange the position.
 }
+
 //9.3========================================
 int search(int a[], int first, int last, int target)
 {
@@ -605,11 +617,53 @@ int search(int a[], int first, int last, int target)
 	
 	return -1;
 }
-//9.4========================================
 
+//2.1========================================
 
+void Remove_Node(pNODE *pHead, int id)
+{
+	assert(*pHead);
+
+	pNODE *p = pHead;
+
+	while(*p && (*p)->id != id)
+	{
+		p = &(*p)->next;
+	}
+
+	pNODE tmp = *p;
+	*p = (*p)->next;
+
+	free(tmp);
+	tmp = NULL;
+}
+
+void deleteDups(pNODE pHead)
+{
+	assert(pHead);
+	
+	if(NULL == pHead->next)
+	{
+		return;
+	}
+
+	pNODE p = pHead;
+	pNODE pNext = NULL;
+	
+	for(p = pHead, p != NULL; p = p->next)
+	{
+		for(pNext = p->next; pNext != NULL; pNext = pNext->next)
+		{
+			if(p->id == pNext->id)
+			{
+				Remove_Node(&pHead, pNext->id);
+			}
+		}
+	}
+}
 
 //=========================================
+
 #define BIG_ENDIAN		1
 #define LITTLE_ENDIAN	0
 int Big_Or_Little()
