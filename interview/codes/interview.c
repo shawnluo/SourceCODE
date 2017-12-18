@@ -75,54 +75,39 @@
 
 #if defined test
 
-int fun(int arr[], int len)
-{
-	int i;
-	
-	if(len < 2)
-	{
-		return -1;
-	}
-	
-	int *arr_new = (int *)malloc(len + 1);
-	if(!arr_new)
-	{
-		perror("Malloc failed!");
-		exit(-1);
-	}
-	
-	memset(arr_new, 0, len);
-	
-	
-	for(i = 0; i <= len; i++)
-	{
-		
-		if(arr[i] == i)
-		{
-			arr_new[i]++;
-		}
-		
-		if(2 == arr_new[i])
-		{
-			return i;
-		}
-	}
 
-	for(i = 0; i <= len; i++)
+int **rotate(int arr[][4])
+{
+	int i = 0, j = 0;
+
+	int **new = (int **)malloc(sizeof(int*) * 4);
+	for(i = 0; i < 4; i++)
 	{
-		printf("%d\n", arr_new[i]);
+		new[i] = (int *)malloc(sizeof(int) * 4);
 	}
 	
-	return -1;
+	for(i = 0; i < 4; i++)
+	{
+		for(j = 0; j < 4; j++)
+		{
+			new[i][j] = arr[4 - 1 - j][i];
+			
+//			printf("%d\t", arr[i][j]);
+		}
+	}
+	return new;
 }
 
 int main(int argc, char *argv[])
 {
-	int arr[5] = {1, 2, 4, 1, 2};
-	int len = 5;
-	
-	printf("%d\n", fun(arr, len));
+	int arr[4][4] = {{1, 2, 3, 4}, {10, 20, 30, 40}, {100, 200, 300, 400}, {1000, 2000, 3000, 4000}};
+	int **new = rotate(arr);
 
+	char **words = (char *)
+
+	printf("\n");
+
+	return 0;
 }
 
 
