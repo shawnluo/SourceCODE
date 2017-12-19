@@ -75,6 +75,150 @@
 
 #if defined test
 
+
+  struct ListNode {
+      int val;
+      struct ListNode *next;
+};
+
+struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2) 
+{
+	assert(l1 && l2);
+	
+	int carry_bit = 0, carry_bit_ext = 0, val1 = 0, val2 = 0;
+	struct ListNode *pHead = NULL, *p1 = NULL, *p2 = NULL;
+	
+	while(l1 || l2)
+	{
+		if(l1 && l2)
+		{
+			val1 = l1->val;
+			val2 = l2->val;
+		}	  
+		else if(NULL == l2)
+		{
+			val2 = 0;
+		}
+		else if(NULL == l1)
+		{
+			val1 = 0;
+		}		
+		
+		if(NULL == pHead)
+		{
+			p1 = (struct ListNode *)malloc(sizeof(struct ListNode));
+			pHead = p1;
+			
+			p1->val = val1 + val2 + carry_bit;			
+			if(p1->val >= 10)
+			{
+				p1->val %= 10;
+				carry_bit = 1;
+			}
+			else
+			{
+				carry_bit = 0;
+			}
+			
+			p1->next = NULL;
+			p2 = p1;
+		}
+		else
+		{
+			p1 = (struct ListNode *)malloc(sizeof(struct ListNode));
+			
+			p1->val = val1 + val2 + carry_bit;
+			if(p1->val >= 10)
+			{
+				p1->val %= 10;
+				carry_bit = 1;				  
+			}
+			else
+			{
+				carry_bit = 0;
+			}
+
+			p1->next = NULL;
+			p2->next = p1;
+			p2 = p1;
+		}
+		
+		l1 = l1 ? l1->next : l1;
+		l2 = l2 ? l2->next : l2;
+	}
+	
+	if(carry_bit)
+	{
+		p1 = (struct ListNode *)malloc(sizeof(struct ListNode));
+		p1->val = carry_bit;
+		p1->next = NULL;
+		p2->next = p1;
+		carry_bit = 0;
+	}
+		
+	return pHead;
+}
+
+
+
+struct ListNode* Creat_LinkedList(int data[], int num)
+{
+	struct ListNode* pHead = NULL, *p1 = NULL, *p2 = NULL;
+
+	int i;
+
+	for(i = 0; i < num; i++)
+	{
+		if(NULL == pHead)
+		{
+			pHead = (struct ListNode *)malloc(sizeof(struct ListNode));
+			pHead->val = data[i];
+			pHead->next = NULL;
+			p2 = pHead;
+		}
+		else
+		{
+			p1 = (struct ListNode *)malloc(sizeof(struct ListNode));
+			p1->val = data[i];
+			p1->next = NULL;
+			p2->next = p1;
+			p2 = p1;
+		}
+	}
+
+	return pHead;
+}
+
+void showme(struct ListNode* pHead)
+{
+	assert(pHead);
+
+	while(pHead)
+	{
+		printf("%d\t", pHead->val);
+
+		pHead = pHead->next;
+	}
+	printf("\n");
+}
+
+int main(void)
+{
+	int data[][4] = {{2, 4, 3}, {5, 6}};
+	struct ListNode* l1 = Creat_LinkedList(data[0], sizeof(data[0]) / sizeof(data[0][0]));
+	showme(l1);
+
+	struct ListNode* l2 = Creat_LinkedList(data[1], sizeof(data[1]) / sizeof(data[1][0]));
+	showme(l2);
+	
+	struct ListNode* pHead = addTwoNumbers(l1, l2);
+
+	showme(pHead);
+
+}
+
+#elif defined test1
+
 void Find_Sub(char *arr, char *arr_sub, int *ret)
 {
 	int i, j, tmp, k = 0;
@@ -1370,6 +1514,33 @@ pNODE Create_Linkedlist(int data[], int len)
 	return pHead;
 }
 
+pNODE Create_Linkedlist_Ext(int data[], int len)
+{
+	pNODE pHead = NULL, p1 = NULL, p2 = NULL;
+
+	for(int i = 0; i < len; i++)
+	{
+		if(NULL == pHead)
+		{
+			p1 = (pNODE)malloc(LEN);
+			p1->id = data[i];
+			p1->next = NULL;
+
+			pHead = p1;
+			p2 = p1;
+		}
+		else
+		{			
+			p1 = (pNODE)malloc(LEN);
+			p1->id = data[i];
+			p1->next = NULL;
+			p2->next = p1;
+			p2 = p1;
+		}
+	}	
+	
+	return pHead;
+}
 void Insert_Node_Front(pNODE *ppHead, int target_id, int new_id)
 {
 	assert(*ppHead);
@@ -1514,17 +1685,17 @@ int main(int argc, char *argv[])
 	pNODE pHead = NULL;
 	int len = sizeof(data[0]) / sizeof(data[0][0]);
 	
-	pHead = Create_Linkedlist(data[0], len);
+	pHead = Create_Linkedlist_Ext(data[0], len);
 	Showme(pHead);
-
+#if 0
 	Insert_Node_Front(&pHead, 1, 300);
-	Showme(pHead);
+//	Showme(pHead);
 
 	Insert_Node_Behind(&pHead, 5, 500);
-	Showme(pHead);
+//	Showme(pHead);
 
 	Del_Node(&pHead, 300);
-	Showme(pHead);
+//	Showme(pHead);
 	
 	Create_Circular(pHead, 3);
 //	Showme(pHead);
@@ -1535,8 +1706,8 @@ int main(int argc, char *argv[])
 	pNODE pHead2 = NULL;
 	int len2 = sizeof(data[1]) / sizeof(data[1][0]);
 
-	Sorting_Node(pHead);
-	
+//	Sorting_Node(pHead);
+#endif	
 	return 0;
 }
 
