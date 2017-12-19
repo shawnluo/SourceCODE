@@ -75,7 +75,203 @@
 
 #if defined test
 
+char* reverseString(char* s) {
+    assert(s);
+    
+    int len = strlen(s);
+    
+    if(len < 2)
+    {
+        return s;
+    }
+    
+    char *p_start = s, *p_end = s + len - 1;
+    char tmp = NULL;
+    
+    while(p_start < p_end)
+    {
+        tmp = *p_start;
+        *p_start++ = *p_end;
+        *p_end-- = tmp;
+    }
+    
+    return s;
+}
 
+char* reverseVowels(char* s) {
+    assert(s);
+    
+    int len = strlen(s);
+    if(len < 2)
+    {
+        return s;
+    }
+    
+    char *pStart = s, *pEnd = s + len - 1;
+    char tmp = NULL;
+    
+    while(pStart < pEnd)
+    {
+        while((*pStart != '\0') && (*pStart != 'a') && (*pStart != 'A') &&(*pStart != 'e') && (*pStart != 'E') && (*pStart != 'i') && (*pStart != 'I') && (*pStart != 'o') && (*pStart != 'O') && (*pStart != 'u') && (*pStart != 'U'))
+        {
+            pStart++;
+        }
+    
+        while((pEnd > pStart) && (*pEnd != 'a') && (*pEnd != 'A') &&(*pEnd != 'e') && (*pEnd != 'E') && (*pEnd != 'i') && (*pEnd != 'I') && (*pEnd != 'o') && (*pEnd != 'O') && (*pEnd != 'u') && (*pEnd != 'U'))
+        {
+            pEnd--;
+        }
+
+        if(pStart < pEnd)
+        {
+            tmp = *pStart;
+            *pStart++ = *pEnd;
+            *pEnd-- = tmp;
+        }
+		else
+			break;
+    }
+
+    return s;
+}
+
+int main(void)
+{
+	char *s = (char *)malloc(sizeof(s));
+	strcpy(s, "hello");
+//	char *ret = reverseString(s);
+	char *ret = reverseVowels(s);
+
+	printf("%s\n", ret);
+	
+	return 0;
+}
+
+#elif defined test_4
+int *array_pointer(int num)
+{
+	int tmp = num;
+	int i, len = 0;
+//	int bit = 0;
+	
+	while(tmp % 10 > 0)
+	{
+		tmp /= 10;
+		len++;
+	}
+
+	//way 1. using int pointer
+	int *ret = (int *)malloc(sizeof(int) * len);
+	memset(ret, 0, sizeof(int) * len);
+
+	i = 0;
+	
+	while(num > 0)
+	{
+		*(ret + i++) = num % 10;
+		num /= 10;
+	}
+
+	for(i = 0; i < len; i++)
+	{
+		printf("%d - %d\n", i, *(ret + i));
+	}
+
+	return ret;
+}
+
+int **array_pointer_Ext(int num)
+{
+	int tmp = num;
+	int i, len = 0;
+//	int bit = 0;
+	
+	while(tmp % 10 > 0)
+	{
+		tmp /= 10;
+		len++;
+	}
+
+	//way 2. using int array pointer
+	int (*ret)[len] = (int (*)[])malloc(sizeof(int) * len);
+
+	memset(ret, 0, sizeof(int *) * len);
+
+	i = 0;
+	
+	while(num > 0)
+	{
+		*(*ret + i++) = num % 10;
+		num /= 10;
+	}
+
+	for(i = 0; i < len; i++)
+	{
+		printf("%d - %d\n", i, *(*ret + i));
+	}
+
+	return ret;
+}
+
+int main(void)
+{
+	int *ret = array_pointer(2334);
+
+//	int **ret_Ext = array_pointer_Ext(2334);
+
+
+	for(int i = 0; i < 4; i++)
+	{
+		printf("%d\n", ret[i]);
+	}
+//	printf("%d\n", ret[0]);
+	
+	return 0;
+}
+
+#elif defined test_3
+//int **malloc_2D_Array(int **arr)				//it will not work. it will be translate to int (*)[] when it serve as a right side value.	
+int **malloc_2D_Array(int arr[][4])		//here we can use arr[][4]
+{
+	int i;
+	int **ret = (int **)malloc(sizeof(int *) * 4);
+	printf("%d\n", sizeof(ret));
+
+	for(i = 0; i < 4; i++)
+	{
+		ret[i] = (int *)malloc(sizeof(int) * 4);
+	}
+	
+	for(i = 0; i < 4; i++)
+	{
+		ret[i] = arr[i];
+	}
+	return ret;
+}
+
+int main(void)
+{
+	int arr[4][4] = {{1, 2, 3, 4}, {10, 20, 30, 40}, {100, 200, 300, 400}, {1000, 2000, 3000, 4000}};
+
+	int **ret = malloc_2D_Array(arr);
+
+	for(int i = 0; i < 4; i++)
+	{
+		for(int j = 0; j < 4; j++)
+		{
+			printf("%d\t", *(*(ret + i) + j));
+		}
+		printf("\n");
+	}
+	free(ret);
+
+	int len = sizeof(arr);
+	printf("%d\n", len);
+	
+	return 0;
+}
+
+#elif defined test_2
   struct ListNode {
       int val;
       struct ListNode *next;
