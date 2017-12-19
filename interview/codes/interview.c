@@ -75,38 +75,85 @@
 
 #if defined test
 
-
-int **rotate(int arr[][4])
+void Find_Sub(char *arr, char *arr_sub, int *ret)
 {
-	int i = 0, j = 0;
-
-	int **new = (int **)malloc(sizeof(int*) * 4);
-	for(i = 0; i < 4; i++)
-	{
-		new[i] = (int *)malloc(sizeof(int) * 4);
-	}
+	int i, j, tmp, k = 0;
 	
-	for(i = 0; i < 4; i++)
+	for(i = 0; i < strlen(arr); i++)
 	{
-		for(j = 0; j < 4; j++)
+		tmp = i;
+		for(j = 0; j < (strlen(arr_sub)); j++)
 		{
-			new[i][j] = arr[4 - 1 - j][i];
+			if(arr[tmp++] != arr_sub[j])
+			{
+				break;
+			}
+		}
+		
+		if(j == (strlen(arr_sub)))
+		{
+			ret[k++] = i;
 			
-//			printf("%d\t", arr[i][j]);
+			if(0 == j)
+			{
+				//flag = 1;
+			}
 		}
 	}
-	return new;
+	
+	for(i = 0; i < 10; i++)
+		printf("%d\t", ret[i]);
+	printf("\n");
+}
+
+int *location(char *arr, char *arr1, char *arr2)
+{
+	int *ret = (int *)malloc(sizeof(int) * 100);
+	
+	printf("ret_address 0 = %x\n", ret);
+
+	if(!ret)
+	{
+		perror("Malloc failed!");
+		exit(-1);
+	}
+	
+	memset(ret, 0, sizeof(int) * 100);
+
+	char *p = NULL, *pt = NULL;
+	
+	int i, j, tmp, k = 0;
+	int flag = 1;	//NO.0 position has the substring.
+	
+	//1. find out all the located numbers in arr for arr1, and put them in ret;
+	printf("ret_address 1 = %x\n", ret);
+
+	Find_Sub(arr, arr1, ret);
+	printf("ret_address 2 = %x\n", ret);
+
+	//2. find out all the located numbers in arr for arr2, and put them in ret;
+	Find_Sub(arr, arr2, ret);
+	printf("ret_address 3 = %x\n", ret);
+
+	//3. sorting the ret
+	
+	return ret;
 }
 
 int main(int argc, char *argv[])
 {
-	int arr[4][4] = {{1, 2, 3, 4}, {10, 20, 30, 40}, {100, 200, 300, 400}, {1000, 2000, 3000, 4000}};
-	int **new = rotate(arr);
+	char *arr = "goodaytodaygoogood";	//(char *)malloc(sizeof(char) * );
 
-	char **words = (char *)
+	char *arr1 = "goo";
+	char *arr2 = "day";
 
-	printf("\n");
+	int *ret = location(arr, arr1, arr2);
 
+	for(int i = 0; i < 10; i++)
+	{
+		printf("%d\n", ret[i]);
+	}
+	
 	return 0;
 }
 
@@ -340,15 +387,40 @@ void Replace_Character(char *str)
 }
 //1.6=========================
 
-void Rotate_Image(int matrix[n][n], int n)
+
+
+int **rotate(int arr[][4])
 {
-	int layer, i, first, last, top, offset;
+	int i = 0, j = 0;
+
+	int **new = (int **)malloc(sizeof(int*) * 4);
+	for(i = 0; i < 4; i++)
+	{
+		new[i] = (int *)malloc(sizeof(int) * 4);
+	}
+	
+	for(i = 0; i < 4; i++)
+	{
+		for(j = 0; j < 4; j++)
+		{
+			new[i][j] = arr[4 - 1 - j][i];
+			
+//			printf("%d\t", arr[i][j]);
+		}
+	}
+	return new;
+}
+
+
+void Rotate_Image_Inplace(int matrix[n][n], int n)
+{
+	int layer, i, j, tmp;
 
 	for(i = 0; i <= (n - 1) / 2; i++)
 	{
 		for(j = i; j < n - 1 - i; j++)
 		{
-			temp = matrix[i][i];
+			tmp = matrix[i][i];
 
 			matrix[i][j] = matrix[n - 1 - j][i]
 			matrix[n - 1 - j][i] = 
