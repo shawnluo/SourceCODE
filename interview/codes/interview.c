@@ -79,6 +79,200 @@
 
 #if defined test
 
+#elif defined pure_virtual_Fun
+
+#include <iostream>
+using namespace std;
+
+class CShape
+{
+public:
+	virtual void Show() = 0;		//pure virtual function
+};
+
+class CPoint2D:public CShape
+{
+public:
+	void Msg()
+	{
+		printf("CPoint2D.Mag() is invoked\n");
+	}
+#if 1
+	void Show()					//we have to write a function at here!
+	{
+		printf("Show() from CPoint2D\n");
+	}
+#endif
+};
+
+int main(void)
+{
+	CPoint2D p2d;
+	p2d.Msg();
+
+	CShape *pShape = &p2d;
+	pShape->Show();
+
+	return 0;
+}
+
+#elif defined virtual_Fun2
+using namespace std;
+
+#include <iostream>
+
+class A
+{
+public:
+	virtual void foo()
+	{
+		cout << "A::foo() is called" << endl;
+	}
+};
+
+class B:public A
+{
+public:
+	void foo()
+	{
+		cout << "B::foo() is called" << endl;
+	}
+};
+
+int main(void)
+{
+	A *a = new B();
+	a->foo();
+	
+	return 0;
+}
+
+#elif defined virtual_Fun1
+
+#include <iostream>    
+
+using namespace std;    
+
+class A    
+{    
+public:    
+    virtual void print()    
+    { 
+		cout << "A::print()" <<endl;
+	}    
+};
+
+class B: public A    
+{    
+public:    
+    virtual void print()    
+    { 
+		cout << "B::print()" <<endl;
+	}    
+};
+
+class C: public A    
+{    
+public:    
+    virtual void print()    
+    { 
+		cout << "C::print()" <<endl;
+	}    
+};    
+
+void print(A a)    
+{    
+    a.print();    
+}    
+
+int main(void)    
+{    
+    A a;
+    B b;    
+    C c;    
+	
+	A *aa, *ab, *ac;   
+	
+    aa = &a;    
+    ab = &b;    
+    ac = &c;    
+	
+    a.print();    
+    b.print();    
+    c.print();    
+	
+	cout << "" <<endl;
+	
+    aa->print();    
+    ab->print();    
+    ac->print();    
+	
+	cout << "" <<endl;
+	
+    print(a);    
+    print(b);    
+    print(c);
+
+	return 0;
+}    
+
+
+#elif defined FizzBuzz
+char** fizzBuzz(int n, int* returnSize) 
+{
+	*returnSize = n;
+
+	if(0 == n)
+    {
+        return NULL;
+    }
+    
+    char **ret = (char **)malloc(sizeof(char *) * n);
+    char buf[10];
+    
+    for(int i = 0; i < n; i++)
+    {
+        if(((i + 1) % 3 == 0) && ((i + 1) % 5 == 0))
+        {			
+            strcpy(buf, "FizzBuzz");
+        }
+        else if((i + 1) % 3 == 0)
+        {
+            strcpy(buf, "Fizz");
+        }
+        else if((i + 1) % 5 == 0)
+        {
+            strcpy(buf, "Buzz");
+        }
+        else
+        {
+            sprintf(buf, "%d", i + 1);
+        }
+
+        ret[i] = (char *)malloc(sizeof(buf));
+        memset(ret[i], 0, sizeof(buf));
+		strcpy(ret[i], buf);
+    }
+    
+    return ret;
+}
+
+
+int main(void)
+{
+	int returnSize = NULL;
+	int n = 30;
+	
+	char **ret = fizzBuzz(n, &returnSize);
+
+	for(int i = 0; i < n; i++)
+	{
+		printf("%s\n", *(ret + i));
+	}
+}
+
+#elif defined Uppercase
+
 void UpperCase(char str[])
 {
 	for( ; *str != '\0'; str++)
