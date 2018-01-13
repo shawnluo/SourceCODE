@@ -1,3 +1,0 @@
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/wallace/workSPACE/gitHUB/SourceCODE/tools/textColor
-export C_LIBRARY_PATH=$C_LIBRARY_PATH:/home/wallace/workSPACE/gitHUB/SourceCODE/tools/textColor/include
-#export PATH=$PATH:/home/wallace/workSPACE/gitHUB/SourceCODE/tools/textColor

@@ -1,10 +1,10 @@
-FLAGS = -std=c99 -g -Wall -O -L/home/wallace/workSPACE/gitHUB/SourceCODE/tools/textColor -I/home/wallace/workSPACE/gitHUB/SourceCODE/tools/textColor/include
+FLAGS = -std=c99 -g -Wall -O
 
 
-test: test.c
-	@gcc test.c -o test -lcolor -lm -lpthread $(FLAGS)
+interview: interview.c
+	@gcc interview.c -o interview -lm -lpthread $(FLAGS)
 
 .PHONY: clean
 
 clean:
-	@rm test
+	@rm interview

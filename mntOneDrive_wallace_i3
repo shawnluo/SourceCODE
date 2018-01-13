@@ -1,0 +1,1 @@
+sudo mount -t cifs -o username=andersluo@hotmail.com,password=3342415neoluo,uid=wallace,gid=wallace //192.168.0.107/GitHub /mnt
