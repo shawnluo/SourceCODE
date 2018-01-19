@@ -1,1 +1,2 @@
+sudo ntpdate pool.ntp.org
 sudo mount -t cifs -o username=Shawn,password=19952001,uid=wallace,gid=wallace //172.20.192.119/GitHub /mnt

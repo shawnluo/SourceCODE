@@ -115,8 +115,9 @@ void showme(int mat[][5], int n)
 
 int main(void)
 {
-    int n = 5, i, j;
-    int mat[n][n] = { {  1,  2,  3,  4,  5 },
+//    int n = 5, i, j;
+	int n = 5;
+    int mat[5][5] = { {  1,  2,  3,  4,  5 },
                       {  6,  7,  8,  9, 10 },
                       { 11, 12, 13, 14, 15 },
                       { 16, 17, 18, 19, 20 },
@@ -144,7 +145,7 @@ int main(void)
 
 //	printf();
 #endif
-    printf("sizeof(mat) is: %d\n", sizeof(mat));
+    printf("sizeof(mat) is: %d\n", (int)sizeof(mat));
 
 
     rotate(mat, n);
