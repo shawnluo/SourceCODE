@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+clear;
+make -f Makefile_cpp clean; make -f Makefile_cpp && ./test_cpp

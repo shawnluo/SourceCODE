@@ -1,10 +1,10 @@
 FLAGS = -std=c99 -g -Wall -O
 
 
-interview: interview.c
-	@gcc interview.c -o interview -lm -lpthread $(FLAGS)
+test: test.c
+	@gcc test.c -o test -lm -lpthread $(FLAGS)
 
 .PHONY: clean
 
 clean:
-	@rm interview
+	@rm test

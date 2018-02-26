@@ -1019,30 +1019,46 @@ void Replace_Character(char *str)
 //1.6=========================
 
 
+#elif defined Matrix_Rotates
 
+//	way 1
+
+int **rotate(int arr[][4], )
+{
+	int i, j;
+	int arr_new[4][4] = {0};
+
+	for(i = 0; i < 4; i++)
+	{
+		arr_new[i][j] = arr[][i];
+	}
+}
+
+//	way 2
 int **rotate(int arr[][4])
 {
     int i = 0, j = 0;
 
-    int **new = (int **)malloc(sizeof(int *) * 4);
+    int **arr_new = (int **)malloc(sizeof(int *) * 4);
 
     for (i = 0; i < 4; i++)
     {
-        new[i] = (int *)malloc(sizeof(int) * 4);
+        arr_new[i] = (int *)malloc(sizeof(int) * 4);
     }
 
     for (i = 0; i < 4; i++)
     {
         for (j = 0; j < 4; j++)
         {
-            new[i][j] = arr[4 - 1 - j][i];
+            arr_new[i][j] = arr[4 - 1 - j][i];
 
 //			printf("%d\t", arr[i][j]);
         }
     }
-    return new;
+    return arr_new;
 }
 
+//	way 3
 
 void Rotate_Image_Inplace(int matrix[n][n], int n)
 {
@@ -1054,8 +1070,10 @@ void Rotate_Image_Inplace(int matrix[n][n], int n)
         {
             tmp = matrix[i][i];
 
-            matrix[i][j]                                               = matrix[n - 1 - j][i]
-                                                  matrix[n - 1 - j][i] =
+            matrix[i][j] = matrix[n - 1 - j][i];
+			matrix[n - 1 - j][i] = matrix[n - 1 - i][n - 1 - j];
+			matrix[n - 1 - i][n - 1 - j] = matrix[j][n - 1 - i];	//matrix[n - 1 - (n - 1 - j)][n - 1 - i];
+			matrix[j][n - 1 - i] = tmp;
         }
     }
 }
@@ -1334,6 +1352,12 @@ void Remove_Node(pNODE *pHead, int id)
     {
         p = &(*p)->next;
     }
+
+	if(*p)
+	{
+		printf("Cannot find it!\n");
+		return;
+	}
 
     pNODE tmp = *p;
     *p = (*p)->next;
