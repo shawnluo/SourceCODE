@@ -16,6 +16,90 @@
 
 #if defined test
 
+int main(void)
+{
+	create_stack_
+}
+
+#elif defined yy
+
+void BitOperations(unsigned int address, int bit, int value)
+{
+	unsigned int volatile *p = (unsigned int *)address;
+	
+	//setbit
+	*p |= (1 << bit);
+
+	//clearbit
+	*p &= ~(1 << bit);
+
+	//getbit
+	return ((*p >> bit) & 1);
+
+	//reversebit
+	*p ^= (1 << bit);
+}
+
+int main(void)
+{
+	findAddi(0xf2);
+}
+
+#elif defined xx
+int longestCommonSubstring_n3(const char *str1, const char *str2)
+{
+	assert(str1 && str2);
+
+	int len1 = strlen(str1);
+	int len2 = strlen(str2);
+	
+	int length = 0, longest = 0;
+	int start1 = -1, start2 = -1;
+		
+	if(len1 == 0 || len2 == 0)	return 0;
+
+	for(int i = 0; i < len1; i++)
+	{
+		for(int j = 0; j < len2; j++)
+		{
+			int tmp_i = i, tmp_j = j;
+			length = 0;
+
+			while((tmp_i < len1) && (tmp_j < len2))
+			{
+				if(str1[tmp_i] != str2[tmp_j])
+				{
+					break;
+				}
+
+				length++;
+				tmp_i++;
+				tmp_j++;
+			}
+
+			if(length > longest)
+			{
+				longest = length;
+				start1 = i;
+				start2 = j;
+			}
+		}
+	}
+
+	printf("%d\t%d\n", start1, start2);
+
+	return longest;
+}
+
+int main(void)
+{
+	int ret = longestCommonSubstring_n3("aaaa", "dd12xa45pp");
+	printf("ret = %d\n", ret);
+	
+	return 0;
+}
+
+#elif defined kk
 int Is_Pal(char *str)
 {
 	assert(str);

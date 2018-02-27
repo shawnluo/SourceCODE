@@ -64,6 +64,10 @@
 //#define Demos_ArraysStrings
 //#define Demo_semaphore
 //#define d_23	//LowCaseUpperCase
+//#define d_24	//longestCommonSubstring
+//#define d_25	//calculate the number of 1
+//#define d_26	//bitOperations
+
 //#define interview
 
 //#define test_pre
@@ -701,6 +705,83 @@ int main(void)
 	return 0;
 }
 
+#elif defined d_26
+
+void BitOperations(unsigned int address, int bit, int value)
+{
+	unsigned int volatile *p = (unsigned int *)address;
+	
+	//setbit
+	*p |= (1 << bit);
+
+	//clearbit
+	*p &= ~(1 << bit);
+
+	//getbit
+	return ((*p >> bit) & 1);
+
+	//reversebit
+	*p ^= (1 << bit);
+}
+
+
+#elif defined d_25
+void CalculateOne(int num)
+{
+	int sum = 0;
+
+	while(num)
+	{
+		sum += num & 1;
+		num >>= 1;
+	}
+}
+#elif defined d_24
+int longestCommonSubstring(const char *str1, const char *str2)
+{
+	assert(str1 && str2);
+	
+	size_t size1 = strlen(str1);
+	size_t size2 = strlen(str2);
+
+	if(size1 == 0 || size2 == 0)	return 0;
+
+	int start1 = -1;
+	int start2 = -1;
+	int longest = 0;
+//	int comparisons = 0;
+
+	for(int i = 0; i < size1; i++)
+	{
+		for(int j = 0; j < size2; j++)
+		{
+			int length = 0;
+			int tmp_i = i;
+			int tmp_j = j;
+
+			while(tmp_i < size1 && tmp_j < size2)
+			{
+//				++comparisons;
+
+				if(str1[tmp_i] != str2[tmp_j])
+				{
+					break;
+				}
+				
+				++length;
+				++tmp_i;
+				++tmp_j;
+			}
+
+			if(longest < length)
+			{
+				longest = length;
+				start1 = i;
+				start2 = j;
+			}
+		}
+	}
+}
 #elif defined d_23
 
 void LowCase_To_UpperCase(char c)
