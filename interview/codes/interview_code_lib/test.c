@@ -67,6 +67,8 @@
 //#define d_24	//longestCommonSubstring
 //#define d_25	//calculate the number of 1
 //#define d_26	//bitOperations
+//#define d_27	//stack DIY array
+//#define d_28	//stack DIY LinkedList
 
 //#define interview
 
@@ -704,6 +706,140 @@ int main(void)
 	printf("%d\n", x);
 	return 0;
 }
+
+#elif defined d_28
+typedef struct node
+{
+	int data;
+	struct node *next;
+}Node;
+
+#define LEN sizeof(Node)
+
+typedef struct LinkStack
+{
+	Node *top;
+}stack;
+
+void init_stack(stack *s)
+{
+	s->top = NULL;
+}
+
+void push_stack(stack *s, int data)
+{
+	Node *newnode = (Node *)malloc(LEN);
+	newnode->data = data;
+	newnode->next = s->top;
+	s->top = newnode;
+}
+
+int pop_stack(stack *s)
+{
+	int temp;
+	Node *p;
+	if(s->top == NULL)
+	{
+		printf("stack is empty, cannot pop stack\n");
+		return -1;
+	}
+	temp = s->top->data;
+	p = s->top;
+	s->top = s->top->next;
+	free(p);
+
+	return temp;
+}
+int main(void)
+{
+	stack *s = (stack *)malloc(LEN);
+	init_stack(s);
+
+	for(int i = 0; i < 10; i++)
+	{
+		push_stack(s, i);
+	}
+	
+	for(int i = 0; i < 10; i++)
+	{
+		printf("%d -> ", pop_stack(s));
+	}
+	printf("\n");
+	
+	return 0;
+}
+#elif defined d_27
+
+#define STACK_SIZE 50
+typedef struct SeqStack
+{
+	int data[STACK_SIZE];
+	int top;
+}stack;
+
+void Init_Stack(stack *s)
+{
+	s->top = -1;
+}
+
+int IsFull(stack *s)
+{
+	return (s->top == STACK_SIZE - 1);
+}
+
+int IsEmpty(stack *s)
+{
+	return (s->top == -1);
+}
+
+void Push(stack *s, int n)
+{
+	if(IsFull(s))
+	{
+		printf("Stack is full!\n");
+		return;
+	}
+	s->top++;
+	s->data[s->top] = n;
+}
+
+int Pop(stack *s)
+{
+	if(IsEmpty(s))
+	{
+		printf("Stack is empty!\n");
+		return -1;
+	}
+	return s->data[s->top--];
+}
+
+int main(void)
+{
+	stack *s = (stack *)malloc(sizeof(stack));
+
+	if(s == NULL)
+	{
+		printf("Malloc failed!\n");
+		exit(-1);
+	}
+	
+	Init_Stack(s);
+
+	for(int i = 0; i < 10; i++)
+	{
+		Push(s, i);
+	}
+
+	while(!IsEmpty(s))
+	{
+		int data = Pop(s);
+		printf("%d -> ", data);
+	}
+	printf("\n");
+	
+	return 0;
+}
+
 
 #elif defined d_26
 
