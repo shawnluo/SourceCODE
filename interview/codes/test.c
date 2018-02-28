@@ -16,6 +16,35 @@
 
 #if defined test
 
+int main(void)
+{
+	char *s = "12a98";
+	int i = atoi(s);
+
+	printf("%d\n", i);
+
+	int ret = 0;
+	
+#if 0	
+	int x = 1111;
+	char *ret = (char *)malloc(100);
+	sprintf(ret, "%d", x);
+		
+	printf("%s\n", ret);
+#endif
+
+	while(i)
+	{
+		ret = ret * 10 + i % 10;
+		i /= 10;
+	}
+
+	printf("%d\n", ret);
+
+	return 0;
+}
+
+#elif defined xx
 typedef struct node
 {
 	int data;

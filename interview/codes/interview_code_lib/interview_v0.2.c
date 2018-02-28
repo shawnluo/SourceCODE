@@ -42,7 +42,6 @@
 //#define d_02	//find and return the substring
 //#define d_03	//bit operations
 //#define d_04	//find the addtional character
-//#define d_05	//linklist and sorting
 //#define d_06	//quick sorting
 //#define sorting_02	//insertion sorting
 //#define d_07	//Is_Palindrome
@@ -53,7 +52,7 @@
 //#define d_12	//rotate 90 degree in place
 //#define d_13	//same string but in different order
 //#define d_14	//find the onlyone
-//#define d_15	//reverse a interger, beware of overflow
+//#define d_15	//reverse a interger, beware of overflow, tranfer interger to string
 //#define d_16	//dynamically allocate a 2D array
 //#define d_17	//thread demo
 //#define d_18	//select usage
@@ -69,6 +68,7 @@
 //#define d_26	//bitOperations
 //#define d_27	//stack DIY array
 //#define d_28	//stack DIY LinkedList
+//#define d_29	//anagram
 
 //#define interview
 
@@ -85,500 +85,10 @@ void print_trace()
 
 #if defined test
 
-typedef struct node
-{
-	int id;
-	struct node *next;
-} NODE, *pNODE;
 
-#define LEN sizeof(NODE)
 
-pNODE *Swap(pNODE *p1, pNODE *p2)
-{
-	pNODE pTmp = NULL;
 
-	pTmp = *p1;
-	*p1 = *p2;
-	*p2 = pTmp;
-	
-	return p1;
-}
-
-pNODE Create_LinkedList(int Data[], int Num)
-{
-	pNODE pHead = NULL;
-	pNODE p = NULL;
-
-	while(Num-- > 0)
-	{
-		p = (pNODE)malloc(LEN);
-		p->id = Data[Num];
-		p->next = pHead;
-		pHead = p;
-	}
-
-	return pHead;
-}
-
-pNODE Reverse_LinkedList(pNODE pHead)
-{
-	assert(pHead);
-	
-	pNODE pCur = pHead, pNext = NULL, pSaved = NULL;
-
-	while(pCur)
-	{
-		pNext = pCur->next;
-
-		if(pCur == pHead)
-		{
-			pCur->next = NULL;
-		}
-		else
-		{
-			pCur->next = pSaved;
-		}
-		
-		pSaved = pCur;
-		pCur = pNext;
-	}
-	pHead = pSaved;
-}
-
-int *Node(pNODE pHead, int i)
-{
-	int x = 0;
-	pNODE p = pHead;
-
-	for(x = 0; x < i; x++)
-	{
-		p = p->next;
-	}
-
-	return &(p->id);
-}
-
-void Swap_Node(int *id1, int *id2)
-{
-	int tmp = 0;
-
-	tmp = *id1;
-	*id1 = *id2;
-	*id2 = tmp;
-}
-
-void Reverse_LinkedList_ext(pNODE pHead)
-{
-	assert(pHead);
-	
-	int Len = 0;	//length of linkedlist
-	pNODE p = pHead;
-	
-	while(p)
-	{
-		Len++;
-		p = p->next;
-	}
-	
-	for(int i = 0; i < Len / 2; i++)
-	{
-		Swap_Node(Node(pHead, i), Node(pHead, Len - i - 1));
-	}
-}
-
-pNODE Find_Node(pNODE pHead, int id)
-{
-	assert(pHead);
-	
-	pNODE p = pHead;
-
-	while(p && p->id != id)
-	{
-		p = p->next;
-	}
-
-	if(p == NULL)
-	{
-		printf("Cannot find it\n");	//Cannot find it
-		return NULL;
-	}
-	else
-	{
-		return p;
-	}
-}
-
-void Insert_Node_Front(pNODE *ppHead, int target, int NewID)
-{
-	assert(*ppHead);
-	
-	pNODE *p = ppHead;
-
-	while(*p && (*p)->id != target)
-	{
-		p = &(*p)->next;
-	}
-
-	if(NULL == *p)
-	{
-		perror("Target isn't exist!");
-		return;
-	}
-	
-	pNODE pNew = (pNODE)malloc(LEN);	//NewNode	
-	pNew->id = NewID;	
-	pNew->next = *p;
-
-	*p = pNew;	//previous Node 
-}
-
-void Insert_Node_Behind(pNODE pHead, int target, int NewID)
-{
-	assert(pHead);
-
-	pNODE p = pHead;
-
-	while(p && p->id != target)
-	{
-		p = p->next;
-	}
-
-	pNODE pNew = (pNODE)malloc(LEN);
-	pNew->id = NewID;
-	pNew->next = p->next;		//NewNode
-
-	p->next = pNew;		//current Node
-}
-
-void Del_Node(pNODE *ppHead, int target)
-{
-	assert(*ppHead);
-
-	pNODE *p = ppHead;
-
-	while(*p && target != (*p)->id)
-	{
-		p = &(*p)->next;
-	}
-
-	if(!*p)
-	{
-		perror("Cannot find it!");
-		return;
-	}
-	
-	pNODE pTmp = *p;
-	*p = (*p)->next;
-
-	free(pTmp);
-	pTmp = NULL;
-}
-
-void Create_Circular(pNODE pHead, int num)
-{
-	assert(pHead);
-	
-	pNODE p = pHead;
-
-	while(p && p->id != num)
-	{
-		p = p->next;
-	}
-
-	pNODE pEnd = pHead;
-
-	while(pEnd->next)
-	{
-		pEnd = pEnd->next;
-	}
-
-	pEnd->next = p;
-}
-
-int Has_Circular(pNODE pHead)
-{
-	assert(pHead);
-
-	pNODE p, p2;
-
-	for(p = pHead; ; p = p->next)
-	{		
-		if(NULL == p)
-		{
-			return 0;	//NO
-		}
-		
-		if(p->next == pHead)	//YES	tail points to head
-		{
-			return 1;
-		}
-		
-		for(p2 = pHead; p2 != p; p2 = p2->next)
-		{
-		
-			if(p->next == p2->next)
-			{
-				return 1;	//YES
-			}
-		}
-	}
-}
-
-//int Has_Circular_EXT(LINKLIST * head)
-
-void showme(pNODE pHead)
-{
-	while(pHead)
-	{
-		printf("%d\t", pHead->id);
-		pHead = pHead->next;
-	}
-
-	printf("\n");
-}
-
-int main(void)
-{
-	pNODE p1 = (pNODE)malloc(LEN);
-	p1->id = 100;
-	
-	pNODE p2 = (pNODE)malloc(LEN);	
-	p2->id = 200;
-	
-	Swap(&p1, &p2);
-	
-//	printf("p1: %d\n", p1->id);
-//	printf("p2: %d\n", p2->id);
-
-	int Data[][6] = {	{1, 2, 3, 4, 5, 6},
-						{6, 7, 8, 9, 0}
-					};
-
-	pNODE pHead = Create_LinkedList(Data[0], sizeof(Data[0]) / sizeof(Data[0][0]));
-	showme(pHead);
-	
-//	pHead = Reverse_LinkedList(pHead);
-//	showme(pHead);
-
-	Reverse_LinkedList_ext(pHead);
-	showme(pHead);
-
-	Insert_Node_Behind(pHead, 1, 300);
-	showme(pHead);
-
-	Insert_Node_Front(&pHead, 6, 400);
-	showme(pHead);
-	
-	Del_Node(&pHead, 300);
-	showme(pHead);
-
-	Create_Circular(pHead, 400);
-//	showme(head);
-
-	int x = Has_Circular(pHead);
-	printf("x = %d\n", x);
-	
-	return 0;
-}
-
-#elif tet
-typedef struct LinkList
-{
-	int id;
-	struct stu *next;
-} LINKLIST;
-
-LINKLIST *ReverseLinkedList(pLinkedList *pHead)
-{
-	if(pHead == NULL)
-	{
-		return NULL;
-	}
-
-	pLinkedList *p1=NULL,*p2=NULL, *p3=NULL;
-	p1 = pHead;
-	while((p1 != NULL) && (p1->next != NULL))
-	{
-		p2=p1->next;
-
-		p3=p2->next;
-
-		p2->next=p1;
-		if(p1 == pHead)
-		{
-			p1->next = NULL;
-		}
-
-		p1=p2;
-	}
-
-	if(p1!=NULL)
-	pHead = p1;
-	
-	return pHead;		
-}
-
-
-#elif defined test1
-void fun(char *arr, int m, int n)
-{
-	int i, j;
-
-	for(i = 0; i < m; i++)
-	{
-		for(j = 0; j < n; j++)
-		{
-			printf("%d\t", *(arr + i * n + j));
-		}
-		printf("\n");
-	}
-}
-
-#if 0
-int main(void)
-{
-	int i;
-	char *arr;
-	arr = (int *)malloc(3 * 4 * sizeof(int));
-	for(i = 0; i < 3 * 4; i++)
-	{
-		arr[i] = i;
-	}
-	
-	fun(arr, 3, 4);
-	
-	return 0;
-}
-#endif
-
-int main(int argc, char *argv[])
-{
-	if(argc < 3)
-	{
-		printf("Please input: ");
-	}
-	
-	int i, j;
-	int m = atoi(argv[1]);
-	int n = atoi(argv[2]);
-	char *arr;
-	arr = (int *)malloc(m * n * sizeof(int));
-	for(i = 0; i < m * n; i++)
-	{
-		arr[i] = i;
-	}
-
-	fun(arr, m, n);
-	
-	return 0;
-}
-
-#elif defined interview
-
-int IsUniq(char *str)
-{
-	int i, j;
-
-	assert(str);
-	
-	if(strlen(str) == 1)
-	{
-		return 1;	//yes
-	}
-	
-	for(i = 0; i < strlen(str) - 1; i++)
-	{
-		for(j = i + 1; j < strlen(str); j++)
-		{
-			if(*(str + i) == *(str + j))
-			{
-				return 0;	//no
-			}
-		}
-	}
-
-	return 1;	//yes
-}
-
-void reverse(char *str)
-{
-	assert(str);
-	
-	if(strlen(str) == 1)
-	{
-		return;
-	}
-	
-	char *start = str;
-	char *end = str + strlen(str) - 1;	//watch out!   -1
-	while(start < end)
-	{
-		char c = *start;
-		*start++ = *end;
-		*end-- = c;
-	}
-}
-
-int findSingle(int arr[], int num)
-{
-	int i = 0, value = 0;
-	for(i = 0; i < num; i++)
-	{
-		value ^= arr[i];
-	}
-	return value;
-}
-
-int verseInter(int num)
-{
-	int x = 0, sign = 0;
-
-//	sign = num >= 0 ? 1 : 0;
-	sign = num >>31;
-
-	while(num != 0)
-	{
-		x = num % 10 + x * 10;
-		num = num / 10;
-	}
-
-	if(sign != (x >> 31))
-	{
-		printf("overflow...\n");
-		exit(1);
-	}
-
-	return x;
-}
-
-char *removeDup(char *str)
-{
-	int i, j;
-
-	for(i = 0; *(str + i) != '\0'; i++)
-	{
-		for(j = i + 1; *(str + j) != '\0'; j++)
-		{
-			if(*(str + i) == *(str + j))
-			{
-				memmove(str + j, str + j + 1, strlen(str + j + 1) + 1);
-			}
-		}
-	}
-
-	return str;
-}
-
-void bit_op(int number, int x, int n)
-{
-    number |= 1 << x;                   //set bit x
-    number &= ~(1 << x);                //clear bit x
-    number ^= 1 << x;                   //toggling bit x   (XOR)
-    int bit     = (number >> x) & 1;        //checking a bit -- this will put the value of bit x into the variable bit.
-    number ^= (-x ^ number) & (1 << n); //bit n will be set if x is 1, and cleared if x is 0.
-}
-
-
+#elif defined d_29
 int Is_Anagrams(char *str1, char *str2)
 {
 	assert(str1 && str2);
@@ -609,102 +119,6 @@ int Is_Anagrams(char *str1, char *str2)
 	}
 	else
 		return 0;
-}
-
-void myReplace(char *str, char *rep)
-{
-	char *p = str;
-	while(*str != '\0')
-	{
-		if(*str == ' ')
-		{
-			memmove(str + 2, str, strlen(str) + 1);
-			memmove(str, rep, strlen(rep));
-		}
-		str = str + 2;
-	}
-//	memmove(str + 4, str + 2, strlen(str + 2) + 1);
-}
-
-int **rotate(int arr[][4])
-{
-	int i = 0, j = 0;
-
-	int **new = (int **)malloc(sizeof(int*) * 4);
-	for(i = 0; i < 4; i++)
-	{
-		new[i] = (int *)malloc(sizeof(int) * 4);
-	}
-	
-	for(i = 0; i < 4; i++)
-	{
-		for(j = 0; j < 4; j++)
-		{
-			new[i][j] = arr[4 - 1 - j][i];
-			
-//			printf("%d\t", arr[i][j]);
-		}
-	}
-	return new;
-}
-
-int Is_sub(char *str1, char *str2)	//suppose str1 longer than str2
-{
-	assert(str1 && str2);
-	
-	char *p_str1 = NULL, *p_str2 = NULL;
-
-	for(; *str1; str1++)
-	{
-		p_str1 = str1;
-
-		for(p_str2 = str2; *p_str2; p_str2++)
-		{
-			if(*p_str1++ != *p_str2)
-			{
-				break;
-			}
-		}
-
-		if(*p_str2 == '\0')
-		{
-			return 1;
-		}
-	}
-
-	return 0;
-}
-
-int main(void)
-{
-	char *str1 = "showme";
-	char *str2 = "showme";
-	int i = 0, j = 0;
-
-#if 0
-	int x = Is_Anagrams(str1, str2);
-//	printf("%d\n", x);
-
-	char str[] = "show m e";
-	char *rep  = "%20";
-	myReplace(str, rep);
-	printf("%s\n", str);
-	int arr[4][4] = {{1, 2, 3, 4}, {10, 20, 30, 40}, {100, 200, 300, 400}, {1000, 2000, 3000, 4000}};
-	int **new = rotate(arr);
-	
-	for(i = 0; i < 4; i++)
-	{
-		for(j = 0; j < 4; j++)
-		{
-			printf("%d\t", new[i][j]);
-		}
-	}
-	printf("\n");
-#endif
-
-	int x = Is_sub(str1, str2);
-	printf("%d\n", x);
-	return 0;
 }
 
 #elif defined d_28
@@ -843,23 +257,14 @@ int main(void)
 
 #elif defined d_26
 
-void BitOperations(unsigned int address, int bit, int value)
+void bit_op(int number, int x, int n)
 {
-	unsigned int volatile *p = (unsigned int *)address;
-	
-	//setbit
-	*p |= (1 << bit);
-
-	//clearbit
-	*p &= ~(1 << bit);
-
-	//getbit
-	return ((*p >> bit) & 1);
-
-	//reversebit
-	*p ^= (1 << bit);
+    number |= 1 << x;                   //set bit x
+    number &= ~(1 << x);                //clear bit x
+    number ^= 1 << x;                   //toggling bit x   (XOR)
+    int bit     = (number >> x) & 1;        //checking a bit -- this will put the value of bit x into the variable bit.
+    number ^= (-x ^ number) & (1 << n); //bit n will be set if x is 1, and cleared if x is 0.
 }
-
 
 #elif defined d_25
 void CalculateOne(int num)
@@ -936,7 +341,7 @@ typedef struct stu
 
 #define LEN sizeof(STU)
 
-STU *create_Linklist(int data[], int num)
+STU *create_Linklist_Double(int data[], int num)
 {
 	STU *head = (STU *)malloc(LEN);
 	STU *preNode = NULL;
@@ -960,7 +365,7 @@ STU *create_Linklist(int data[], int num)
 	return head;
 }
 
-void insertNode_Front(STU **head, int target, int newData)
+void insertNode_Front_Double(STU **head, int target, int newData)
 {
 	STU **p = head;
 	while(*p != NULL && (*p)->id != target)		//*p != NULL need be put on front
@@ -1002,7 +407,7 @@ void insertNode_Front(STU **head, int target, int newData)
 	tmp->pre = NewNode;	
 }
 
-void insertNode_Behind(STU **head, int target, int newData)
+void insertNode_Behind_Double(STU **head, int target, int newData)
 {
 	STU **p = head;
 
@@ -1042,7 +447,7 @@ void insertNode_Behind(STU **head, int target, int newData)
 	}
 }
 
-void delNode(STU **head, int target)
+void delNode_Double(STU **head, int target)
 {
 	STU **p = head;
 
@@ -1090,17 +495,17 @@ int main(void)
 {
 	int data[] = {1, 2, 3, 4, 5};
 
-	STU *head = create_Linklist(data, sizeof(data) / sizeof(data[0]));
+	STU *head = create_Linklist_Double(data, sizeof(data) / sizeof(data[0]));
 	showme(head);
 	
 	printf("----------------\n");
 	
-	insertNode_Front(&head, 10, 200);
+	insertNode_Front_Double(&head, 10, 200);
 	showme(head);
 
 	printf("----------------\n");
 
-	insertNode_Behind(&head, 50, 800);
+	insertNode_Behind_Double(&head, 50, 800);
 	showme(head);
 	
 	return 0;
@@ -1263,91 +668,6 @@ int main(void)
 	return 0;
 }
 
-
-#elif defined test_1
-
-typedef struct stu
-{
-    int        id;
-    struct stu *next;
-} STU;
-
-#define LEN    sizeof(STU)
-
-STU *create_Linkedlist(int data[], int len)
-{
-    STU *head = NULL, *p = NULL;
-
-    while (--len >= 0)
-    {
-        p       = (STU *)malloc(LEN);
-        p->id   = data[len];
-        p->next = head;
-        head    = p;
-    }
-
-    return head;
-}
-
-void insert_Node_Front(STU **head, int Target, int New)
-{
-    STU **p      = head;
-    STU *newNode = NULL;
-
-    while (*p && (*p)->id != Target)
-    {
-        p = &(*p)->next;
-    }
-
-    STU *tmp = *p;
-    newNode       = (STU *)malloc(LEN);
-    newNode->id   = New;
-    *p            = newNode;
-    newNode->next = tmp;
-}
-
-void insert_Node_Behind(STU **head, int Target, int New)
-{
-    STU **p      = head;
-    STU *newNode = NULL;
-
-    while (*p && (*p)->id != Target)
-    {
-        p = &(*p)->next;
-    }
-
-    STU *tmp = (*p)->next;
-    newNode       = (STU *)malloc(LEN);
-    newNode->id   = New;
-    (*p)->next    = newNode;
-    newNode->next = tmp;
-}
-
-void showme(STU *head)
-{
-    while (head)
-    {
-        printf("%d\t", head->id);
-        head = head->next;
-    }
-    printf("\n");
-}
-
-int main(void)
-{
-    int data[3][5] = { {  1,  2,  3,  4,  5 },
-                       {  6,  7,  8,  9, 10 },
-                       { 11, 12, 13, 14, 15 } };
-
-    STU *head = create_Linkedlist(data[0], sizeof(data[0]) / sizeof(data[0][0]));
-
-    insert_Node_Front(&head, 5, 100);
-    showme(head);
-    insert_Node_Behind(&head, 1, 300);
-    showme(head);
-    return 0;
-}
-
 #elif defined d_17
 pthread_t tid1, tid2;
 
@@ -1410,100 +730,6 @@ int main(void)
 }
 
 #elif defined d_16		//1. pass 2D array as parameter. 2. initilize a 2D array
-#if 0
-int main(void)
-{
-    int r = 3, c = 4;
-    int *arr = (int *)malloc(r * c * sizeof(int));
-
-    int i, j, count = 0;
-
-    for (i = 0; i < r; i++)
-    {
-        for (j = 0; j < c; j++)
-        {
-            *(arr + i * c + j) = ++count;
-        }
-    }
-
-    for (i = 0; i < r; i++)
-    {
-        for (j = 0; j < c; j++)
-        {
-            printf("%d ", *(arr + i * c + j));
-        }
-    }
-
-    return 0;
-}
-#endif
-
-#if 0
-int main(void)
-{
-    int r = 3, c = 4, i, j, count;
-    int *arr[r];
-
-    for (i = 0; i < r; i++)
-    {
-        arr[i] = (int *)malloc(c * sizeof(int));
-    }
-
-    count = 0;
-
-    for (i = 0; i < r; i++)
-    {
-        for (j = 0; j < c; j++)
-        {
-            arr[i][j] = ++count;                //*(*(arr + i) + j) = ++count;
-        }
-    }
-
-    for (i = 0; i < r; i++)
-    {
-        for (j = 0; j < c; j++)
-        {
-            printf("%d ", arr[i][j]);
-        }
-    }
-
-    return 0;
-}
-#endif
-
-#if 0
-int main()
-{
-    int r = 3, c = 4, i, j, count;
-
-//	int (*arr)[c];
-    int **arr = (int **)malloc(r * sizeof(int *));
-
-    for (i = 0; i < r; i++)
-    {
-        arr[i] = (int *)malloc(c * sizeof(int));
-    }
-
-    count = 0;
-    for (i = 0; i < r; i++)
-    {
-        for (j = 0; j < c; j++)
-        {
-            arr[i][j] = ++count;
-        }
-    }
-
-    for (i = 0; i < r; i++)
-    {
-        for (j = 0; j < c; j++)
-        {
-            printf("%d ", arr[i][j]);
-        }
-    }
-    return 0;
-}
-#endif
-
 
 void Pass_2DArray_way1(int *arr, int m, int n)	//1. alloc in stack  2. pass 2D array as a parameter
 {
@@ -1596,39 +822,6 @@ int main(void)
 	return 0;
 }
 
-#if 0
-int main(void)
-{
-    int r = 3, c = 4;
-    int **arr;
-    int count = 0, i, j;
-
-    arr    = (int **)malloc(sizeof(int *) * r);
-    arr[0] = (int *)malloc(sizeof(int) * c * r);
-
-    for (i = 0; i < r; i++)
-    {
-        arr[i] = (*arr + c * i);
-    }
-
-    for (i = 0; i < r; i++)
-    {
-        for (j = 0; j < c; j++)
-        {
-            arr[i][j] = ++count;
-        }
-    }
-
-    for (i = 0; i < r; i++)
-    {
-        for (j = 0; j < c; j++)
-        {
-            printf("%d ", arr[i][j]);
-        }
-    }
-    return 0;
-}
-#endif
 #elif defined d_15
 
 int Reverse_Inter(int num)
@@ -1669,10 +862,20 @@ int Reverse_Inter_v2(int num)
     return ret;
 }
 
-int main(void)
-
+char *Inter_To_Char(int num, char *str)
 {
-    int num = Reverse_Inter(100100);
+	assert(str);
+
+	sprintf(str, "%d", num);
+
+	return str;
+}
+
+int main(void)
+{
+	int num = atoi("12r987");
+	
+    num = Reverse_Inter(num);
 
     printf("%d\n", num);
 
@@ -1680,6 +883,9 @@ int main(void)
     printf("i >> 31: %d\n%d\n", i >> 31, INT_MAX);
     printf("%d\n", CHAR_BIT);
     printf("%llu\n", ((unsigned long long)1 << 32) - 1);
+
+	Inter_To_Char(12345);
+	
     return 0;
 }
 
@@ -2358,6 +1564,45 @@ void del_Node(STU **head, int target)
     tmp = NULL;
     free(tmp);
 }
+
+void swap(int *p1, int *p2)
+{
+    int tmp = 0;
+
+    tmp = *p1;
+    *p1 = *p2;
+    *p2 = tmp;
+}
+
+
+void bubleSort_Linklist(STU *head)
+{
+    int length = 0;
+    int i, j;
+    STU *p = head;
+
+    while (p != NULL)
+    {
+        length++;
+        p = p->next;
+    }
+
+    p = head;
+
+    for (i = 0; i < length; i++)
+    {
+        p = head;
+        while (p->next != NULL)
+        {
+            if (p->id > p->next->id)
+            {
+                swap(&(p->id), &(p->next->id));
+            }
+            p = p->next;
+        }
+    }
+}
+
 
 void showme(STU *head)
 {
@@ -3330,153 +2575,7 @@ int main(void)
     return 0;
 }
 
-#elif defined d_05
 
-typedef struct stu
-{
-    int        id;
-    char       *name;
-    struct stu *next;
-} STU;
-
-#define LEN    sizeof(struct stu)
-
-STU *create_Linklist(int data[], int number)
-{
-    STU *head = NULL, *p = NULL;
-
-    for (int i = number; i >= 0; i--)
-    {
-        p       = (STU *)malloc(LEN);
-        p->id   = data[i];
-        p->next = head;
-        head    = p;
-    }
-
-    return head;
-}
-
-void ins_Linklist_Front(STU **head, int id, int new_id)
-{
-    STU **p = head;
-
-    while (*p && ((*p)->id != id))
-    {
-        p = &((*p)->next);
-    }
-
-    STU *tmp = *p;
-    *p         = (STU *)malloc(LEN);
-    (*p)->id   = new_id;
-    (*p)->next = tmp;
-}
-
-void ins_Linklist_Behind(STU **head, int id, int new_id)
-{
-    STU **p = head;
-
-    while (*p && ((*p)->id != id))
-    {
-        p = &((*p)->next);
-    }
-
-    STU *tmp = (*p)->next;
-    (*p)->next       = (STU *)malloc(LEN);
-    (*p)->next->id   = new_id;
-    (*p)->next->next = tmp;
-}
-
-void del_Linklist(STU **head, int id)
-{
-    STU **p = head;
-
-    while (*p && (*p)->id != id)
-    {
-        p = &((*p)->next);
-    }
-
-    STU *tmp = *p;
-    *p = tmp->next;
-    free(tmp);
-    tmp->next = NULL;
-}
-
-void swap(int *p1, int *p2)
-{
-    int tmp = 0;
-
-    tmp = *p1;
-    *p1 = *p2;
-    *p2 = tmp;
-}
-
-
-void bubleSort_Linklist(STU *head)
-{
-    int length = 0;
-    int i, j;
-    STU *p = head;
-
-    while (p != NULL)
-    {
-        length++;
-        p = p->next;
-    }
-
-    p = head;
-
-    for (i = 0; i < length; i++)
-    {
-        p = head;
-        while (p->next != NULL)
-        {
-            if (p->id > p->next->id)
-            {
-                swap(&(p->id), &(p->next->id));
-            }
-            p = p->next;
-        }
-    }
-}
-
-void showme(STU *head)
-{
-    while (head)
-    {
-        printf("%d\t", head->id);
-        head = head->next;
-    }
-
-    printf("\n");
-}
-
-int main(void)
-{
-    int data[] = { 102, 45, 876, 8, 21 };
-    int number = sizeof(data) / sizeof(data[0]) - 1;
-    STU *head  = create_Linklist(data, number);
-
-//	ins_Linklist_Front(&head, 8, 1000);
-
-    ins_Linklist_Front(&head, 102, 7666);
-    showme(head);
-
-    ins_Linklist_Behind(&head, 21, 22222);
-    showme(head);
-
-    del_Linklist(&head, 21);
-    showme(head);
-
-    del_Linklist(&head, 7666);
-    showme(head);
-
-    del_Linklist(&head, 22222);
-    showme(head);
-
-    bubleSort_Linklist(head);
-    showme(head);
-    return 0;
-}
 #elif defined d_06      //fast sorting
 
 void swap(int *p1, int *p2)
