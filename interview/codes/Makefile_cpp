@@ -1,5 +1,6 @@
 test_cpp: test_cpp.cpp
-	g++ test_cpp.cpp -lglog -lgflags -o test_cpp
+	#g++ test_cpp.cpp -lglog -lgflags -o test_cpp
+	g++ test_cpp.cpp -o test_cpp
 
 PHONY: clean
 clean:

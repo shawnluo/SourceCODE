@@ -42,8 +42,14 @@
 //#define d_02	//find and return the substring
 //#define d_03	//bit operations
 //#define d_04	//find the addtional character
-//#define d_06	//quick sorting
-//#define sorting_02	//insertion sorting
+
+//Sorting
+//#define d_05	// quick
+				// insertion
+				// selection
+				// merge
+				// bubble
+
 //#define d_07	//Is_Palindrome
 //#define d_08	//2 linklists adding with carry bit
 //#define d_09	//substring or not
@@ -65,13 +71,25 @@
 //#define d_23	//LowCaseUpperCase
 //#define d_24	//longestCommonSubstring
 //#define d_25	//calculate the number of 1
-//#define d_26	//bitOperations
 //#define d_27	//stack DIY array
 //#define d_28	//stack DIY LinkedList
 //#define d_29	//anagram
+//#define d_30	//exchange high and low bits
+//#define d_31	//reverse binary number
+//#define d_32	//bits set
+
+//1. 64位无符号整数除以一个常量，并且截成一个32位无符号数
+//2. 宏来得到最大值
+//3. 多进程通信之消费者，生产者
+//4. 乘以17的最有效算法（cpu最少cycle）
+//5. 函数指针
+//6. 一副图片，宽和高已知，将这个图片传给一个函数，在函数中，截取图片的一部分，并且传回给调用函数
+//7. printf在ISR，不可重入，导致阻塞
+//8. 结构体能不能传值给另一个函数
+//9. 位操作
+//10. 持续读取寄存器，直到该寄存器的第四个bit为1才返回
 
 //#define interview
-
 //#define test_pre
 #define test
 //#define test_2
@@ -85,8 +103,117 @@ void print_trace()
 
 #if defined test
 
+#elif defined d_33
 
 
+
+#elif defined d_32
+void Bit_Set_Single(unsigned char *p_data, unsigned char pos, int flag)
+{
+	if(!p_data)
+		return;
+
+	if(flag == 1)
+	{
+		*p_data |= 1 << (pos - 1);
+	}
+	else if(flag == 0)
+	{
+		*p_data &= ~(1 << (pos - 1));
+	}	
+	else if(flag == 2)
+	{
+		*p_data ^= (1 << (pos - 1));
+	}
+}
+
+void Bits_Set(unsigned char *p_data, unsigned char from, unsigned char end, int flag)
+{
+	for(int i = from; i <= end; i++)
+	{
+		Bit_Set_Single(p_data, i, flag);
+	}
+}
+
+int main(void)
+{
+	unsigned char c = 15 * 2;	//0000 1111
+	
+	Bits_Set(&c, 1, 4, 0);
+	printf("%d\n", c);
+	
+	return 0;
+}
+
+
+#elif defined d_31
+//二进制逆序 by MoreWindows( http://blog.csdn.net/MoreWindows )  
+#include <stdio.h>
+template <class T>
+void PrintfBinary(T a)
+{
+	int i;
+	for (i = sizeof(a) * 8 - 1; i >= 0; --i)
+	{
+		if ((a >> i) & 1)
+			putchar('1');
+		else 
+			putchar('0');
+		if (i == 8)
+			putchar(' ');
+	}
+	putchar('\n');
+}
+int main()
+{
+	printf("二进制逆序 --- by MoreWindows( http://blog.csdn.net/MoreWindows )  ---\n\n");
+
+	printf("逆序前:    ");
+	unsigned short a = 34520;
+	PrintfBinary(a);
+
+	printf("逆序后:    ");	
+	a = ((a & 0xAAAA) >> 1) | ((a & 0x5555) << 1);
+	a = ((a & 0xCCCC) >> 2) | ((a & 0x3333) << 2);
+	a = ((a & 0xF0F0) >> 4) | ((a & 0x0F0F) << 4);
+	a = ((a & 0xFF00) >> 8) | ((a & 0x00FF) << 8);
+	PrintfBinary(a);
+}
+
+#elif defined d_30
+void PrintfBinary(unsigned int a)  
+{  
+    int i;  
+    for (i = sizeof(a) * 8 - 1; i >= 0; --i)  
+    {  
+        if ((a >> i) & 1)  
+            putchar('1');  
+        else   
+            putchar('0');  
+        if (i == 8)  
+            putchar(' ');  
+    }  
+    putchar('\n');  
+}  
+
+int Exchange_High_Low(unsigned int num)	// 11110000 10101010 -> 10101010 11110000
+{
+	num = num << 8 | num >> 8;
+	PrintfBinary(num);
+	
+	return num;
+}
+
+int main(void)
+{
+	char *str1 = "goodaytodieh";
+	char *str2 = "showmetodiehegoodamoney";
+	
+	PrintfBinary(5);
+
+	Exchange_High_Low(5);	
+	return 0;
+}
 
 #elif defined d_29
 int Is_Anagrams(char *str1, char *str2)
@@ -254,18 +381,6 @@ int main(void)
 	return 0;
 }
 
-
-#elif defined d_26
-
-void bit_op(int number, int x, int n)
-{
-    number |= 1 << x;                   //set bit x
-    number &= ~(1 << x);                //clear bit x
-    number ^= 1 << x;                   //toggling bit x   (XOR)
-    int bit     = (number >> x) & 1;        //checking a bit -- this will put the value of bit x into the variable bit.
-    number ^= (-x ^ number) & (1 << n); //bit n will be set if x is 1, and cleared if x is 0.
-}
-
 #elif defined d_25
 void CalculateOne(int num)
 {
@@ -303,7 +418,6 @@ int longestCommonSubstring(const char *str1, const char *str2)
 			while(tmp_i < size1 && tmp_j < size2)
 			{
 //				++comparisons;
-
 				if(str1[tmp_i] != str2[tmp_j])
 				{
 					break;
@@ -323,6 +437,7 @@ int longestCommonSubstring(const char *str1, const char *str2)
 		}
 	}
 }
+
 #elif defined d_23
 
 void LowCase_To_UpperCase(char c)
@@ -332,6 +447,7 @@ void LowCase_To_UpperCase(char c)
 }
 
 #elif defined d_22	//double LinkedList
+
 typedef struct stu
 {
 	int id;
@@ -572,7 +688,6 @@ void reverse_2(char *str)
 		*end-- = tmp;
 	}
 }
-
 
 int main(void)
 {
@@ -1095,7 +1210,7 @@ int main(void)
 }
 
 #elif defined t5
-void my_Rep(char *str, char *rep)
+void my_Replace(char *str, char *rep)
 {
 	assert(str && rep);
 	
@@ -1140,7 +1255,7 @@ int main(void)
 
     char *rep = "%20";
 
-    my_Rep(str, rep);
+    my_Replace(str, rep);
 
     printf("%s\n", str);
 
@@ -1227,33 +1342,6 @@ int main(void)
     remove_Dup(str);
     printf("%s\n", str);
     return 0;
-}
-
-#elif defined t2
-
-void reverse(char *str)
-{
-    int  len = strlen(str);
-    int  i;
-    char tmp;
-
-    for (i = 0; i < (len + 1) / 2; i++)
-    {
-        tmp                  = *(str + i);
-        *(str + i)           = *(str + len - 1 - i);
-        *(str + len - 1 - i) = tmp;
-    }
-}
-
-int main(void)
-{
-    char *str = (char *)malloc(20);
-
-    strcpy(str, "showme");
-
-    reverse(str);
-
-    printf("%s\n", str);
 }
 
 #elif defined t1
@@ -1364,11 +1452,11 @@ int main(void)
 }
 
 #elif defined d_10
-typedef struct stu
+typedef struct node
 {
     int        id;
     struct stu *next;
-} STU;
+} Node, *pNode;
 
 #define LEN    sizeof(STU)
 
@@ -1565,6 +1653,33 @@ void del_Node(STU **head, int target)
     free(tmp);
 }
 
+void Del_LL_FromTo(pNode *ppHead, int start, int end)
+{
+	int i = 0;
+	pNode *pp = ppHead;
+
+	for(i = 0; i < start; i++)
+	{
+		pp = &(*pp)->next;
+	}
+	
+	for(i = start; i < end; i++)
+	{
+		Del_Node(pp, (*pp)->id);
+	}
+}
+
+void Del_LL_All(pNode *ppHead)
+{
+	pNode *pp = ppHead;
+	
+	while(*pp)
+	{
+		Del_Node(ppHead, (*pp)->id);
+	}
+}
+
+
 void swap(int *p1, int *p2)
 {
     int tmp = 0;
@@ -1603,6 +1718,108 @@ void bubleSort_Linklist(STU *head)
     }
 }
 
+pNode Reverse_LL(pNode pHead)
+{
+	assert(pHead);
+
+	pNode p = pHead, pL = NULL, pR = NULL;
+
+	p = pHead->next;
+	pL = pHead;
+	pL->next = NULL;
+
+	while(p)
+	{
+		pR = p->next;	//save pR
+
+		p->next = pL;	//reverse p->next
+		pL = p;
+		p = pR;
+	}
+
+	return pL;
+}
+
+
+STU *sum_Linklist(STU *l1, STU *l2)
+{
+    assert(l1 && l2);
+
+    STU *ret = NULL, *p = NULL, *p1 = NULL, *tmp = NULL;
+    int len_l1 = 1, len_l2 = 1, len_ret = 0, flag = 0;
+
+    tmp = l1;
+    while (tmp->next != NULL)
+    {
+        len_l1++;
+        tmp = tmp->next;
+    }
+
+    tmp = l2;
+    while (tmp->next != NULL)
+    {
+        len_l2++;
+        tmp = tmp->next;
+    }
+
+    len_ret = (len_l1 >= len_l2 ? len_l1 : len_l2);
+
+    if (len_l1 < len_l2)
+    {
+        insert_linklist_tail(&l1, len_ret - len_l1, 0);
+    }
+    else
+    {
+        insert_linklist_tail(&l2, len_ret - len_l2, 0);
+    }
+
+    for (int i = 0; i < len_ret; i++)
+    {
+        if (i == 0)
+        {
+            p = p1 = ret = (STU *)malloc(LEN);
+
+            ret->num = l1->num + l2->num;
+
+            if (ret->num >= 10)
+            {
+                ret->num -= 10;
+                flag      = 1;
+            }
+        }
+        else
+        {
+            p = (STU *)malloc(LEN);
+
+            p->num = l1->num + l2->num + flag;
+            if (p->num >= 10)
+            {
+                p->num -= 10;
+                flag    = 1;
+            }
+            else
+            {
+                flag = 0;
+            }
+            p1->next = p;
+            p1       = p;
+        }
+
+        l1 = l1->next;
+        l2 = l2->next;
+    }
+
+    if (flag == 1)
+    {
+        p        = (STU *)malloc(LEN);
+        p->num   = 1;
+        p1->next = p;
+
+        p->next = NULL;
+    }
+
+    return ret;
+}
 
 void showme(STU *head)
 {
@@ -1706,32 +1923,6 @@ int main(void)
 }
 
 #elif defined Demos_ArraysStrings
-typedef struct stu
-{
-    int        id;
-    struct stu *next;
-}STU;
-
-int Has_Circular(STU *head)
-{
-    STU **p, **pre;
-
-    for (p = &head; ; p = &((*p)->next))
-    {
-        if (*p == NULL)
-        {
-            return 0;
-        }
-
-        for (pre = &head; pre != p; pre = (&(*pre)->next))
-        {
-            if (*pre == *p)
-            {
-                return 1;
-            }
-        }
-    }
-}
 
 int Is_unique(char *str)
 {
@@ -1874,37 +2065,190 @@ int main(void)
 //	printf("%s\n", str);
 }
 
-#elif defined sorting_02
-void insertion_sort(int arr[], int len)
+#elif defined d_05
+
+void swap(int *x, int *y)
 {
-    int i, j, tmp;
+	int tmp = *x;
+	*x = *y;
+	*y = tmp;
+}
 
-    for (i = 1; i < len; i++)
-    {
-        tmp = arr[i];
-        j   = i - 1;
+void Sort_Bubble(int arr[], int size)
+{
+	int i, j;
+	for(i = 0; i < size - 1; i++)
+	{
+		for(j = i + 1; j < size; j++)
+		{
+			if(arr[i] > arr[j])
+			{
+				swap(&arr[i], &arr[j]);
+			}
+		}
+	}
+}
 
-        for ( ; j >= 0 && arr[j] > tmp; j--)
-        {
-            arr[j + 1] = arr[j];
-        }
-        arr[j + 1] = tmp;
-    }
+void Sort_Selection(int arr[], int size)
+{
+	int i, j, min;
+	for(i = 0; i < size - 1; i++)
+	{
+		min = i;
+		for(j = i + 1; j < size; j++)
+		{
+			if(arr[j] < arr[min])
+			{
+				min = j;
+			}
+		}
+		
+		if(i != min)
+		{
+			swap(&arr[i], &arr[min]);
+		}
+	}
+}
+
+void Sort_Quick(int arr[], int start, int end)
+{
+	int L, R;
+	
+	if(start < end)
+	{
+		L = start + 1;
+		R = end;
+		
+		while(L <= R)
+		{
+			while(arr[L] <= arr[start])	L++;
+			while(arr[R] > arr[start])	R--;
+
+			if(L < R)
+			{
+				swap(&arr[L], &arr[R]);
+			}
+		}
+		swap(&arr[R], &arr[start]);
+		Sort_Quick(arr, start, R - 1);
+		Sort_Quick(arr, R + 1, end);
+	}
+}
+
+void Merge(int arr[], int arrtmp[], int LeftPos, int RightPos, int RightEnd)
+{
+	int LeftEnd = RightPos -1;
+	int tmppos = LeftPos;
+	int numElements = RightEnd - LeftPos + 1;
+	
+	while((LeftPos <= LeftEnd) && (RightPos <= RightEnd))
+	{
+		if(arr[LeftPos] <= arr[RightPos])
+		{
+			arrtmp[tmppos++] = arr[LeftPos++];
+		}
+		else
+		{
+			arrtmp[tmppos++] = arr[RightPos++];
+		}
+	}
+
+	while(LeftPos <= LeftEnd)
+	{
+		arrtmp[tmppos++] = arr[LeftPos++];
+	}
+
+	while(RightPos <= RightEnd)
+	{
+		arrtmp[tmppos++] = arr[RightPos++];
+	}
+
+	for(int i = 0; i < numElements; i++, RightEnd--)
+	{
+		arr[RightEnd] = arrtmp[RightEnd];
+	}
+
+}
+
+void Sort_Merge(int arr[], int tmp[], int left, int right)
+{
+	int mid;
+	
+	if(left < right)
+	{
+		mid = (left + right) / 2;
+
+		Sort_Merge(arr, tmp, left, mid);
+		Sort_Merge(arr, tmp, mid + 1, right);
+		Merge(arr, tmp, left, mid + 1, right);
+	}
+	
+	for(int i = 0; i < 5; i++)
+	{
+		printf("%d\t", arr[i]);
+	}
+	printf("\n");
+}
+
+void Sort_Insertion(int data[], int size)
+{
+	int i, j;
+	int tmp;
+	
+	for(i = 0; i < 5; i++)
+	{
+		printf("%d\t", data[i]);
+	}
+	printf("\n");
+
+	for(i = 1; i < size; i++)
+	{
+		tmp = data[i];
+		
+		for(j = i; (j > 0 && (tmp < data[j - 1])); j--)
+		{
+			data[j] = data[j - 1];
+		}
+		data[j] = tmp;
+	}
+	
+	for(i = 0; i < 5; i++)
+	{
+		printf("%d\t", data[i]);
+	}
+	
+	printf("\n");
 }
 
 int main(void)
 {
-    int arr[] = { 1, 5, 221, 8, 0, 32, 322, 8 };
+	int data[5] = {1, 22, 421, 765, 0};
 
-    insertion_sort(arr, sizeof(arr) / sizeof(arr[0]));
+//	Sort_Insertion(data, sizeof(data) / sizeof(data[0]));
 
-    for (int i = 0; i < sizeof(arr) / sizeof(arr[0]); i++)
-    {
-        printf("%d\t", arr[i]);
-    }
-    printf("\n");
+//	int tmp[5] = {0};
+//	Sort_Merge(data, tmp, 0, 4);
 
-    return 0;
+//	Sort_Quick(data, 0, 4);
+	Sort_Bubble(data, 5);
+//	Sort_Selection(data, 5);
+
+/*
+	int data[] = {1, 22, 32, 12, 87, 0};
+	data = Sort_Bubble(data, sizeof(data) / sizeof(data[0]));
+
+	WRONG!!!!!
+	注意！数组名是一个地址，是一个指针常量，是const型的，不能被修改！！！
+*/
+
+
+	for(int i = 0; i < 5; i++)
+	{
+		printf("%d\t", data[i]);
+	}
+	printf("\n");
+	
+	return 0;
 }
 
 #elif defined d_09
@@ -1980,319 +2324,6 @@ int main(void)
     int  flag = Is_Palindrome(s);
 
     printf("flag = %d\n", flag);
-
-    return 0;
-}
-
-
-#elif defined d_08
-typedef struct stu
-{
-    int        num;
-    struct stu *next;
-}STU;
-
-#define LEN    sizeof(STU)
-
-STU *create_Linklist(int data[], int number)
-{
-    int i;
-    STU *head = NULL, *p = NULL;
-
-    while (number-- != 0)
-    {
-        p       = (STU *)malloc(LEN);
-        p->num  = data[number];
-        p->next = head;
-        head    = p;
-    }
-
-    return head;
-}
-
-void insert_linklist_tail(STU **head, int len, int num)
-{
-    STU **p = head, *newNode;
-    int i = 0;
-
-    while ((*head != NULL) && (*p != NULL))
-    {
-        p = &((*p)->next);
-    }
-
-    for (i = 0; i < len; i++)
-    {
-        newNode      = (STU *)malloc(LEN);
-        newNode->num = num;
-
-        *p      = newNode;
-        newNode = newNode->next;
-        p       = &((*p)->next);
-    }
-    newNode = NULL;
-}
-
-STU *sum_Linklist(STU *l1, STU *l2)
-{
-    assert(l1 && l2);
-
-    STU *ret = NULL, *p = NULL, *p1 = NULL, *tmp = NULL;
-    int len_l1 = 1, len_l2 = 1, len_ret = 0, flag = 0;
-
-    tmp = l1;
-    while (tmp->next != NULL)
-    {
-        len_l1++;
-        tmp = tmp->next;
-    }
-
-    tmp = l2;
-    while (tmp->next != NULL)
-    {
-        len_l2++;
-        tmp = tmp->next;
-    }
-
-    len_ret = (len_l1 >= len_l2 ? len_l1 : len_l2);
-
-    if (len_l1 < len_l2)
-    {
-        insert_linklist_tail(&l1, len_ret - len_l1, 0);
-    }
-    else
-    {
-        insert_linklist_tail(&l2, len_ret - len_l2, 0);
-    }
-
-    for (int i = 0; i < len_ret; i++)
-    {
-        if (i == 0)
-        {
-            p = p1 = ret = (STU *)malloc(LEN);
-
-            ret->num = l1->num + l2->num;
-
-            if (ret->num >= 10)
-            {
-                ret->num -= 10;
-                flag      = 1;
-            }
-        }
-        else
-        {
-            p = (STU *)malloc(LEN);
-
-            p->num = l1->num + l2->num + flag;
-            if (p->num >= 10)
-            {
-                p->num -= 10;
-                flag    = 1;
-            }
-            else
-            {
-                flag = 0;
-            }
-            p1->next = p;
-            p1       = p;
-        }
-
-        l1 = l1->next;
-        l2 = l2->next;
-    }
-
-    if (flag == 1)
-    {
-        p        = (STU *)malloc(LEN);
-        p->num   = 1;
-        p1->next = p;
-
-        p->next = NULL;
-    }
-
-    return ret;
-}
-
-void showme(STU *head)
-{
-    while (head != NULL)
-    {
-        printf("%d\t", head->num);
-        head = head->next;
-    }
-    printf("\n");
-}
-
-int main(void)
-{
-    int data[][5] = { { 1, 8, 4, 8, 5, 9 }, { 9, 3, 9, 9 } };
-    int len       = sizeof(data[0]) / sizeof(data[0][0]);
-
-    STU *l1 = create_Linklist(data[0], 6);
-    STU *l2 = create_Linklist(data[1], 4);
-
-    showme(l1);
-    showme(l2);
-    STU *new = sum_Linklist(l1, l2);
-
-    showme(new);
-
-    return 0;
-}
-
-#elif defined test_3
-
-typedef struct stu
-{
-    int        id;
-    char       *name;
-    struct stu *next;
-}STU;
-
-#define LEN    sizeof(STU)
-
-STU *creat_Linklist(int *data, int len)
-{
-    STU *head = NULL;
-    STU *p    = NULL;
-
-    while (len--)
-    {
-        p = (STU *)malloc(LEN);
-//		assert(p);
-        if (!p)
-        {
-            perror("malloc failed!");
-        }
-        p->id   = *(data + len);
-        p->next = head;
-        head    = p;
-    }
-
-    return head;
-}
-
-void del_Linklist(STU **head, int id)
-{
-    STU **p = head;
-
-    while ((*p != NULL) && ((*p)->id != id))
-    {
-        p = &((*p)->next);
-    }
-//	printf("cannot find it\n");
-
-    if (*p == NULL)
-    {
-        printf("Cannot find it!\n");
-        return;
-    }
-
-    STU *tmp = *p;
-    *p = (*p)->next;
-    free(tmp);
-    tmp = NULL;
-}
-
-void ins_Linklist_Front(STU **head, int id, int new_id)
-{
-    STU **p = head;
-
-    while ((*p != NULL) && ((*p)->id != id))
-    {
-        p = &(*p)->next;
-    }
-
-    if (*p == NULL)
-    {
-        printf("Cannot find it!\n");
-        return;
-    }
-
-    STU *tmp = *p;
-    *p         = (STU *)malloc(LEN);
-    (*p)->id   = new_id;
-    (*p)->next = tmp;
-}
-
-void ins_Linklist_Behind(STU **head, int id, int new_id)
-{
-    STU **p = head;
-
-    while (((*p) != NULL) && ((*p)->id != id))
-    {
-        p = &((*p)->next);
-    }
-
-    if ((*p) == NULL)
-    {
-        printf("Cannot find it!\n");
-        return;
-    }
-
-    STU *tmp = (STU *)malloc(LEN);
-    tmp->id    = new_id;
-    tmp->next  = (*p)->next;
-    (*p)->next = tmp;
-}
-
-void showme(STU *head)
-{
-    while (head)
-    {
-        printf("id = %d\t", head->id);
-        head = head->next;
-    }
-    printf("\n");
-}
-
-int main()
-{
-    int data[] = { 510, 111, 123, 234, 98 };
-    int len    = (int)(sizeof(data) / sizeof(data[0]));
-    STU *head  = NULL;
-
-    head = creat_Linklist(data, len);
-    showme(head);
-    printf("\n");
-
-    del_Linklist(&head, 2314);
-    del_Linklist(&head, 111);
-    showme(head);
-
-    ins_Linklist_Front(&head, 510, 999);
-    showme(head);
-
-    ins_Linklist_Behind(&head, 510, 1999);
-    showme(head);
-
-    return(0);
-}
-
-
-#elif defined test_2
-
-void print_buf(char *buf, size_t len)
-{
-    int k;
-
-    printf("%02X", buf[0]);
-    for (k = 1; k < len; k++)
-    {
-        printf(" %02X", buf[k]);
-    }
-}
-
-int main(void)
-{
-    char buf[3] = { 1, 1, 1 };
-    char *r;
-
-    printf("Enter CTRL+D: ");
-    fflush(stdout);
-    r = fgets(buf, sizeof buf, stdin);
-    printf("\nfgets returned %p, buf has [", (void *)r);
-    print_buf(buf, sizeof buf);
-    printf("]\n");
 
     return 0;
 }
@@ -2511,8 +2542,6 @@ char *my_strstr2(const char *haystack, const char *needle)
 
         for (p_n = needle; *p_n != '\0'; p_n++)
         {
-//			printf("p_h = %s\tp_n = %s\n", p_h, p_n);
-
             if (*p_h++ != *p_n)
             {
                 break;
@@ -2548,29 +2577,12 @@ char *my_strstr3(const char *s1, const char *s2)
 
 int main(void)
 {
-#if 1
     const char *p1 = "htt p://dd. ae";
     const char *p2 = "txt p";    //"/dd. a";
 
     char       *x = my_strstr2(p1, p2);
 
-//    char       *p = strstr(p1, p2);
-
-
     printf("x = %s\n", x);
-#else
-//step2: use array[]
-
-
-
-    const char haystack[20] = "TutorialsPoint";
-    const char needle[10]   = "Poddint";
-    char       *ret;
-
-    ret = strstr(haystack, needle);
-
-    printf("The substring is: %s\n", ret);
-#endif
 
     return 0;
 }
@@ -2686,8 +2698,6 @@ typedef struct stu
 STU *creat_Linklist(int data[], int num)
 {
     STU *head = NULL, *p = NULL;
-
-//	num--;
 
     while (--num >= 0)
     {

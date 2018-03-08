@@ -3,8 +3,47 @@
 #include <math.h>
 #include <glog/logging.h>
 
+#define test
+
 using namespace std;
 
+#if defined test
+
+class Fish
+{
+protected:
+//private:
+	bool FreshWaterFish;
+
+public:
+	int x = 0;
+	void Swim()
+	{
+		cout << FreshWaterFish << endl;
+	}
+};
+
+class Tuna: public Fish
+{
+public:
+	Tuna()
+	{
+		FreshWaterFish = false;
+	}
+};
+
+
+int main(void)
+{
+	Tuna myDinner;
+	myDinner.Swim();
+	myDinner.x = 100;
+//	myDinner.FreshWaterFish = 1;
+	return 0;
+}
+
+
+#elif defined yy
 int main(int argc, char *argv[])
 {
 /*
@@ -92,7 +131,7 @@ int main(void)
 	return 0;
 }
 
-#elif defined Cplusplus
+#elif defined xx
 
 #include<iostream>
 using namespace std;
@@ -240,4 +279,4 @@ int main(int argc, char* argv[])
     delete b;
     return 0;
 }
-
+#endif
