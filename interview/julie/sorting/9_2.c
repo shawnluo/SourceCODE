@@ -33,7 +33,7 @@ int Check_Anagram(char *pStr1, char *pStr2)
 			printf("\n Not a anagram \n");
 			return 0; //Not a anagram
 		}
-		else if(hashMap[*pTmp > 0)
+		else if(hashMap[*pTmp] > 0)
 		{
 			hashMap[*pTmp--]--;
 		}
@@ -105,7 +105,7 @@ char **MergeAnagram(char *pStr[], int left_start, int left_end, int right_start,
 	
 	//Copy all strings from pTmp to pStr
 	p1 = pStr+left_start;
-	p2 = pTmp+left_start
+	p2 = pTmp+left_start;
 	while(p1 <=pStr+right_end)
 	{
 		*p1++ = *p2++;
@@ -114,6 +114,7 @@ char **MergeAnagram(char *pStr[], int left_start, int left_end, int right_start,
 }
 
 
+#if 0
 char **MergeSortAnagram(char *pStr[], int left, int right, char *pTmp[])
 {
 	int center = 0;
@@ -133,6 +134,7 @@ char **MergeSortAnagram(char *pStr[], int left, int right, char *pTmp[])
 		MergeAnagram(pStr,left,center,center+1,right,pTmp);
 	}
 }
+#endif
 
 //To-do
 int main(void)
