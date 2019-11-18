@@ -1,0 +1,80 @@
+filetype off
+  set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+" Define bundles via Github repos "
+Bundle 'christoomey/vim-run-interactive'
+Bundle 'Valloric/YouCompleteMe'
+Bundle 'croaky/vim-colors-github'
+Bundle 'danro/rename.vim'
+Bundle 'majutsushi/tagbar'
+Bundle 'kchmck/vim-coffee-script'
+Bundle 'kien/ctrlp.vim'
+Bundle 'pbrisbin/vim-mkdir'
+Bundle 'scrooloose/syntastic'
+Bundle 'slim-template/vim-slim'
+Bundle 'thoughtbot/vim-rspec'
+Bundle 'tpope/vim-bundler'
+Bundle 'tpope/vim-endwise'
+Bundle 'tpope/vim-fugitive'
+Bundle 'tpope/vim-rails'
+Bundle 'tpope/vim-surround'
+Bundle 'vim-ruby/vim-ruby'
+Bundle 'vim-scripts/ctags.vim'
+Bundle 'vim-scripts/matchit.zip'
+Bundle 'vim-scripts/tComment'
+Bundle 'mattn/emmet-vim'
+Bundle 'scrooloose/nerdtree'
+Bundle 'Lokaltog/vim-powerline'
+Bundle 'godlygeek/tabular'
+Bundle 'msanders/snipmate.vim'
+Bundle 'jelera/vim-javascript-syntax'
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'othree/html5.vim'
+Bundle 'xsbeats/vim-blade'
+
+" automatic complete quotes, parens, brackets, etc
+Bundle 'Raimondi/delimitMate'
+Bundle 'groenewege/vim-less'
+" Bundle 'evanmiller/nginx-vim-syntax'
+Bundle 'Lokaltog/vim-easymotion'
+Bundle 'tomasr/molokai'
+Bundle 'klen/python-mode'
+" Bundle 'klen/python3-mode'
+Bundle 'octol/vim-cpp-enhanced-highlight'
+
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+"===============================================================
+" Write your plugins here
+"===============================================================
+" indent對齊參考線
+Plugin 'Yggdroot/indentLine'
+" 顯示行尾空白
+Plugin 'ntpeters/vim-better-whitespace'
+" 顯示狀態資訊 (包含git版本)
+
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+"Plugin 'bling/vim-airline'
+
+" 在vim中使用git命令
+"Plugin 'tpope/vim-fugitive'
+" 把cscope指令對應到hotkey
+Plugin 'chazy/cscope_maps'
+" 列出檔案中所有symbols，並可以跳至symbol處
+Plugin 'vim-scripts/taglist.vim'
+" 顯示目錄結構
+"Plugin 'scrooloose/nerdtree'
+" 切割視窗列出function定義
+Plugin 'wesleyche/SrcExpl'
+" 控管SrcExpl, taglist, nerdtree視窗
+Plugin 'wesleyche/Trinity'
+" taglist加強
+"Plugin 'majutsushi/tagbar'
+
+Plugin 'morhetz/gruvbox'
+"Plugin 'octol/vim-cpp-enhanced-highlight'
+
