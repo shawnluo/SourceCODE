@@ -1,0 +1,15 @@
+1. copy/delete word under cursor in Vim
+    yw / byw
+
+    Assuming that the cursor is at the first character of the word simply do this in command mode:
+        yw
+    y is for yank and w is for word.
+
+    Other ways of doing the same thing which are not as efficient:
+        vey
+    the v starts visual select mode. e tells vim to move to end of word. y yanks or copies the word. to delete replace y with x.
+
+    if the cursor is somewhere in the middle of the word, add a b before the command as in:
+        byw
+    or
+        bvey
