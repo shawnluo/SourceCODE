@@ -1,0 +1,7 @@
+test1: test1.c
+	gcc test1.c -o test1 -lpthread -g -Wall
+
+PHONY: clean
+
+clean:
+	rm test1

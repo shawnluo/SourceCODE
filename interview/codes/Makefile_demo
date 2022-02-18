@@ -1,0 +1,7 @@
+demo:
+	gcc demo.c -o demo -lpthread -g -Wall
+
+PHONY: clean
+
+clean:
+	rm demo
