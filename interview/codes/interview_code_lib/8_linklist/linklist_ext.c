@@ -42,7 +42,8 @@ void Insert_Linklist_Front(STU **head, int target, int newValue)
     STU **p      = head;
     STU *newNode = NULL;
 
-    while (*p && (*p)->score != target)
+    while (*p && (*p)->score != target)         // *p must be put at first
+    //while ((*p)->score != target) && *p)      // This line will cause crash. because p maybe point to NULL, then (*p)->sccore is invalid, will cause core dump.
     {
         p = &(*p)->next;
     }
