@@ -1,84 +1,174 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 #include <string.h>
+#include <assert.h>
+
 
 /*
-    find all the substrings
-
-    1234
-
-    - 1, 12, 123, 1234
-    - 2, 23, 234
-    - 3, 34
-    - 4
+    creat linkedlist
 */
 
-void print_str(const char *str, int pos, int curLen)
+typedef struct data
 {
-    while(curLen--)
+    int i;
+    struct data *next;
+} Data, *pData;
+
+#define SIZE_ll sizeof(struct data)
+
+void showme(pData pHead)
+{
+    while(pHead)
     {
-        printf("%c", str[pos++]);
+        printf("%d, ", pHead->i);
+        pHead = pHead->next;
     }
-    printf(", ");
+
+    printf("\n");
 }
 
 
-void find_all_substr(const char *str)
+pData create_ll(int *arr, int len)
 {
-    int pos, curLen, k;
-    int len = strlen(str);
+    int i;
+    pData p1, p2, pHead;   // p1 points to new created link
 
-    for(pos = 0; pos< len; pos++)
+    if(len <= 0)    return NULL;
+    if(arr == NULL) return NULL;
+
+    // for the head of the linked list
+    p1 = p2 = pHead = (pData)malloc(SIZE_ll);
+    pHead->i = arr[0];
+    pHead->next = NULL;
+
+    for(i = 1; i < len; i++)
     {
-        for(curLen = 1; curLen <= len - pos; curLen++)
-        {
-            print_str(str, pos, curLen);
-        }
-        printf("\n");
+        p1 = (pData)malloc(SIZE_ll);
+        p1->i = arr[i];
+        p1->next  = NULL;
+        p2->next = p1;
+        p2 = p1;
     }
+
+    return pHead;
+}
+
+/*
+pData create_ll_ext(int *arr, int len)
+{
+    pData p, pHead;     // p is used to malloc a new link node
+    p = pHead = NULL;
+
+    while(len-- > 0)
+    {
+        p = (pData)malloc(SIZE_ll);
+        p->i = arr[len];
+        p->next = pHead;
+        pHead = p;
+    }
+
+    return pHead;
+}
+*/
+
+pData Create_ll_ext(int *array, int len)
+{
+    pData pHead = NULL, p = NULL;
+    int i = 0;
+
+    for (i = len; i >= 0; i--)
+    {
+        p = (pData)malloc(SIZE_ll);
+        memset(p, 0, SIZE_ll);
+        p->i = *(array + i);
+        p->next  = pHead;
+        pHead     = p;
+    }
+
+    return pHead;
 }
 
 
-void find_all_substr_ext(const char *str)
+// insert a new node behind of node
+// the ll head still keeps the memory address
+/* target: the new node will be inserted behind of this node
+    newData: the new node
+*/
+int Ins_behind_ll(pData *ppHead, int newData, int target)
 {
-    int i, j, k;
-    int len = strlen(str);
-    char *pTmp = str;
-    int curLen = 0;
-    for(i = 0; str[i] != '\0'; i++)
+    if(*ppHead == NULL)
     {
-        for(j = i; str[j] != '\0'; j++)
-        {
-            //for(k = i; str[k] != '\0'; k--)
-            for(k=1;k <=j;k++)
-            {
-                pTmp = str;
-                curLen =k;
-                while(curLen > 0)
-                {
-                    printf("%c", *pTmp);
-                    curLen--;
-                    pTmp++;
-                }
-            }
-            printf("\t");
-        }
-        printf("\n");
+        printf("ll is invalid!\n");
+        return -1;
     }
+
+    pData *pp = ppHead;
+
+    while(((*pp)->i != target) && (*pp != NULL))
+    {
+        pp = &(*pp)->next;
+    }
+    if(*pp == NULL)
+    {
+        printf("can not find the target\n");
+        return -2;
+    }
+
+/*
+    pData pTmp = p;
+    p = (pData)malloc(SIZE_ll);
+    p->i = newData;
+    p->next = pTmp->next;
+    pTmp->next = p;
+*/
+    return 0;
 }
 
 
-int main(void)
+// insert a new node infront of the specific node
+int Ins_infront_ll(pData *ppHead, int newData, int target)
 {
-    char str[10] = "1234";
+    if(*ppHead == NULL)
+    {
+        printf("invalid ll\n");
+        return -1;
+    }
 
-    find_all_substr(str);
+    pData *pp = ppHead;
+    while(((*pp)->i != target) && (*pp != NULL))
+    {
+        //printf("%x\n", p);
+        pp = &(*pp)->next;
+    }
+    if(*pp == NULL)
+    {
+        printf("can NOT find the target\n");
+        return -2;
+    }
 
-    //printf("2 - %s\n", str);
-    //for(int i = 0; i < sizeof(str2); i++)
-    //printf("%c\t", str2[i]);
-    //printf("\n");
-    //printf("%d\n", strcmp("abcd", "abc"));
+    pData pTmp = *pp;
+    
+
+    return 0;
+}
+
+
+int main()
+{
+    int arr[] = {11, 12, 13, 14, 15};
+    int num = sizeof(arr) / sizeof(arr[0]);
+    int ret;
+    pData pHead = Create_ll_ext(arr, num);
+    showme(pHead);
+
+    ret = Ins_behind_ll(&pHead, 33, 112);
+    printf("ret = %d\n", ret);
+    showme(pHead);
+
+/*
+    ret = Ins_infront_ll(pHead, 33, 111);
+    printf("ret = %d\n", ret);
+    showme(pHead);
+*/
     return 0;
 }

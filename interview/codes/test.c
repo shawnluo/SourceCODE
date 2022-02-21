@@ -1,78 +1,281 @@
-#include <stdio.h>
+
 #include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <assert.h>
 
-void set_longest(char *tmp, char *longest_substr)
+
+typedef struct stu
 {
-    printf("1 - %s, %s\n", tmp, longest_substr);
-    if(strlen(longest_substr) < strlen(tmp))
+    int        score;
+    char       *name;
+    struct stu *next;
+}STU, *STU_EXT;
+
+#define LEN    sizeof(STU)
+
+
+STU *Create_Linklist(int *array, char *name)
+{
+    STU *head = NULL, *p = NULL;
+    int i = 0;
+
+    for (i = 4; i >= 0; i--)
     {
-        strcpy(longest_substr, tmp);
+        p = (STU *)malloc(LEN);
+        memset(p, 0, LEN);
+        p->score = *(array + i);
+        p->next  = head;
+        head     = p;
     }
-    printf("2 - %s\n", longest_substr);
+
+    return head;
 }
 
-/* find the longest substring of a string containing distinct characters
-      1. from the beginning of strng, find the distinct string, and calculate the length. save it to longest_str[];
-            a. how to find the distinct string?
-                1. inilize a 128 units integer array with 0;
-                2. from the first of the string, set the array to 1 if it was 0, else the loop stops.
-      2. continue to find the distinct string, if the new one is longer than the saved longest_str, then replace the longest_str with the new one.
-      3. untile the double for loop finished.
-*/
-void func(char *str)
+void Insert_Linklist_Front(STU **head, int target, int newValue)
 {
-    int data[128] = {0};
-    char longest_substr[100] = {0};
-    char tmp[100] = {0};
-    int pos;
+    STU **p      = head;
+    STU *newNode = NULL;
 
-    if(!str)
+    while (*p && (*p)->score != target)
     {
-        perror("str must NOT be empty!");
-        return -1;
+        p = &(*p)->next;
     }
-    
-    int cur_pos = 0;
-    int len = strlen(str);
-    int i, flag = 0;
 
-    for(i = 0; i < len; i++)
+    if (!*p)
     {
-        for(int j = i; j < len; j++)
+        printf("Cannot find the target!\n");
+    }
+    else
+    {
+        newNode = (STU *)malloc(LEN);
+        memset(newNode, 0, LEN);
+        newNode->score = newValue;
+        newNode->next  = *p;
+        *p             = newNode;
+    }
+}
+
+void Insert_Linklist_Behind(STU **head, int target, int newValue)
+{
+    STU **p = head, *newNode = NULL;
+
+    while (*p && (*p)->score != target)
+    {
+        p = &(*p)->next;
+    }
+
+    if (!*p)
+    {
+        printf("Cannot find the target!\n");
+    }
+    else
+    {
+        newNode = (STU *)malloc(LEN);
+        memset(newNode, 0, LEN);
+        newNode->score = newValue;
+        newNode->next  = (*p)->next;
+        (*p)->next     = newNode;
+    }
+}
+
+
+void showme(STU *head)
+{
+    while (head)
+    {
+        printf("%d\t", head->score);
+        head = head->next;
+    }
+    printf("\n");
+}
+
+void Delete_Linklist(STU **head, int target)
+{
+    STU **p = head, *deletePointer = NULL;
+
+    while (*p && (*p)->score != target)
+    {
+        p = &(*p)->next;
+    }
+
+    if (!*p)
+    {
+        printf("Cannot find the target!\n");
+    }
+    else
+    {
+        deletePointer       = *p;
+        *p                  = deletePointer->next;
+        deletePointer->next = NULL;
+
+        free(deletePointer);
+        deletePointer = NULL;
+    }
+}
+
+
+void swap(STU *p, STU *t)
+{
+    int tmp = p->score;
+
+    p->score = t->score;
+    t->score = tmp;
+}
+
+void sorting_Bubble(STU *head)
+{
+    STU *p = NULL, *t = NULL;
+
+    for (p = head; p; p = p->next)
+    {
+        for (t = p->next; t; t = t->next)
         {
-            if(data[str[j]] == 0)
+            if (p->score > t->score)
             {
-                data[str[j]] = 1;
-                tmp[pos++] = str[j];
+                swap(p, t);
             }
-            else
+        }
+    }
+}
+
+
+//Way1: we merge head2 into head1
+STU *Merge_Linklist(STU *head1, STU *head2)
+{
+    STU *p1 = NULL, *p2 = NULL;
+
+    sorting_Bubble(head1);
+    sorting_Bubble(head2);
+
+    for (p2 = head2; p2; p2 = p2->next)
+    {
+        for (p1 = head1; p1; p1 = p1->next)
+        {
+            if (p2->score <= p1->score)
             {
-                tmp[pos] = '\0';
-                pos = 0;
-                set_longest(tmp, longest_substr);
-                //printf();
-                memset(tmp, 0, 100);
-                memset(data, 0, 128);
+                Insert_Linklist_Front(&head1, p1->score, p2->score);
+                break;
+            }
+
+            if (!p1->next)
+            {
+                Insert_Linklist_Behind(&head1, p1->score, p2->score);
                 break;
             }
         }
     }
-    tmp[pos] = '\0';
 
-    printf("%s\n", longest_substr);
+    return head1;
+}
+
+
+//way2: 1. link the whole linklist head2 into the end of linklist head1.
+//		2. sorting linklist head1
+void Merge_Linklist_EXT(STU **head1, STU **head2)
+{
+    STU **p = head1;
+
+    while (*p)
+    {
+        p = &(*p)->next;
+    }
+
+    *p = *head2;
+
+    sorting_Bubble(*head1);
 }
 
 
 int main()
 {
-    int n;
-    //scanf("%d", &n);
-    n = 4;
+    int array1[5] = { 7, 15, 72, 88, 98 };
+    int array2[5] = { 2, 43, 88, 90, 1008 };
 
-    char *str = "show me!bhs";
-    func(str);
+    int *array[2] = { NULL };
 
+    array[0] = array1;
+    array[1] = array2;
+
+    int array_Data[2][5] = { { 76, 15, 72, 88, 98 }, { 442, 43, 88, 90, 1008 } };
+    int (*array_ext)[5] = array_Data;
+
+
+    //============usage of char *str[]===================================
+    char *name[5] = { "1234", "5678", "Shaw", "Alex", "Joe" };     //the end of string will follow with '\0'
+    printf("%s\t", name[0]);
+    printf("%s\n", name[1]);
+
+    //============usage of char (*str)[]=================================
+    char data[][4] = { "abc", "def", "ghi" };     //the end of string will follow with '\0'
+    char (*name2)[4] = NULL;
+    name2            = &data[0];
+    printf("%s\t", *name2);
+    printf("%s\n", *(name2 + 1));
+    for (int i = 0; i < 4; i++)
+    {
+        printf("%c\t", *(*name2 + i));
+        printf("%c\n", *(*(name2 + 1) + i));
+    }
+	//===============================end=================================
+
+    STU *test = (STU *)malloc(LEN);
+    memset(test, 0, LEN);
+
+    STU *test2 = (STU *)malloc(LEN);
+    memset(test2, 0, LEN);
+
+    STU *headTest = test;
+    headTest->score = 8888;
+    headTest->next  = test2;
+
+    assert(headTest);
+
+//	my_trace(BRIGHT, RED, BLACK, "test address:\t%p\n", &test);
+//	my_trace(BRIGHT, GREEN, BLACK, "headTest address:\t%p\n", &headTest);
+//	my_trace(BRIGHT, RED, BLACK, "headTest->next value:\t%p\n", headTest->next);
+
+    free(headTest);
+    memset(headTest, 0, LEN);
+
+//	my_trace(BRIGHT, GREEN, BLACK, "headTest address:\t%p\n", &headTest);
+//	my_trace(BRIGHT, RED, BLACK, "headTest->next value:\t%p\n\n", headTest->next);
+
+
+
+//	STU *head1 = Create_Linklist(array[0]);
+    STU *head1 = Create_Linklist(*array_ext, *name);
+    showme(head1);
+
+//	STU *head2 = Create_Linklist(array[1]);
+    STU *head2 = Create_Linklist(*(array_ext + 1), *(name + 1));
+    showme(head2);
+
+#if 1
+    Insert_Linklist_Front(&head1, 888, 79);
+    showme(head1);
+
+    Insert_Linklist_Behind(&head1, 7, 9);
+    showme(head1);
+
+    Insert_Linklist_Behind(&head1, 98, 38888);
+    showme(head1);
+
+    Delete_Linklist(&head1, 38888);
+    showme(head1);
+
+    sorting_Bubble(head1);
+    showme(head1);
+
+    head1 = Merge_Linklist(head1, head2);
+    showme(head1);
+#endif
+
+    Merge_Linklist_EXT(&head1, &head2);
+    showme(head1);
     return 0;
 }
