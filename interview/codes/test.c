@@ -9,273 +9,68 @@
 #include <assert.h>
 
 
-typedef struct stu
+void showme(int *arr, int len)
 {
-    int        score;
-    char       *name;
-    struct stu *next;
-}STU, *STU_EXT;
-
-#define LEN    sizeof(STU)
-
-
-STU *Create_Linklist(int *array, char *name)
-{
-    STU *head = NULL, *p = NULL;
-    int i = 0;
-
-    for (i = 4; i >= 0; i--)
+    for(int i = 0; i < len; i++)
     {
-        p = (STU *)malloc(LEN);
-        memset(p, 0, LEN);
-        p->score = *(array + i);
-        p->next  = head;
-        head     = p;
-    }
-
-    return head;
-}
-
-void Insert_Linklist_Front(STU **head, int target, int newValue)
-{
-    STU **p      = head;
-    STU *newNode = NULL;
-
-    while (*p && (*p)->score != target)
-    {
-        p = &(*p)->next;
-    }
-
-    if (!*p)
-    {
-        printf("Cannot find the target!\n");
-    }
-    else
-    {
-        newNode = (STU *)malloc(LEN);
-        memset(newNode, 0, LEN);
-        newNode->score = newValue;
-        newNode->next  = *p;
-        *p             = newNode;
-    }
-}
-
-void Insert_Linklist_Behind(STU **head, int target, int newValue)
-{
-    STU **p = head, *newNode = NULL;
-
-    while (*p && (*p)->score != target)
-    {
-        p = &(*p)->next;
-    }
-
-    if (!*p)
-    {
-        printf("Cannot find the target!\n");
-    }
-    else
-    {
-        newNode = (STU *)malloc(LEN);
-        memset(newNode, 0, LEN);
-        newNode->score = newValue;
-        newNode->next  = (*p)->next;
-        (*p)->next     = newNode;
-    }
-}
-
-
-void showme(STU *head)
-{
-    while (head)
-    {
-        printf("%d\t", head->score);
-        head = head->next;
+        printf("%d ", arr[i]);
     }
     printf("\n");
 }
 
-void Delete_Linklist(STU **head, int target)
+void swap(int *p1, int *p2)
 {
-    STU **p = head, *deletePointer = NULL;
-
-    while (*p && (*p)->score != target)
-    {
-        p = &(*p)->next;
-    }
-
-    if (!*p)
-    {
-        printf("Cannot find the target!\n");
-    }
-    else
-    {
-        deletePointer       = *p;
-        *p                  = deletePointer->next;
-        deletePointer->next = NULL;
-
-        free(deletePointer);
-        deletePointer = NULL;
-    }
+    int tmp;
+    tmp = *p1;
+    *p1 = *p2;
+    *p2 = tmp;
 }
 
-
-void swap(STU *p, STU *t)
+void sorting_bubble(int *arr, int len)
 {
-    int tmp = p->score;
-
-    p->score = t->score;
-    t->score = tmp;
-}
-
-void sorting_Bubble(STU *head)
-{
-    STU *p = NULL, *t = NULL;
-
-    for (p = head; p; p = p->next)
+    int i, j;
+    for(i = 0; i < len; i++)
     {
-        for (t = p->next; t; t = t->next)
+        for(j = 0; j < len - i - 1; j++)
         {
-            if (p->score > t->score)
+            if(arr[j] > arr[j + 1])
             {
-                swap(p, t);
+                swap(arr + j, arr + j + 1);
             }
         }
     }
 }
 
-
-//Way1: we merge head2 into head1
-STU *Merge_Linklist(STU *head1, STU *head2)
+/*
+    from the first one, insert the element to the right position
+*/
+void sorting_ins(int *arr, int len)
 {
-    STU *p1 = NULL, *p2 = NULL;
-
-    sorting_Bubble(head1);
-    sorting_Bubble(head2);
-
-    for (p2 = head2; p2; p2 = p2->next)
+    int i, j, save;
+    for(i = 1; i < len; i++)
     {
-        for (p1 = head1; p1; p1 = p1->next)
+        save = arr[i];
+        j = i - 1;
+
+        // save the current element, compare it with the front elements.
+        // if the saved element less than the front elements, then swap with it.
+        while(j >= 0 && save < arr[j])
         {
-            if (p2->score <= p1->score)
-            {
-                Insert_Linklist_Front(&head1, p1->score, p2->score);
-                break;
-            }
-
-            if (!p1->next)
-            {
-                Insert_Linklist_Behind(&head1, p1->score, p2->score);
-                break;
-            }
+            arr[j + 1] = arr[j];
+            j--;
         }
+        // until find the element bigger than saved one, then set it to saved one.
+        arr[j + 1] = save;
     }
-
-    return head1;
 }
-
-
-//way2: 1. link the whole linklist head2 into the end of linklist head1.
-//		2. sorting linklist head1
-void Merge_Linklist_EXT(STU **head1, STU **head2)
-{
-    STU **p = head1;
-
-    while (*p)
-    {
-        p = &(*p)->next;
-    }
-
-    *p = *head2;
-
-    sorting_Bubble(*head1);
-}
-
 
 int main()
 {
-    int array1[5] = { 7, 15, 72, 88, 98 };
-    int array2[5] = { 2, 43, 88, 90, 1008 };
+    int arr[] = { 117, 15, 72, 88, 98, 332, -1 };
+    int len = sizeof(arr) / sizeof(arr[0]);
 
-    int *array[2] = { NULL };
+    sorting_bubble(arr, len);
+    showme(arr, len);
 
-    array[0] = array1;
-    array[1] = array2;
-
-    int array_Data[2][5] = { { 76, 15, 72, 88, 98 }, { 442, 43, 88, 90, 1008 } };
-    int (*array_ext)[5] = array_Data;
-
-
-    //============usage of char *str[]===================================
-    char *name[5] = { "1234", "5678", "Shaw", "Alex", "Joe" };     //the end of string will follow with '\0'
-    printf("%s\t", name[0]);
-    printf("%s\n", name[1]);
-
-    //============usage of char (*str)[]=================================
-    char data[][4] = { "abc", "def", "ghi" };     //the end of string will follow with '\0'
-    char (*name2)[4] = NULL;
-    name2            = &data[0];
-    printf("%s\t", *name2);
-    printf("%s\n", *(name2 + 1));
-    for (int i = 0; i < 4; i++)
-    {
-        printf("%c\t", *(*name2 + i));
-        printf("%c\n", *(*(name2 + 1) + i));
-    }
-	//===============================end=================================
-
-    STU *test = (STU *)malloc(LEN);
-    memset(test, 0, LEN);
-
-    STU *test2 = (STU *)malloc(LEN);
-    memset(test2, 0, LEN);
-
-    STU *headTest = test;
-    headTest->score = 8888;
-    headTest->next  = test2;
-
-    assert(headTest);
-
-//	my_trace(BRIGHT, RED, BLACK, "test address:\t%p\n", &test);
-//	my_trace(BRIGHT, GREEN, BLACK, "headTest address:\t%p\n", &headTest);
-//	my_trace(BRIGHT, RED, BLACK, "headTest->next value:\t%p\n", headTest->next);
-
-    free(headTest);
-    memset(headTest, 0, LEN);
-
-//	my_trace(BRIGHT, GREEN, BLACK, "headTest address:\t%p\n", &headTest);
-//	my_trace(BRIGHT, RED, BLACK, "headTest->next value:\t%p\n\n", headTest->next);
-
-
-
-//	STU *head1 = Create_Linklist(array[0]);
-    STU *head1 = Create_Linklist(*array_ext, *name);
-    showme(head1);
-
-//	STU *head2 = Create_Linklist(array[1]);
-    STU *head2 = Create_Linklist(*(array_ext + 1), *(name + 1));
-    showme(head2);
-
-#if 1
-    Insert_Linklist_Front(&head1, 888, 79);
-    showme(head1);
-
-    Insert_Linklist_Behind(&head1, 7, 9);
-    showme(head1);
-
-    Insert_Linklist_Behind(&head1, 98, 38888);
-    showme(head1);
-
-    Delete_Linklist(&head1, 38888);
-    showme(head1);
-
-    sorting_Bubble(head1);
-    showme(head1);
-
-    head1 = Merge_Linklist(head1, head2);
-    showme(head1);
-#endif
-
-    Merge_Linklist_EXT(&head1, &head2);
-    showme(head1);
     return 0;
 }
