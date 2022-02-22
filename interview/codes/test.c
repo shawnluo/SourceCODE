@@ -9,68 +9,83 @@
 #include <assert.h>
 
 
-void showme(int *arr, int len)
-{
-    for(int i = 0; i < len; i++)
-    {
-        printf("%d ", arr[i]);
-    }
-    printf("\n");
-}
+/*
+        1.5 write a method to replace all spaces in a string with '%20'
+            "a bc"    -   "a%20bc"
+*/
 
-void swap(int *p1, int *p2)
-{
-    int tmp;
-    tmp = *p1;
-    *p1 = *p2;
-    *p2 = tmp;
-}
-
-void sorting_bubble(int *arr, int len)
-{
-    int i, j;
-    for(i = 0; i < len; i++)
-    {
-        for(j = 0; j < len - i - 1; j++)
-        {
-            if(arr[j] > arr[j + 1])
-            {
-                swap(arr + j, arr + j + 1);
-            }
-        }
-    }
-}
 
 /*
-    from the first one, insert the element to the right position
+    1. go through str, to calculate how many space, num.
+    2. inilize a new str_new, size set to (3 - 1) * num + strlen(str)
+    3. 2 while loop to copy str to str_new start from tail,
+        1). one from str tail, decrease
+        2). another from str_new, decrease
+        3). if meet space, 
+            a. str--
+            b. str_new[i] = '0'
+            c. str_new[i - 1] = '2'
+            d. str_new[i - 2] = '%'
 */
-void sorting_ins(int *arr, int len)
+int replace_space(char *str)
 {
-    int i, j, save;
-    for(i = 1; i < len; i++)
+    if(!str)
     {
-        save = arr[i];
-        j = i - 1;
-
-        // save the current element, compare it with the front elements.
-        // if the saved element less than the front elements, then swap with it.
-        while(j >= 0 && save < arr[j])
-        {
-            arr[j + 1] = arr[j];
-            j--;
-        }
-        // until find the element bigger than saved one, then set it to saved one.
-        arr[j + 1] = save;
+        printf("str is empty!\n");
+        return -1;
     }
+
+    int len_str = strlen(str);
+
+    int num = 0;    // how many old_ch
+    char *p = str;
+    while(*p)
+    {
+        if(*p == ' ')
+        {
+            num++;
+        }
+        p++;
+    }
+    //return num;
+
+    int len_new = len_str + num * (3 - 1); // len "%20" - len ' '
+    char str_new[len_new];
+
+    char *p1 = str + len_str - 1;      // str end
+    char *p2 = str_new + len_new - 1;  // new str end
+
+    while(len_str--)
+    {
+        if(*str != ' ')
+        {
+            *p2 = *p1;
+            p1--;
+            p2--;
+        }
+        else
+        {
+            *p2 = '0';
+            *(p2 - 1) = '2';
+            *(p2 - 2) = '%';
+            p1--;
+            p2 -= 3;
+        }
+    }
+
+    str_new[len_new] = '\0';
+    printf("%s\n", str_new);
 }
+
 
 int main()
 {
-    int arr[] = { 117, 15, 72, 88, 98, 332, -1 };
-    int len = sizeof(arr) / sizeof(arr[0]);
+    char *str = "sh e";
+    char *old_ch = " ";
+    char *new_ch = "%20";
+    int ret = replace_space(str);
 
-    sorting_bubble(arr, len);
-    showme(arr, len);
+    //printf("%d\n", ret);
 
     return 0;
 }
