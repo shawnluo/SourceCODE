@@ -467,3 +467,93 @@ int main()
 
     return 0;
 }
+
+
+
+
+/*
+        1.7 write an algorithm such that if an element in an MxN matrix is 0, then set its entire row and column to 0
+            1 2 3      -->      7 4 1
+            4 5 6               8 5 2
+            7 8 9               9 6 3
+*/
+
+
+/*
+    step 1. transpose the matrix and then flip it symmetrical swap
+    1 2 3           1 4 7
+    4 5 6           2 5 8
+    7 8 9           3 6 9
+
+    step2. flip the matrix horizontally
+    1 4 7           7 4 1
+    2 5 8           7 5 2
+    3 6 9           9 6 3
+*/
+
+#define row 5
+#define col 5
+
+void swap(int arr[row][col])
+{
+    int i, j, tmp;
+
+    for(i = 0; i < row; i++)
+    {
+        for(j = 0; j <= i; j++)
+        {
+            tmp = arr[i][j];
+            arr[i][j] = arr[j][i];
+            arr[j][i] = tmp;
+        }
+    }
+
+/*
+    for(i = 0; i < row; i++)
+    {
+        for(j = 0; j < col; j++)
+        {
+            printf("%d, ", arr[i][j]);;
+        }
+        printf("\n");
+    }
+*/
+
+#if 1
+    for(i = 0; i < row; i++)
+    {
+        for(j = 0; j < col / 2; j++)
+        {
+            tmp = arr[i][j];
+            arr[i][j] = arr[i][5 - j - 1];
+            arr[i][5 - j - 1] = tmp;
+        }
+    }
+
+    for(i = 0; i < row; i++)
+    {
+        for(j = 0; j < col; j++)
+        {
+            printf("%d, ", arr[i][j]);;
+        }
+        printf("\n");
+    }
+#endif
+}
+
+int main()
+{
+    int arr[row][col] = {   {1, 2, 3, 4, 5},
+                        {6, 7, 8, 9, 10},
+                        {11, 12, 13, 14, 15},
+                        {16, 17, 18, 19, 20},
+                        {21, 22, 23, 24, 25}
+    };
+
+    swap(arr);
+
+    //printf("%d\n", ret);
+    //printf("%s\n", str_new);
+
+    return 0;
+}
