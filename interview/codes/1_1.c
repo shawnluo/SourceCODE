@@ -5,14 +5,16 @@
 
 
 /*
-    1.2 reverse a c-style string
+    1.1 determine if a string has all unique characters.
 */
 
+
+
+// just go through the string to find if it's unique or not
 int test()
 {
-    char *str = "abcd";
-    int len = strlen(str);
-    char *reverse = (char *)malloc();
+    char *str = "good";
+    char *p;
 
     while(*str)
     {
@@ -29,36 +31,11 @@ int test()
 }
 
 
+
+
+
 // insect sorting str, then go through and see the neighboring characters are identical
 int test2()
-{
-    int arr[5] = {3, 1, 2, 4, 5};
-    int len = sizeof(arr) / sizeof(arr[0]);
-    int i, j, tmp;
-    for(i = 1; i < len; i++)
-    {
-        tmp = arr[i];
-        j = i - 1;
-        while(j >= 0 && tmp < arr[j])
-        {
-            arr[j + 1] = arr[j];
-            j--;
-        }
-        arr[j + 1] = tmp;
-    }
-
-    for(i = 0; i < len; i++)
-    {
-        printf("%d\n", arr[i]);
-    }
-    
-
-    return 0;
-}
-
-
-// insect sorting str, then go through and see the neighboring characters are identical
-int test3()
 {
     char arr[] = "acbex";
     int len = strlen(arr);
