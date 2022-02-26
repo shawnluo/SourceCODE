@@ -8,24 +8,66 @@
 #include <sys/stat.h>
 #include <assert.h>
 
-
-void test()
+typedef struct data
 {
-    char str[5] = "\0";
-    //"12345";
-    str[0] = '1';
-    str[1] = '2';
-    str[2] = '3';
-    str[3] = '4';
-    //str[4] = '5';
-    //str[5] = '6';
-    printf("%d\n", sizeof(str));
-    printf("%d\n", strlen(str));
-    printf("%d\n", str[4]);
+    int i;
+    struct data *next;
+}Data, *pData;
+
+#define LEN sizeof(Data)
+
+int free_ll(pData p)
+{
+    pData pTmp = NULL;
+    while(p != NULL)
+    {
+        pTmp = p->next;
+        free(p);
+        p = pTmp;
+    }
+
+    return 0;
+}
+
+void print_ll(pData p)
+{
+    printf("print ll!\n");
+    while(p != NULL)
+    {
+        printf("p->i = %d\n", p->i);
+        p = p->next;
+    }
+}
+
+pData create_ll()
+//void create_ll(pData *ppHead)
+{
+    pData pHead = NULL;//*ppHead;
+    int arr[] = {1, 2, 3, 4, 5};
+    int len = sizeof(arr) / sizeof(arr[0]);
+    pData p = NULL;
+
+    while(len > 0)
+    {
+        p = (pData)malloc(LEN);
+        memset(p, 0, LEN);
+        p->i = arr[len - 1];
+        p->next = pHead;
+        pHead = p;
+        len--;
+    }
+    //print_ll(pHead);
+    return pHead;
 }
 
 int main()
 {
-    test();
+    pData pHead = NULL;
+    pHead = create_ll();
+    //create_ll(&pHead);
+    //printf("ret = %d\n", ret);
+    print_ll(pHead);
+
+    free_ll(pHead);
     return 0;
 }
