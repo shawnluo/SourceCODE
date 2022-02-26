@@ -236,7 +236,6 @@ int remove_dup_ll(pData *ppHead)
     }
 }
 
-// find the ll length, then traverse the ll
 pData find_element_toLast_ll(pData *ppHead, int n)
 {
     assert(*ppHead);
@@ -252,8 +251,7 @@ pData find_element_toLast_ll(pData *ppHead, int n)
 
     p = *ppHead;
     // nth to the end is len_ll - n;
-    int x = len_ll - n;
-    while(x-- != 0)
+    while((len_ll - n)-- != 0)
     {
         p = p->next;
     }
@@ -262,17 +260,9 @@ pData find_element_toLast_ll(pData *ppHead, int n)
     return p;
 }
 
-// 
-pData add_ll(pData pHead1, pData pHead2)
-{
-    int inc = 0;
-
-    return NULL;
-}
-
 int main()
 {
-    int arr[] = {1, 21, 31, 4, 5};
+    int arr[] = {1, 2, 3, 4, 5};
     int len = sizeof(arr) / sizeof(arr[0]);
     pData pHead = NULL;
 
@@ -298,8 +288,8 @@ int main()
     //remove_dup_ll(&pHead);
     //print_ll(pHead);
 
-    find_element_toLast_ll(&pHead, 5);
+    find_element_toLast_ll(&pHead, )
 
-    free_ll(pHead);
+    free_ll(pHead, 1);
     return 0;
 }
