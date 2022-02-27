@@ -170,8 +170,6 @@ int reverse_ll(pData *ppHead)
         p2 = p1;
         *ppHead = p1;
     }
-    // TODO if pTmp == NULL
-
 
     return 0;
 }
@@ -268,33 +266,129 @@ int add_tail(pData *ppHead, int newData)
     if(*ppHead == NULL)
     {
         *ppHead = (pData)malloc(LEN);
-        (*ppHead)->id = newData;
+        (*ppHead)->i = newData;
         (*ppHead)->next = NULL;
         return 0;
     }
 
     pData p = *ppHead;
-    while(p )
+    pData pNew = NULL;
+    while(p->next != NULL)
+    {
+        p = p->next;
+    }
+    pNew = (pData)malloc(LEN);
+    pNew->i = newData;
+    p->next = pNew;
+    pNew->next = NULL;
+
+    return 0;
 }
 
 
 // add 2 ll, each node contains a single digit. the digits are stored in reverse order.
 pData add_ll(pData pHead1, pData pHead2)
 {
+    assert(pHead1 || pHead2);
+
     int inc = 0;
 
+    int len1 = 0;
+    int len2 = 0;
+
+    pData p1 = pHead1;
+    pData p2 = pHead2;
+
+    while(p1 != NULL)
+    {
+        len1++;
+        p1 = p1->next;
+    }
+
+    while(p2 != NULL)
+    {
+        len2++;
+        p2 = p2->next;
+    }
+
+    printf("len1 = %d, len2 = %d\n", len1, len2);
+
+
+#if 1
+    // choose the longer one to travel, 
+    // p1 5        p2 5
+    //pData pHead_a = len1 >= len2 ? pHead1 : pHead2;     // 5 6      6
+    //pData pHead_b = len2 <= len1 ? pHead2 : pHead1;     // 6 5      5
+
+    pData pNew = NULL;
+    int newData = 0;
+    int i1, i2;
+
+    while(p1->next != NULL || p2->next != NULL)
+    {
+        if(p1->next == NULL)    
+            i1 = 0;
+        else
+        {
+            i1 = p1->i;
+            p1 = p1->next;
+        }
+
+        if(p2->next == NULL)    
+            i2 = 0;
+        else
+        {
+            i2 = p2->i;
+            p2 = p2->next;
+        }
+
+        newData = i1 + i2 + inc;
+        if (newData >= 10)
+        {
+            newData -= 10;
+            inc = 1;
+        }
+        else
+        {
+            inc = 0;
+        }
+
+        add_tail(&pNew, newData);
+    }
+
+    if(inc == 1)
+    {
+        add_tail(&pNew, 1);
+    }
+
+    print_ll(pNew);
+    free_ll(pNew);
+#endif
     return NULL;
 }
 
 int main()
 {
-    int arr[] = {1, 21, 31, 4, 5};
-    int len = sizeof(arr) / sizeof(arr[0]);
-    pData pHead = NULL;
+    int arr1[] = {1, 1, 1, 1, 1};
+    int arr2[] = {1, 2, 3, 4, 5};
+    int len1 = sizeof(arr1) / sizeof(arr1[0]);
+    int len2 = sizeof(arr2) / sizeof(arr2[0]);
+    pData pHead1 = NULL;
+    pData pHead2 = NULL;
 
-    int ret = create_ll(&pHead, arr, len);
-    //printf("ret = %d\n", ret);
-    print_ll(pHead);
+    int ret;
+    ret = create_ll(&pHead1, arr1, len1);
+    printf("ret = %d\n", ret);
+    print_ll(pHead1);
+
+    ret = create_ll(&pHead2, arr2, len2);
+    printf("ret = %d\n", ret);
+    print_ll(pHead2);
+
+    add_ll(pHead1, pHead2);
+
+    free_ll(pHead1);
+    free_ll(pHead2);
 
     //del_node_byData(&pHead, 1);
     //print_ll(pHead);
@@ -314,8 +408,20 @@ int main()
     //remove_dup_ll(&pHead);
     //print_ll(pHead);
 
-    find_element_toLast_ll(&pHead, 5);
+    //find_element_toLast_ll(&pHead, 5);
 
-    free_ll(pHead);
+    //free_ll(pHead);
+
+//-------------------
+#if 0
+    pData pNew = NULL;
+    add_tail(&pNew, 888);
+    add_tail(&pNew, 2222);
+    add_tail(&pNew, 777);
+
+    print_ll(pNew);
+    free_ll(pNew);
+#endif
+
     return 0;
 }
