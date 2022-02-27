@@ -262,7 +262,23 @@ pData find_element_toLast_ll(pData *ppHead, int n)
     return p;
 }
 
-// 
+// add new node to the ll tail
+int add_tail(pData *ppHead, int newData)
+{
+    if(*ppHead == NULL)
+    {
+        *ppHead = (pData)malloc(LEN);
+        (*ppHead)->id = newData;
+        (*ppHead)->next = NULL;
+        return 0;
+    }
+
+    pData p = *ppHead;
+    while(p )
+}
+
+
+// add 2 ll, each node contains a single digit. the digits are stored in reverse order.
 pData add_ll(pData pHead1, pData pHead2)
 {
     int inc = 0;
