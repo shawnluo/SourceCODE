@@ -29,6 +29,12 @@ int free_ll(pData p)
     return 0;
 }
 
+// free linked list with circular
+int free_ll_ext(pData p)
+{
+    return 0;
+}
+
 void print_ll(pData p)
 {
     //printf("print ll: ");
@@ -369,8 +375,94 @@ pData add_ll(pData pHead1, pData pHead2)
     return NULL;
 }
 
+
+/* create a ll, has circular.
+    1 2 3    0 4 5 6 0 4 5 6 0 ...
+*/
+pData create_circular_ll(pData *ppHead, int *arr, int size)
+{
+    // step 1. create a linkedlist
+    pData p = NULL;
+
+    while(size--)
+    {
+        p = (pData)malloc(LEN);
+        p->i = arr[size];
+        p->next = *ppHead;
+        *ppHead = p;
+    }
+
+    // step 2. the linked list tail point to the own linked list node
+    p = *ppHead;
+
+    while(p->next != NULL)
+    {
+        p = p->next;
+    }
+
+    p->next = (*ppHead)->next;
+
+
+    return NULL;
+}
+
+
+/*
+    find the circluar entry:
+    1. traval linked list, 
+*/
+pData find_circular(pData *ppHead)
+{
+    pData p = *ppHead;
+
+    return NULL;
+}
+
+int Has_Circular(pData pHead)
+{
+    assert(pHead);
+
+    pData pCur = NULL, pFind = NULL;
+
+    if (pHead->next == pHead)
+    {
+        return 1;
+    }
+
+    for (pCur = pHead; ; pCur = pCur->next)
+    {
+        if (NULL == pCur)
+        {
+            return 0;                   //no
+        }
+
+		if(pCur->next == pHead)
+		{
+			return 1;					//yes
+		}
+
+        for (pFind = pHead; pFind != pCur; pFind = pFind->next)
+        {
+            printf("pFind->i = %d, pCur->i = %d\n", pFind->i, pCur->i);
+            if (pFind->next == pCur->next)
+            {
+                return 1;				//yes
+            }
+        }
+    }
+}
+
 int main()
 {
+    pData pHead = NULL;
+    int arr[] = {1, 2, 3, 4, 5};
+    create_circular_ll(&pHead, arr, 5);
+    //create_ll(&pHead, arr, 5);
+    int ret = Has_Circular(pHead);
+    printf("ret = %d\n", ret);
+    //print_ll(pHead);
+    //free_ll(pHead);
+#if 0
     int arr1[] = {9, 9, 1, 8, 1};
     int arr2[] = {1, 2, 3, 4, 9};
     int len1 = sizeof(arr1) / sizeof(arr1[0]);
@@ -413,7 +505,7 @@ int main()
     //find_element_toLast_ll(&pHead, 5);
 
     //free_ll(pHead);
-
+#endif
 //-------------------
 #if 0
     pData pNew = NULL;
