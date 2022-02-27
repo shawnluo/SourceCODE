@@ -418,7 +418,7 @@ pData find_circular(pData *ppHead)
     return NULL;
 }
 
-int Has_Circular(pData pHead)
+pData Find_Circular_entry(pData pHead)
 {
     assert(pHead);
 
@@ -426,27 +426,34 @@ int Has_Circular(pData pHead)
 
     if (pHead->next == pHead)
     {
-        return 1;
+        return pHead;
     }
 
     for (pCur = pHead; ; pCur = pCur->next)
     {
-        if (NULL == pCur)
+        if (NULL == pCur)   // if pCur points to NULL, then NO circular.
         {
-            return 0;                   //no
+            return NULL;                   //no
         }
 
-		if(pCur->next == pHead)
+		if(pCur->next == pHead)     //if head pointer points to itself, then YES
 		{
-			return 1;					//yes
+			return pHead;					//yes
 		}
 
+        //printf("pCur = %x\n", pCur);
+
+        /*
+            pFind travels from the head Node. If it meets pCur, then stop the loop
+            if pFind meets pCur->next, then the pFind is the entry of circular.
+        */ 
         for (pFind = pHead; pFind != pCur; pFind = pFind->next)
         {
-            printf("pFind->i = %d, pCur->i = %d\n", pFind->i, pCur->i);
-            if (pFind->next == pCur->next)
+            //printf("pFind = %x\n", pFind);
+            //printf("pFind->i = %d, pCur->i = %d\n", pFind->next->i, pCur->next->i);
+            if (pFind == pCur->next)
             {
-                return 1;				//yes
+                return pFind;				//yes
             }
         }
     }
@@ -456,10 +463,18 @@ int main()
 {
     pData pHead = NULL;
     int arr[] = {1, 2, 3, 4, 5};
-    create_circular_ll(&pHead, arr, 5);
-    //create_ll(&pHead, arr, 5);
-    int ret = Has_Circular(pHead);
-    printf("ret = %d\n", ret);
+    //create_circular_ll(&pHead, arr, 5);
+    create_ll(&pHead, arr, 5);
+    pData pEntry = Find_Circular_entry(pHead);
+    if(pEntry == NULL)
+    {
+        printf("no circular!\n");
+    }
+    else
+    {
+        printf("circular entry = %d\n", pEntry->i);
+    }
+
     //print_ll(pHead);
     //free_ll(pHead);
 #if 0
