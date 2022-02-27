@@ -323,10 +323,12 @@ pData add_ll(pData pHead1, pData pHead2)
     pData pNew = NULL;
     int newData = 0;
     int i1, i2;
+    p1 = pHead1;
+    p2 = pHead2;
 
-    while(p1->next != NULL || p2->next != NULL)
+    while(p1 != NULL || p2 != NULL)
     {
-        if(p1->next == NULL)    
+        if(p1 == NULL)    
             i1 = 0;
         else
         {
@@ -334,7 +336,7 @@ pData add_ll(pData pHead1, pData pHead2)
             p1 = p1->next;
         }
 
-        if(p2->next == NULL)    
+        if(p2 == NULL)    
             i2 = 0;
         else
         {
@@ -369,8 +371,8 @@ pData add_ll(pData pHead1, pData pHead2)
 
 int main()
 {
-    int arr1[] = {1, 1, 1, 1, 1};
-    int arr2[] = {1, 2, 3, 4, 5};
+    int arr1[] = {9, 9, 1, 8, 1};
+    int arr2[] = {1, 2, 3, 4, 9};
     int len1 = sizeof(arr1) / sizeof(arr1[0]);
     int len2 = sizeof(arr2) / sizeof(arr2[0]);
     pData pHead1 = NULL;
