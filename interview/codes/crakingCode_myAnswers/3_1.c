@@ -21,7 +21,6 @@ int buff[900] = {0};
 int stack_id = 0;   //0, 1, 2
 int stack_size = 300;
 int stack_ptr[3] = {0, 0, 0};
-int min[3] = {0, 0, 0};
 
 int push_stack(int stack_id, int data)
 {
@@ -43,22 +42,6 @@ int push_stack(int stack_id, int data)
     stack_ptr[stack_id]++;
 
     return 0;
-}
-
-int min_stack(int stack_id)
-{
-    //check if stack_id is invalid
-    if(stack_id < 0 || stack_id > 2)
-    {
-        printf("stack id is invalid!\n");
-        return 2;
-    }
-
-    int idx_btm = stack_id * stack_size + stack_ptr[0];
-    
-
-    int val = min[stack_id];
-    return val;
 }
 
 int pop_stack(int stack_id)
