@@ -42,6 +42,11 @@ int push_stack(int stack_id, int data)
     buff[idx] = data;
     stack_ptr[stack_id]++;
 
+    if(data < min[stack_id])
+    {
+        min[stack_id] = data;
+    }
+
     return 0;
 }
 
@@ -55,7 +60,7 @@ int min_stack(int stack_id)
     }
 
     int idx_btm = stack_id * stack_size + stack_ptr[0];
-    
+
 
     int val = min[stack_id];
     return val;
@@ -81,6 +86,20 @@ int pop_stack(int stack_id)
 
     buff[idx] = 0;          //set 0 to the stack
     stack_ptr[stack_id]--;  //decrease stack pointer
+
+    if(min[stack_id] > val)
+    {
+        for(int i = 0; i < idx - 1; i++)
+        {
+            if(buf[i] < val)    break;
+            else
+            {
+                buff[]
+            }
+        }
+
+    }
+
 
     return val;
 }
