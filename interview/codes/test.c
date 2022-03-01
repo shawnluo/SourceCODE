@@ -47,7 +47,7 @@ int push_stack(int data)
     int stack_id = 0;       //container id
     int stack_index = 0;    //postion in container
 
-    stack_ptr++;
+    stack_ptr++; //
 
     stack_id = stack_ptr / SIZE;
     stack_index = stack_ptr % SIZE;
