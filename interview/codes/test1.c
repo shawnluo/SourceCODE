@@ -6,14 +6,16 @@
 
 #define SIZE 10
 
-#if 0
+#if 1
 int main(void)
 {
     int **pArr = NULL;
 
-    pArr = (int *)malloc(sizeof(int *) * SIZE);
-
+    pArr = (int **)malloc(sizeof(int *) * SIZE);
+    memset(pArr, 0, sizeof(int *) * SIZE);
+    
     pArr[0] = (int *)malloc(sizeof(int) * SIZE);
+    memset(pArr[0], 0, sizeof(int) * SIZE);
 
     for(int i = 0; i < SIZE; i++)
     {

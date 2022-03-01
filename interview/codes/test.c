@@ -17,7 +17,7 @@
 
 #define SIZE 5
 
-int (*stack)[SIZE] = {0};
+int **stack = NULL;
 int stack_full_size = 300;
 int stack_size = 100;   //for each container: [0, 99] [100, 199], [200, 299]
 int stack_ptr = -1;     // ptr == - 1, then no data in the stack
@@ -33,7 +33,7 @@ int push_stack(int data)
     //0. malloc stack
     if(stack == NULL)
     {
-        stack = (int **)malloc(sizeof(*int) * SIZE);
+        return NULL;
     }
 
     //1. check if stack is full
@@ -100,6 +100,12 @@ int peek_stack()
     printf("peek: %d\n", val);
 
     return val;
+}
+
+int init_stack()
+{
+    stack = (int **)malloc(sizeof(int *) * SIZE);
+    memset(stack, NULL, sizeof(int *) * SIZE);
 }
 
 
