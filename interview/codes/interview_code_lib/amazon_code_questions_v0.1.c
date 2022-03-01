@@ -6,7 +6,7 @@ void ControlSound(int Input)
     int volatile *reg = (int *)0x80000000;
      *reg |= (1<<0x7); //enable the control
      
-     for(i = 8;i <=15;i++)
+     for(i = 8;i <= 15;i++)
      {
          data |= (Input >> i);
          data <<= 1;

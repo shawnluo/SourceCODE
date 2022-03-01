@@ -17,7 +17,7 @@
 
 #define SIZE 5
 
-int (*stack)[SIZE] = {0};
+int stack[3][SIZE] = {0};
 int stack_full_size = 300;
 int stack_size = 100;   //for each container: [0, 99] [100, 199], [200, 299]
 int stack_ptr = -1;     // ptr == - 1, then no data in the stack
@@ -30,12 +30,6 @@ int stack_ptr = -1;     // ptr == - 1, then no data in the stack
 */
 int push_stack(int data)
 {
-    //0. malloc stack
-    if(stack == NULL)
-    {
-        stack = (int **)malloc(sizeof(*int) * SIZE);
-    }
-
     //1. check if stack is full
     if(stack_ptr == 300)
     {
@@ -48,11 +42,6 @@ int push_stack(int data)
     int stack_index = 0;    //postion in container
 
     stack_ptr++;
-    if(stack_ptr % SIZE == 0)
-    {
-        stack_id = stack_ptr % SIZE;
-        stack + stack_id = (int *)malloc(sizeof(int) * SIZE);
-    }
 
     stack_id = stack_ptr / SIZE;
     stack_index = stack_ptr % SIZE;

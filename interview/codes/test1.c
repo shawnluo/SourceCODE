@@ -4,25 +4,73 @@
 #include <assert.h>
 
 
-/*
-    1.2 reverse a c-style string
-*/
+#define SIZE 10
 
-int test(int *i)
+#if 0
+int main(void)
 {
-    *i = 5;
+    int **pArr = NULL;
+
+    pArr = (int *)malloc(sizeof(int *) * SIZE);
+
+    pArr[0] = (int *)malloc(sizeof(int) * SIZE);
+
+    for(int i = 0; i < SIZE; i++)
+    {
+        pArr[0][i] = i;
+    }
+
+    for(int i = 0; i < SIZE; i++)
+    {
+        printf("%d ", pArr[0][i]);
+    }
+    printf("\n");
+
+    free(pArr[0]);
+    free(pArr);
 
     return 0;
 }
 
+#else
 
-
-
-int main()
+int main(void)
 {
-    int i = 1;
-    int ret = test(&i);
-    printf("%d\n", i);
+    int (*pArr)[SIZE] = NULL;
+
+    pArr = (int *)malloc(sizeof(int) * SIZE);
+    
+    for(int i = 0; i < SIZE; i++)
+    {
+        (*pArr)[i] = i;
+    }
+
+    for(int i = 0; i < SIZE; i++)
+    {
+        printf("%d ", (*pArr)[i]);
+    }
+    printf("\n");
+
+    int (*pTmp)[SIZE] = pArr;
+
+    pArr++;
+    pArr = (int *)malloc(sizeof(int) * SIZE);
+    
+    for(int i = 0; i < SIZE; i++)
+    {
+        (*pArr)[i] = i * 10;
+    }
+
+    for(int i = 0; i < SIZE; i++)
+    {
+        printf("%d ", (*pArr)[i]);
+    }
+    printf("\n");
+
+    free(pTmp);
+    free(pArr);
 
     return 0;
 }
+
+#endif
