@@ -14,21 +14,22 @@ int main(void)
     pArr = (int **)malloc(sizeof(int *) * SIZE);
     memset(pArr, 0, sizeof(int *) * SIZE);
     
-    pArr[0] = (int *)malloc(sizeof(int) * SIZE);
-    memset(pArr[0], 0, sizeof(int) * SIZE);
+    int index = 0;
+    pArr[index] = (int *)malloc(sizeof(int) * SIZE);
+    memset(pArr[index], 0, sizeof(int) * SIZE);
 
     for(int i = 0; i < SIZE; i++)
     {
-        pArr[0][i] = i;
+        pArr[index][i] = i;
     }
 
     for(int i = 0; i < SIZE; i++)
     {
-        printf("%d ", pArr[0][i]);
+        printf("%d ", pArr[index][i]);
     }
     printf("\n");
 
-    free(pArr[0]);
+    free(pArr[index]);
     free(pArr);
 
     return 0;

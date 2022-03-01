@@ -48,15 +48,15 @@ int push_stack(int data)
     int stack_index = 0;    //postion in container
 
     stack_ptr++;
-    if(stack_ptr % SIZE == 0)
-    {
-        stack_id = stack_ptr % SIZE;
-        stack + stack_id = (int *)malloc(sizeof(int) * SIZE);
-    }
 
     stack_id = stack_ptr / SIZE;
     stack_index = stack_ptr % SIZE;
 
+    if(stack[stack_id] == NULL)
+    {
+        stack[stack_id] = (int *)malloc(sizeof(int) * stack_size);
+        memset(stack[stack_id], 0, sizeof(int) * stack_size);
+    }
     stack[stack_id][stack_index] = data;
 
     return 0;
@@ -112,6 +112,8 @@ int init_stack()
 int main(void)
 {
     push_stack(111);
+
+#if 0
     push_stack(222);
     push_stack(333);
     push_stack(444);
@@ -145,6 +147,7 @@ int main(void)
     //peek_stack(2);
     //pop_stack(0);
     //peek_stack(0);
+#endif
 
     return 0;
 }
