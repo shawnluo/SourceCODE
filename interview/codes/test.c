@@ -8,7 +8,7 @@
 #include <sys/stat.h>
 #include <assert.h>
 
-#if 0
+#if 1
 /*
     Hanoi tower play
     1. 3 stacks, 5 numbers
@@ -21,6 +21,12 @@
 
 #define ROD 3
 #define DISK 5
+
+#define FROM 0
+#define BUF 1
+#define TO 2
+
+int rod[3][] = {0};
 
 int buff[3][DISK] = {0};  //3 rods. buff[0] has 5 disks, buff[1] and buff[2] are empty
 
@@ -50,18 +56,27 @@ int push(int rod, int disk)
     2. move 1   plate       from  : rod_0    buffer: rod_1    to    : rod_2
     3. move n-1 plates      buffer: rod_0    from  : rod_1    to    : rod_2
 */
-int Hanoi(int n, int from, int buffer, int to)
+int Hanoi(int n, int from[], int buff[], int to[])
 {
+    int val = 0;
     if(1 == n)
     {
         printf("Move %d:   %d    -->    %d\n", n, from, to);
+
+        val = pop(from);
+        push(val, to);
+    
+        peek_ext(from);
+        peek_ext(buff);
+        peek_ext(to);
+    
         return 0;
     }
     else
     {
-        Hanoi(n - 1, from,    to,    buffer);
-        Hanoi(1,     from ,  buffer, to);
-        Hanoi(n - 1, buffer, from, to);
+        Hanoi(n - 1, from,  to,     buff);
+        Hanoi(1,     from,  buff,   to);
+        Hanoi(n - 1, buff,  from,   to);
     }
 
     return 0;
