@@ -8,146 +8,67 @@
 #include <sys/stat.h>
 #include <assert.h>
 
-
+#if 0
 /*
-    1. set up 3 stacks,
-    2. each stack size set to 100
-    3. set stack ptr to point to the stack
+    Hanoi tower play
+    1. 3 stacks, 5 numbers
+    2. move numbers between stacks
+    3. bigger numbers on the bottom
+    4. stack push, stack pop
+
+    Move the disks from the first rod to the last rod.
 */
 
-#define SIZE 5
+#define ROD 3
+#define DISK 5
 
-int **stack = NULL;
-int stack_full_size = 300;
-int stack_size = 100;   //for each container: [0, 99] [100, 199], [200, 299]
-int stack_ptr = -1;     // ptr == - 1, then no data in the stack
+int buff[3][DISK] = {0};  //3 rods. buff[0] has 5 disks, buff[1] and buff[2] are empty
 
 /*
-    1. check the stack ptr:
-        a. ptr > 0   && ptr <= 100, then save data to stack[0]
-        b. ptr > 100 && ptr <= 200, then save data to stack[1]
-        c. ptr > 200 && ptr <= 200, then save data to stack[2]
+    implement push()
+    parameters:
+        1. rod id
+        2. disk size
 */
-int push_stack(int data)
+int push(int rod, int disk)
 {
-    //0. malloc stack
-    if(stack == NULL)
-    {
-        return NULL;
-    }
-
-    //1. check if stack is full
-    if(stack_ptr == 300)
-    {
-        printf("stack is full!\n");
-        return 1;
-    }
+    //set disk position which push to the rod.
     
-    //2. set which substack saves the data 
-    int stack_id = 0;       //container id
-    int stack_index = 0;    //postion in container
-
-    stack_ptr++; //
-
-    stack_id = stack_ptr / SIZE;
-    stack_index = stack_ptr % SIZE;
-
-    if(stack[stack_id] == NULL)
+    //1. if disk size larger than the buff[rod], then return fail
+    if(disk > buff[rod][idx])   //rod: the rod. idx: the top plate on rod
     {
-        stack[stack_id] = (int *)malloc(sizeof(int) * stack_size);
-        memset(stack[stack_id], 0, sizeof(int) * stack_size);
+        return -1;
     }
-    stack[stack_id][stack_index] = data;
+
+    int index = 
+}
+#endif
+
+/*
+                plates          rod_0          rod_1           rod_2
+    1. move n-1 plates      from  : rod_0    to    : rod_1    buffer: rod_2
+    2. move 1   plate       from  : rod_0    buffer: rod_1    to    : rod_2
+    3. move n-1 plates      buffer: rod_0    from  : rod_1    to    : rod_2
+*/
+int Hanoi(int n, int from, int buffer, int to)
+{
+    if(1 == n)
+    {
+        printf("Move %d:   %d    -->    %d\n", n, from, to);
+        return 0;
+    }
+    else
+    {
+        Hanoi(n - 1, from,    to,    buffer);
+        Hanoi(1,     from ,  buffer, to);
+        Hanoi(n - 1, buffer, from, to);
+    }
 
     return 0;
 }
 
-
-int pop_stack()
-{
-    //1. check if stack is empty
-    if(stack_ptr == -1)
-    {
-        printf("stack is empty!\n");
-        return 1;
-    }
-
-    //2. check which sub stack
-    int stack_id = 0;       //container id
-    int stack_index = 0;    //postion in container
-    stack_id = stack_ptr / SIZE;
-    stack_index = stack_ptr % SIZE;
-
-    int val = stack[stack_id][stack_index]; //locate the ptr
-    stack[stack_id][stack_index] = 0;       //set 0 to the stack
-    
-    stack_ptr--;  //decrease stack pointer
-
-    return val;
-}
-
-
-//TODO
-int peek_stack()
-{
-    int stack_id = 0;    //postion in container
-    int stack_index = 0;    //postion in container
-    stack_id = stack_ptr / SIZE;
-    stack_index = stack_ptr % SIZE;
-
-    int val = stack[stack_id][stack_index]; //locate the ptr
-
-    printf("peek: %d\n", val);
-
-    return val;
-}
-
-int init_stack()
-{
-    stack = (int **)malloc(sizeof(int *) * SIZE);
-    memset(stack, NULL, sizeof(int *) * SIZE);
-}
-
-
 int main(void)
 {
-    push_stack(111);
-
-#if 0
-    push_stack(222);
-    push_stack(333);
-    push_stack(444);
-    push_stack(555);
-    push_stack(666);
-
-    peek_stack();
-
-    pop_stack();
-    peek_stack();
-
-    pop_stack();
-    peek_stack();
-
-    pop_stack();
-    peek_stack();
-
-    pop_stack();
-    peek_stack();
-
-    pop_stack();
-    peek_stack();
-
-    pop_stack();
-    peek_stack();
-
-    pop_stack();
-    peek_stack();
-
-    //peek_stack(1);
-    //peek_stack(2);
-    //pop_stack(0);
-    //peek_stack(0);
-#endif
-
+    Hanoi(5, 0, 1, 2);
     return 0;
 }
