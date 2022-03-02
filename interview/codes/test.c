@@ -8,7 +8,7 @@
 #include <sys/stat.h>
 #include <assert.h>
 
-#if 0
+#if 1
 /*
     Hanoi tower play
     1. 3 stacks, 5 numbers
@@ -22,7 +22,11 @@
 #define ROD 3
 #define DISK 5
 
-int buff[3][DISK] = {0};  //3 rods. buff[0] has 5 disks, buff[1] and buff[2] are empty
+#define FROM 0
+#define BUF 1
+#define TO 2
+
+int rod[3][DISK] = {0};  //3 rods. buff[0] has 5 disks, buff[1] and buff[2] are empty
 
 /*
     implement push()
@@ -46,21 +50,35 @@ int push(int rod, int disk)
 
 /*
                 plates          rod_0          rod_1           rod_2
-    1. move n-1 plates      from  : rod_0    to    : rod_1    buffer: rod_2
-    2. move 1   plate       from  : rod_0    buffer: rod_1    to    : rod_2
-    3. move n-1 plates      buffer: rod_0    from  : rod_1    to    : rod_2
+    1. move       n-1        from  : rod_0    to    : rod_1    buffer: rod_2
+    2. move       1          from  : rod_0    buffer: rod_1    to    : rod_2
+    3. move       n-1        buffer: rod_0    from  : rod_1    to    : rod_2
+*/
+
+/*
+    3 buffs:
+        - buff[from]
+        - buff[buffer]
+        - buff[to]
 */
 int Hanoi(int n, int from, int buffer, int to)
 {
     if(1 == n)
     {
+        //move 1 disk: from rod_0 to rod_2
         printf("Move %d:   %d    -->    %d\n", n, from, to);
+
+        //from: buff
+        push(n, from[], to);
+        pop();
+        peek();
+
         return 0;
     }
     else
     {
-        Hanoi(n - 1, from,    to,    buffer);
-        Hanoi(1,     from ,  buffer, to);
+        Hanoi(n - 1, rod[FROM],    rod[TO],    rod[BUF]);
+        Hanoi(1,     rod[FROM] ,  rod[BUF], rod[TO]);
         Hanoi(n - 1, buffer, from, to);
     }
 
