@@ -6,74 +6,39 @@
 
 #define SIZE 10
 
-#if 1
-int main(void)
+
+
+void test()
 {
-    int **pArr = NULL;
+    char *str = "+19";
+    char *p = str;
 
-    pArr = (int **)malloc(sizeof(int *) * SIZE);
-    memset(pArr, 0, sizeof(int *) * SIZE);
-    
-    int index = 0;
-    pArr[index] = (int *)malloc(sizeof(int) * SIZE);
-    memset(pArr[index], 0, sizeof(int) * SIZE);
-
-    for(int i = 0; i < SIZE; i++)
-    {
-        pArr[index][i] = i;
-    }
-
-    for(int i = 0; i < SIZE; i++)
-    {
-        printf("%d ", pArr[index][i]);
-    }
-    printf("\n");
-
-    free(pArr[index]);
-    free(pArr);
-
-    return 0;
+    long val = strtol(str, &p, 10);
+    printf("%ld\n", val);
+    printf("%s\n", p);
 }
 
-#else
+void find_num()
+{
+    char *str = "ab234cid*(s349*(20kd";
+    char *p = str;
+    while (*p) // While there are more characters to process...
+    {
+        if( isdigit(*p) || ( (*p == '-' || *p == '+') && isdigit(*(p + 1))))    // Found a number
+        {
+            //printf();
+            long val = strtol(p, &p, 10);   // Read number
+            printf("%ld\n", val);           // and print it.
+        } 
+        else        // Otherwise, move on to the next character.
+        {
+            p++;
+        }
+    }
+}
 
 int main(void)
 {
-    int (*pArr)[SIZE] = NULL;
-
-    pArr = (int *)malloc(sizeof(int) * SIZE);
-    
-    for(int i = 0; i < SIZE; i++)
-    {
-        (*pArr)[i] = i;
-    }
-
-    for(int i = 0; i < SIZE; i++)
-    {
-        printf("%d ", (*pArr)[i]);
-    }
-    printf("\n");
-
-    int (*pTmp)[SIZE] = pArr;
-
-    pArr++;
-    pArr = (int *)malloc(sizeof(int) * SIZE);
-    
-    for(int i = 0; i < SIZE; i++)
-    {
-        (*pArr)[i] = i * 10;
-    }
-
-    for(int i = 0; i < SIZE; i++)
-    {
-        printf("%d ", (*pArr)[i]);
-    }
-    printf("\n");
-
-    free(pTmp);
-    free(pArr);
-
-    return 0;
+    //find_num();
+    test();
 }
-
-#endif
