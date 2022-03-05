@@ -31,7 +31,7 @@ bool ControlSound(int Volume,bool Enable)
     int mask = 0;
     
     int volatile *reg = (int *)0x80000000;
-    *reg |= (1<<0x7); //enable the control
+    //*reg |= (1<<0x7); //enable the control
    
     if(Enable == TRUE)
     {
