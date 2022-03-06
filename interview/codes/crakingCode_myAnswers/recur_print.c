@@ -42,22 +42,22 @@ void showme(void *p, int row, int col)
     6. volatile for register
 */
 
-int len = 0;
+//int len = 0;
 
-void print_bin(int n, int *arr)
+void print_bin(int n, int *arr, int *len)
 {
     //static int len = 0;
     if(n > 0)
     {
-        print_bin(n / 2, arr);
+        print_bin(n / 2, arr, len);
     }
     else
     {
         return;
     }
 
-    arr[len] = n % 2;
-    len = len + 1;
+    arr[*len] = n % 2;
+    *len = *len + 1;
     n = n % 2;
     
     //printf("%d, %d\n", n, i++);
@@ -65,13 +65,12 @@ void print_bin(int n, int *arr)
 }
 
 
-
-
 int main()
 {
-    int arr[100] = {0};
+    int arr[10] = {0};
+    int len = 0;
 
-    print_bin(INT_MAX, arr);
+    print_bin(8, arr, &len);
 
     printf("%d\n", len);
     for(int i = 0; i < len; i++)

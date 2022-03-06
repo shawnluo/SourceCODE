@@ -21,11 +21,12 @@ ControlSound(8,1);
 #define ENABLE_BIT 0x07
 #define VOLUME_START_BIT 0x0
 #define VOLUME_END_BIT 0x7
-bool ControlSound(int Volume,bool Enable)
+bool ControlSound(int Volume, bool Enable)
 {
     int i;
     int data = 0;
-    int max = ~0;
+    //int max = ~0;
+    int max = INT_MAX;
     int left = 0;
     int right = 0;
     int mask = 0;
@@ -46,32 +47,38 @@ bool ControlSound(int Volume,bool Enable)
     //set the volume
     if((Volume >= 0) && (Volumne <= 255))
     {
-        #if 0
+        // there're 2 ways to set the register
+        /*
+            ------------ way1: set the bits one by one
+        */
+        #ifdef way1     
         for(i = VOLUME_START_BIT;i <= VOLUME_END_BIT;i++)
         {
             data |= (Volume >> i);
             data <<= 1; 
         }
         #endif
+
+        /*
+            ------------ way2: use mask to do the job
+        */
+        //1. set mask
+        left = max - ((1 << VOLUME_END_BIT) - 1);
+        right = (1 << VOLUME_END_BIT) - 1;
+        mask = left | right;
+
+        //mask = 0;
+        //mask = (0xff) << 8;
         
+        *reg &= mask;
+
+        //set volume
         data = Volume;
-        data <<= 8;
-        
-        #if 0
-        //clear the volume bits in the register first
-        left = max - (1 << VOLUME_END_BIT)-1;
-        right = (1 << VOLUME_END_BIT)-1;
-        mask = left|right;
-        #endif
-        
-        mask = 0;
-        mask = (0xff) << 8;
-        
-        *reg &= ~mask;
-        
+        data <<= VOLUME_START_BIT;
+
         //write data into register
         *reg |= data;
-        
+
         return TRUE;
  
     }
@@ -100,12 +107,12 @@ int Power(int m,int n)
     }
     if((n % 2) == 0)
     {
-        ret = Power(m,n/2);
+        ret = Power(m, n / 2);
         result = ret * ret;
     } 
     else
     {
-        ret = Power(m,n/2);
+        ret = Power(m, n / 2);
         result = ret * ret * m;
     }
     return result;
