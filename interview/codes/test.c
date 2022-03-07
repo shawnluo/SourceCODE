@@ -10,76 +10,105 @@
 #include <limits.h>
 
 
-void showme(void *p, int row, int col)
+//hackerRank: permutation
+
+int next_permutation(int n, char **s)
 {
-    int (*pArr)[col] = p;
-
-    for(int i = 0; i < row; i++)
-    {
-        for(int j = 0; j < col; j++)
-        {
-            printf("%d ", (*pArr)[j]);
-        }
-        pArr++;
-        printf("\n");
-    }
-}
-
-/*          bit manipulation
-    1. print_bin
-    2. get max integer?
-    3. set 1 bit?     *reg |= 1;
-    4. clear 1 bit?   *reg &= ~1;
-    5. set registar i ~ j bits to data
-        1). get mask:
-            a. get max integer, all bits are 1. MAX_INT or ~0
-            b. get high, [max, high) are 1s, [high, 0] are 0s.
-            c. get low, (low, 0] are 1s.
-            d. mask = high | low 
-        3). clear i ~ j bits:    data &= mask
-        4). data << low
-        5). *reg | data
-    6. volatile for register
-*/
-
-int len = 0;
-
-void print_bin(int n, int *arr)
-{
-    //static int len = 0;
-    if(n > 0)
-    {
-        print_bin(n / 2, arr);
-    }
-    else
-    {
-        return;
-    }
-
-    arr[len] = n % 2;
-    len = len + 1;
-    n = n % 2;
+	/**
+	* Complete this method
+	* Return 0 when there is no next permutation and 1 otherwise
+	* Modify array s to its next permutation
+	*/
     
-    //printf("%d, %d\n", n, i++);
-    //push(n % 2);
+    static int k = 0;
+
+    if(n == 1)
+    {
+        return 0;
+    }
+    
+    /* ab  cd  ef
+       ab  ef  cd
+       cd  ab  ef
+       cd  ef  ab
+       ef  ab  cd
+       ef  cd  ab
+    */
+    /*
+        ab ab bc
+        ab bc ab
+        ab ab bc
+        ab bc ab
+        bc ab ab
+        bc ab ab
+    */
+    /*
+        ab bc ab
+        ab ab bc
+        bc ab ab
+        bc ab ab
+        ab ab bc
+        ab bc ab
+    */
+    /*1. calculate how many elements are different, and delete the duplicates
+      2. calculate the factorial
+      3. calculate the permutation:
+            p = n! / ((n - m)!)
+    */
+
+    int i, j;
+    char *str[] = s
+    if(k == 0) //first time to enter, then set s.
+    {
+        //list s
+        for(i = 0; i < n - 1; i++)
+        {
+
+        }
+    }
+    for(i = 0; i < n - 1; i++)
+    {
+        for(j = i + 1; j < n; j++)
+        {
+            if(strcmp(s[i], s[j]) == 0)
+            {
+                while(j + 1 < n)
+                {
+                    s[j] = s[j + 1];
+                    j++;
+                }
+                i--;
+                n--;
+            }
+        }
+    }
+
+
+
 }
-
-
 
 
 int main()
 {
-    int arr[100] = {0};
+	char **s;
+	int n;
+	scanf("%d", &n);
+	s = calloc(n, sizeof(char*));
+	for (int i = 0; i < n; i++)
+	{
+		s[i] = calloc(11, sizeof(char));
+		scanf("%s", s[i]);
+	}
+	do
+	{
+		for (int i = 0; i < n; i++)
+			printf("%s%c", s[i], i == n - 1 ? '\n' : ' ');
+	} while (next_permutation(n, s));
 
-    print_bin(INT_MAX, arr);
+	for (int i = 0; i < n; i++)
+		free(s[i]);
 
-    printf("%d\n", len);
-    for(int i = 0; i < len; i++)
-    {
-        printf("%d ", arr[i]);
-    }
+	free(s);
 
-    printf("\n");
-
-    return 0;
+	return 0;
 }

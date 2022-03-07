@@ -3,69 +3,123 @@
 #include <string.h>
 #include <assert.h>
 
-
-#define ENABLE_BIT 0x07
-#define VOLUME_START_BIT 0x0
-#define VOLUME_END_BIT 0x7
-bool ControlSound(int Volume, boot Enable)
+void swap(char *a, char *b)
 {
+    char tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+
+int cnt = 0;
+//print the all the permutation 
+void list_permutation(char *str, int left, int right)
+{
+    //statio int cnt = 0;
     int i;
-    int data = 0;
-    int max = ~0;
-    int left = 0;
-    int right = 0;
-    int mask = 0;
-
-    //1. how to access the hardware address?
-    //  1). how to access the address 0x80000000
-    //2. how to control?
-    //  1). set bits
-    //  2). clear bits
-    int volatile *reg = (int *)0x80000000;
-
-    if(Enable == TRUE)
+    if(left == right)
     {
-        *reg |= (1 << ENABLE_BIT);
+        cnt++;
+        //printf("%s\n", str);
     }
     else
     {
-        /*
-            0000    1 << 2     ~100    011
-        */
-        *reg &= ~(1 << ENABLE_BIT); // 
-    }
-    
-    if((Volume >= 0) && (Volume <= 255))
-    {
-        //1. set volume to data
-        data = Volume;
-
-        //2. set the mask: 
-        //  explain in example
-        //  1). set the left:  111111 - (1 << 4) - 1 = 111111 - 10000 - 1 = 110000
-        //  2). set the right: 1 << 2 - 1 = 100 - 1 = 11
-        //  3). mask = left | right                     = 110000 | 11 = 110011
-        left = max - (1 << VOLUME_END_BIT) - 1;
-        right = 1 << VOLUME_START_BIT - 1;
-        mask = left | right;
-
-        //3. clear the bits by "and 0"
-        *reg &= ~mask;      // ~mask = 1100
-        
-        //4. set the data
-        *reg |= data;
-        
-        return TRUE;
-    }
-    else
-    {
-        return FALSE;
+        for(i = left; i <= right; i++)
+        {
+            swap((str + left), (str + i));
+            list_permutation(str, left + 1, right);
+            swap((str + left), (str + i));
+        }
     }
 }
 
 int main(void)
 {
-    ControlSound(4, 1); //set volume to 4, enable
+    char str[] = "abcdef";
+    //char *arr[] = {"ab", "cd", "ef", "gh", "ij"};
+    int n = strlen(str);
+    list_permutation(str, 0, n - 1);
+    printf("%d\n", cnt);
+    return 0;
+}
+
+#if 0
+int main(void)
+{
+    char **s;
+    int n = 5;
+    int i, j;
+
+    char *arr[] = {"ab", "cd", "ef", "gh", "ij"};
+
+    s = calloc(5, sizeof(char *));
+    for(i = 0; i < n; i++)
+    {
+        s[i] = calloc(11, sizeof(char));
+        s[i] = arr[i];
+    }
+
+    char *s2[]= {NULL};
+
+    for(i = 0; i < n; i++)
+    {
+        s2[i] = calloc(11, sizeof(char));
+        strcpy(s2[i], s[i]);
+    }
+
+    for(i = 0; i < n; i++)
+    {
+        //printf("%s\n", s[i]);
+    }
+
+    int x = 0;
+    //calculate the x, fibonachi
+
+    for(i = 0; i < x; i++)
+    {
+
+    }
+
+
+    for(i = 0; i < n; i++)
+    {
+        free(s2[i]);
+    }
+    
+
+
+    return 0;
+    if(n == 1)
+    {
+        return 1;   //only 1 string, no need to delete the duplicate
+    }
+
+    for(i = 0; i < n - 1; i++)
+    {
+        for(j = i + 1; j < n; j++)
+        {
+            //printf("%s\t%s\n", s[i], s[j]);
+            if(strcmp(s[i], s[j]) == 0)
+            {
+                while(j + 1 < n)
+                {
+                    s[j] = s[j + 1];
+                    j++;
+                }
+                i--;
+                n--;
+            }
+        }
+    }
+
+    printf("n = %d\n", n);
+
+    for(int i = 0; i < n; i++)
+    {
+        printf("%s\n", arr[i]);
+    }
+
+
 
     return 0;
 }
+#endif
