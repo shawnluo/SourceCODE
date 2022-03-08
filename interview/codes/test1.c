@@ -2,124 +2,159 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-
-void swap(char *a, char *b)
-{
-    char tmp = *a;
-    *a = *b;
-    *b = tmp;
-}
+#include <limits.h>
 
 int cnt = 0;
-//print the all the permutation 
-void list_permutation(char *str, int left, int right)
+void print_bin(int i)
 {
-    //statio int cnt = 0;
-    int i;
-    if(left == right)
+
+    if(i > 0)
     {
-        cnt++;
-        //printf("%s\n", str);
+        print_bin(i / 2);
     }
     else
     {
-        for(i = left; i <= right; i++)
+        return;
+    }
+    cnt++;
+    printf("%d ", i % 2);
+}
+
+int cal_one(int n)
+{
+    int cnt = 0, i;
+
+    //Do NOT use while(n > 0), because n can be negtive number.
+    /*
+    while(n > 0)
+    {
+        if ((n & 1) == 1)
         {
-            swap((str + left), (str + i));
-            list_permutation(str, left + 1, right);
-            swap((str + left), (str + i));
+            cnt++;
         }
+        n = n >> 1;
+    }
+    */
+    for(i = 0; i < 32; i++)
+    {
+        if((n & 1) == 1)
+        {
+            cnt++;
+        }
+        n >>= 1;
+    }
+
+    return cnt;
+}
+
+//go through a and b from lowest bit
+int change_one(int a, int b)
+{
+    int i, cnt = 0;
+
+    for(i = 0; i < 32; i++)
+    {
+        if((a & 1) != (b & 1))
+        {
+            cnt++;
+        }
+        a >>= 1;
+        b >>= 1;
+    }
+    return cnt;
+}
+
+int change_one_ext(int a, int b)
+{
+    int i, cnt = 0;
+
+    for(i = a ^ b; i > 0; i = i >> 1)
+    {
+        cnt += i & 1;
+    }
+
+    return cnt;
+}
+
+
+//swap even adn odd bits
+//0101  -->  1010
+
+int swap_bit(int n)
+{
+    //0xaa: 10101010
+    //0x55: 01010101
+    n = ((n & 0xaaaaaaaa) >> 1) | ((n & 0x55555555) << 1);
+    return n;
+}
+
+//recursive
+int fibo(int i)
+{
+    if(0 == i)
+    {
+        return 0;
+    }
+    else if(1 == i)
+    {
+        return 1;
+    }
+    else
+    {
+        return (i + fibo(i - 1));
     }
 }
 
-int main(void)
+//iteration
+int fibo_ext(int i)
 {
-    char str[] = "abcdef";
-    //char *arr[] = {"ab", "cd", "ef", "gh", "ij"};
-    int n = strlen(str);
-    list_permutation(str, 0, n - 1);
-    printf("%d\n", cnt);
-    return 0;
+    if(0 == i)
+    {
+        return 0;
+    }
+    else if(1 == i)
+    {
+        return 1;
+    }
+    else
+    {
+        for(i = 0; i <= n; i++)
+    }
 }
 
+int main()
+{
+    printf("%d\n", fibo(3));
 #if 0
-int main(void)
-{
-    char **s;
-    int n = 5;
-    int i, j;
+    int i =0x8;
+    int val = swap_bit(i);
 
-    char *arr[] = {"ab", "cd", "ef", "gh", "ij"};
+    print_bin(i);
+    printf("\n");
 
-    s = calloc(5, sizeof(char *));
-    for(i = 0; i < n; i++)
-    {
-        s[i] = calloc(11, sizeof(char));
-        s[i] = arr[i];
-    }
+    print_bin(val);
+    printf("\n");
 
-    char *s2[]= {NULL};
-
-    for(i = 0; i < n; i++)
-    {
-        s2[i] = calloc(11, sizeof(char));
-        strcpy(s2[i], s[i]);
-    }
-
-    for(i = 0; i < n; i++)
-    {
-        //printf("%s\n", s[i]);
-    }
-
-    int x = 0;
-    //calculate the x, fibonachi
-
-    for(i = 0; i < x; i++)
-    {
-
-    }
-
-
-    for(i = 0; i < n; i++)
-    {
-        free(s2[i]);
-    }
-    
-
+    int val = change_one_ext(1, 2); //10    11
+    printf("%d\n", val);
 
     return 0;
-    if(n == 1)
-    {
-        return 1;   //only 1 string, no need to delete the duplicate
-    }
 
-    for(i = 0; i < n - 1; i++)
-    {
-        for(j = i + 1; j < n; j++)
-        {
-            //printf("%s\t%s\n", s[i], s[j]);
-            if(strcmp(s[i], s[j]) == 0)
-            {
-                while(j + 1 < n)
-                {
-                    s[j] = s[j + 1];
-                    j++;
-                }
-                i--;
-                n--;
-            }
-        }
-    }
+    int i = 17;
+    int val = next_bigger(i);
+    print_bin(i);
+    printf("\n");
 
-    printf("n = %d\n", n);
+    print_bin(val);
+    printf("\n");
 
-    for(int i = 0; i < n; i++)
-    {
-        printf("%s\n", arr[i]);
-    }
+    val = next_smaller(i);
+    print_bin(i);
+    printf("\n");
 
-
+    print_bin(val);
+    printf("\n");
 
     return 0;
-}
 #endif
+}
