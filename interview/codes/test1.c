@@ -106,25 +106,55 @@ int fibo(int i)
 }
 
 //iteration
-int fibo_ext(int i)
+int fibo_ext(int n)
 {
-    if(0 == i)
+    int sum;
+    if(0 == n)
     {
         return 0;
     }
-    else if(1 == i)
+    else if(1 == n)
     {
         return 1;
     }
     else
     {
-        for(i = 0; i <= n; i++)
+        sum = 1;
+        for(int i = 2; i <= n; i++)
+        {
+            sum = i + sum;
+        }
+        return sum;
+    }
+}
+
+
+/*      n * n array
+    1 1 1 1
+    1 1 1 1
+    1 1 1 1
+    1 1 1 1
+*/
+int robot(int m, int n)
+{
+    if(m == 1 || n == 1)
+    {
+        return 1;
+    } 
+    else
+    {
+        return robot(m - 1, n) + robot(m, n - 1);
     }
 }
 
 int main()
 {
-    printf("%d\n", fibo(3));
+    int i = 50;
+
+    int ret = robot(3, 3);
+    printf("ret = %d\n", ret);
+    //printf("%d\n", fibo(i));
+    //printf("%d\n", fibo_ext(i));
 #if 0
     int i =0x8;
     int val = swap_bit(i);

@@ -10,105 +10,67 @@
 #include <limits.h>
 
 
-//hackerRank: permutation
+/*
+    pivot, 
+    from left,      int *pL     all elements <= pivot
+    from right,     int *pR     all elements > pivot
+    quick_sort(arr, left, pivot - 1);
+    quick_sort(arr, pivot + 1, right);
+*/
 
-int next_permutation(int n, char **s)
+void swap(int *a, int *b)
 {
-	/**
-	* Complete this method
-	* Return 0 when there is no next permutation and 1 otherwise
-	* Modify array s to its next permutation
-	*/
-    
-    static int k = 0;
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
 
-    if(n == 1)
-    {
-        return 0;
-    }
-    
-    /* ab  cd  ef
-       ab  ef  cd
-       cd  ab  ef
-       cd  ef  ab
-       ef  ab  cd
-       ef  cd  ab
-    */
-    /*
-        ab ab bc
-        ab bc ab
-        ab ab bc
-        ab bc ab
-        bc ab ab
-        bc ab ab
-    */
-    /*
-        ab bc ab
-        ab ab bc
-        bc ab ab
-        bc ab ab
-        ab ab bc
-        ab bc ab
-    */
-    /*1. calculate how many elements are different, and delete the duplicates
-      2. calculate the factorial
-      3. calculate the permutation:
-            p = n! / ((n - m)!)
-    */
+int partition(int arr[], int left, int right)
+{
+    int pivot = arr[right];
+    int i = (left - 1);
 
-    int i, j;
-    char *str[] = s
-    if(k == 0) //first time to enter, then set s.
+    for(int j = left; j <= right - 1; j++)
     {
-        //list s
-        for(i = 0; i < n - 1; i++)
+        if(arr[j] < pivot)
         {
-
-        }
-    }
-    for(i = 0; i < n - 1; i++)
-    {
-        for(j = i + 1; j < n; j++)
-        {
-            if(strcmp(s[i], s[j]) == 0)
-            {
-                while(j + 1 < n)
-                {
-                    s[j] = s[j + 1];
-                    j++;
-                }
-                i--;
-                n--;
-            }
+            i++;
+            printf("%d : %d\n", arr[i], arr[j]);
+            swap(&arr[i], &arr[j]);
         }
     }
 
-
-
+    swap(&arr[i + 1], &arr[right]);
+    return (i + 1);
 }
 
 
+void quick_sort(int *arr, int left, int right)
+{
+    if(left < right)
+    {
+        int pivot = partition(arr, left, right);
+        quick_sort(arr, left, pivot - 1);
+        quick_sort(arr, pivot + 1, right);
+    }
+}
+
+void printArr(int arr[], int size)
+{
+    int i;
+    for(i = 0; i < size; i++)
+    {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
 int main()
 {
-	char **s;
-	int n;
-	scanf("%d", &n);
-	s = calloc(n, sizeof(char*));
-	for (int i = 0; i < n; i++)
-	{
-		s[i] = calloc(11, sizeof(char));
-		scanf("%s", s[i]);
-	}
-	do
-	{
-		for (int i = 0; i < n; i++)
-			printf("%s%c", s[i], i == n - 1 ? '\n' : ' ');
-	} while (next_permutation(n, s));
-
-	for (int i = 0; i < n; i++)
-		free(s[i]);
-
-	free(s);
+    int arr[] = {10, 7, 8, 1, 5};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    quick_sort(arr, 0, n - 1);
+    printArr(arr, n);
 
 	return 0;
 }
