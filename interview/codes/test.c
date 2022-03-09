@@ -1,4 +1,3 @@
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -10,55 +9,76 @@
 #include <limits.h>
 
 
-/*
-    pivot, 
-    from left,      int *pL     all elements <= pivot
-    from right,     int *pR     all elements > pivot
-    quick_sort(arr, left, pivot - 1);
-    quick_sort(arr, pivot + 1, right);
-*/
-
-void swap(int *a, int *b)
+void merge(int *arr, int left, int mid, int right)
 {
-    int t = *a;
-    *a = *b;
-    *b = t;
-}
-
-int partition(int arr[], int left, int right)
-{
-    int pivot = arr[right];
-    int i = (left - 1);
-
-    for(int j = left; j <= right - 1; j++)
+    int i, j, k;
+    int tmp[100] = {0};
+    for(i = left, j = mid + 1, k = 0; k <= (right - left); k++)
     {
-        if(arr[j] < pivot)
+        if(i == mid + 1)
         {
-            i++;
-            printf("%d : %d\n", arr[i], arr[j]);
-            swap(&arr[i], &arr[j]);
+            tmp[k] = arr[j++];
+            continue;
+        }
+        if(j == right + 1)
+        {
+            tmp[k] = arr[i++];
+            continue;
+        }
+
+        if(arr[i] < arr[j])
+        {
+            tmp[k] = arr[i++];
+        }
+        else
+        {
+            tmp[k] = arr[j++];
         }
     }
 
-    swap(&arr[i + 1], &arr[right]);
-    return (i + 1);
+#if 0
+    for(i = 0; i <= right - left; i++)
+    {
+        printf("%d ", tmp[i]);
+    }
+    printf("\n");
+
+    for(i = 0; i <= right - left; i++)
+    {
+        printf("%d ", tmp[i]);
+        arr[left] = tmp[i];
+        left++;
+    }
+#else
+    for(i = 0; i <= right - left; i++)
+    {
+        printf("%d ", tmp[i]);
+    }
+    printf("\n");
+
+    for(i = left, j = 0; i <= right; i++, j++)
+    {
+        printf("%d ", tmp[j]);
+        arr[i] = tmp[j];
+    }
+#endif
 }
 
-
-void quick_sort(int *arr, int left, int right)
+void merge_sort(int *arr, int left, int right)
 {
-    if(left < right)
+    if (left < right)
     {
-        int pivot = partition(arr, left, right);
-        quick_sort(arr, left, pivot - 1);
-        quick_sort(arr, pivot + 1, right);
+        int mid = (left + right) / 2;
+        merge_sort(arr, left, mid);
+        merge_sort(arr, mid + 1, right);
+        merge(arr, left, mid, right);
     }
 }
 
-void printArr(int arr[], int size)
+
+void showme(int *arr, int size)
 {
-    int i;
-    for(i = 0; i < size; i++)
+    for(int i = 0; i < size; i++)
     {
         printf("%d ", arr[i]);
     }
@@ -67,10 +87,11 @@ void printArr(int arr[], int size)
 
 int main()
 {
-    int arr[] = {10, 7, 8, 1, 5};
-    int n = sizeof(arr) / sizeof(arr[0]);
-    quick_sort(arr, 0, n - 1);
-    printArr(arr, n);
+    int arr[] = {21, 8, 987, -12, 76};
+    int size = sizeof(arr) / sizeof(arr[0]);
+
+    merge_sort(arr, 0, size - 1);
+    //showme(arr, size);
 
 	return 0;
 }

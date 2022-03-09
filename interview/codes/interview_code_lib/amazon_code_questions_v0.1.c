@@ -14,6 +14,27 @@ void ControlSound(int Input)
      *reg |= (data << 7);
 }
 
+/*
+    another way
+*/
+#define SOUND_CTL (*(volatile unsigned long *)0x80000000)
+
+void ControlSound(int Input)
+{
+    int i;
+    int data = 0;
+
+    SOUND_CTL |= (1 << 0x7);    //enable the control
+
+    for(i = 8; i <= 15; i++)
+    {
+        data |= (Input >> i);
+        data <<= 1;
+    }
+    SOUND_CTL |= (data << 7);
+}
+
+
 // Volume can be 0 - 255
 ControlSound(5,1);
 ControlSound(8,1);
