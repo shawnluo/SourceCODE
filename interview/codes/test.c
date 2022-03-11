@@ -1,97 +1,65 @@
+#include <stdio.h> 
+#include <pthread.h> 
 #include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <fcntl.h>
+#include <sys/ipc.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/msg.h>
 #include <sys/types.h>
-#include <sys/stat.h>
-#include <assert.h>
-#include <limits.h>
+#include <sys/shm.h>
 
-
-void merge(int *arr, int left, int mid, int right)
-{
-    int i, j, k;
-    int tmp[100] = {0};
-    for(i = left, j = mid + 1, k = 0; k <= (right - left); k++)
-    {
-        if(i == mid + 1)
-        {
-            tmp[k] = arr[j++];
-            continue;
-        }
-        if(j == right + 1)
-        {
-            tmp[k] = arr[i++];
-            continue;
-        }
-
-        if(arr[i] < arr[j])
-        {
-            tmp[k] = arr[i++];
-        }
-        else
-        {
-            tmp[k] = arr[j++];
-        }
-    }
-
-#if 0
-    for(i = 0; i <= right - left; i++)
-    {
-        printf("%d ", tmp[i]);
-    }
-    printf("\n");
-
-    for(i = 0; i <= right - left; i++)
-    {
-        printf("%d ", tmp[i]);
-        arr[left] = tmp[i];
-        left++;
-    }
-#else
-    for(i = 0; i <= right - left; i++)
-    {
-        printf("%d ", tmp[i]);
-    }
-    printf("\n");
-
-    for(i = left, j = 0; i <= right; i++, j++)
-    {
-        printf("%d ", tmp[j]);
-        arr[i] = tmp[j];
-    }
-#endif
-}
-
-void merge_sort(int *arr, int left, int right)
-{
-    if (left < right)
-    {
-        int mid = (left + right) / 2;
-        merge_sort(arr, left, mid);
-        merge_sort(arr, mid + 1, right);
-        merge(arr, left, mid, right);
-    }
-}
-
-
-void showme(int *arr, int size)
-{
-    for(int i = 0; i < size; i++)
-    {
-        printf("%d ", arr[i]);
-    }
-    printf("\n");
-}
+#define BUFSZ 512
+struct message{
+    long msg_type;
+    char msg_text[BUFSZ];
+};
 
 int main()
 {
-    int arr[] = {21, 8, 987, -12, 76};
-    int size = sizeof(arr) / sizeof(arr[0]);
+    int qid;
+    key_t key;
+    int len;
+    struct message msg;
 
-    merge_sort(arr, 0, size - 1);
-    //showme(arr, size);
+    if((key == ftok(".", 'a')) == -1)
+    {
+        perror("ftok");
+        exit(1);
+    }
 
-	return 0;
+    if((qid = msgget(key, IPC_CREAT | 0666)) == -1)
+    {
+        perror("msgget");
+        exit(1);
+    }
+    printf("opened queue %d\n", qid);
+    puts("Please enter the message to queue:");
+    if((fgets((&msg)->msg_text, BUFSZ, stdin)) == NULL)
+    {
+        puts("no message");
+        exit(1);
+    }
+    msg.msg_type = getpid();
+    len = strlen(msg.msg_text);
+
+    if((msgsnd(qid, &msg, len, 0) < 0))
+    {
+        perror("message posted");
+        exit(1);
+    }
+
+    if(msgrcv(qid, &msg, BUFSZ, 0, 0) < 0)
+    {
+        perror("msgrcv");
+        exit(1);
+    }
+    printf("message is: %s\n", (&msg)->msg_text);
+
+    if((msgctl(qid, IPC_RMID, NULL) < 0))
+    {
+        perror("msgctl");
+        exit(1);
+    }
+
+    return 0;
 }
