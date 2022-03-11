@@ -48,13 +48,15 @@ int main()
         exit(1);
     }
 
+    for(int i = 0; i < 5; i++)
+    {
     if(msgrcv(qid, &msg, BUFSZ, 0, 0) < 0)
     {
         perror("msgrcv");
         exit(1);
     }
     printf("message is: %s\n", (&msg)->msg_text);
-
+    }
     if((msgctl(qid, IPC_RMID, NULL) < 0))
     {
         perror("msgctl");

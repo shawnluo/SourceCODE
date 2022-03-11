@@ -5,78 +5,35 @@
 #include <time.h>
 #include <unistd.h>
 
-pthread_mutex_t write_mutex;
 
-void *my_write(void *temp) 
+void showme(void **p, int row, int col)
 {
-    char *ret;
-    char str[100] = {0};
-
-    while(1)
+    int (*pArr)[col] = p;
+    for(int i = 0; i < row; i++)
     {
-        pthread_mutex_lock(&write_mutex);
-        printf("1 - LOCK\n");
-
-        while(1)
+        for(int j = 0; j < col; j++)
         {
-            scanf("%s", str);
-            if(strcmp(str, "t1") == 0)
-            {
-                printf("1 - got ok!\n");
-                break;
-            }
-            sleep(1);
+            printf("%d ", pArr[i][j]);
         }
-
-        pthread_mutex_unlock(&write_mutex);
-        printf("1 - Unlocked\n");
-        memset(str, 0, 100);
-        sleep(2);
+        printf("\n");
     }
-    return ret;
 }
 
-
-void *my_read(void *temp) 
+void rotat(int *arr, int row, int col)
 {
-    char *ret;
-    char str[100] = {0};
 
-    while(1)
-    {
-        pthread_mutex_lock(&write_mutex);
-        printf("2 - LOCK\n");
-        while(1)
-        {
-            scanf("%s", str);
-            if(strcmp(str, "t2") == 0)
-            {
-                printf("2 - got ok!\n");
-                break;
-            }
-            sleep(1);
-        }
-
-        pthread_mutex_unlock(&write_mutex);
-        printf("2 - Unlocked\n");
-        sleep(2);
-    }
-    return ret;
 }
 
-
-int main(void) 
+int main()
 {
-    pthread_t thread_id,thread_id1;
-    pthread_attr_t attr;
-    int ret;
-    void *res;
+    int arr[3][5] = {   {1, 2, 3, 4, 5},
+                        {11, 22, 33, 44, 55},
+                        {111, 222, 333, 444, 555}};
 
-    ret=pthread_create(&thread_id,NULL,&my_write,NULL);
-    ret=pthread_create(&thread_id1,NULL,&my_read,NULL);
+    showme(arr, 3, 5);
 
-    pthread_join(thread_id,&res);
-    pthread_join(thread_id1,&res);
+    rotat(arr, 3, 5);
+
 
     return 0;
 }
