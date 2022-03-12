@@ -1,67 +1,99 @@
-#include <stdio.h> 
-#include <pthread.h> 
-#include <stdlib.h>
-#include <sys/ipc.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/msg.h>
+#include <stdio.h>
 #include <sys/types.h>
-#include <sys/shm.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <wait.h>
+#include <signal.h>
+#include <errno.h>
+#include <sys/select.h>
+#include <sys/time.h>
+#include <unistd.h>
+ 
+#define MAXBUF 256
+ 
+void child_process(void)
+{
+    sleep(2);
+    char msg[MAXBUF];
+    struct sockaddr_in addr = {0};
+    int n, sockfd,num=1;
 
-#define BUFSZ 512
-struct message{
-    long msg_type;
-    char msg_text[BUFSZ];
-};
+    srandom(getpid());
+    /* Create socket and connect to server */
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(2000);
+    addr.sin_addr.s_addr = inet_addr("127.0.0.1");
 
+    connect(sockfd, (struct sockaddr*)&addr, sizeof(addr));
+
+    printf("child {%d} connected \n", getpid());
+    while(1)
+    {
+        int sl = (random() % 10 ) + 1;
+        num++;
+        sleep(sl);
+        sprintf (msg, "Test message %d from client %d", num, getpid());
+        n = write(sockfd, msg, strlen(msg));	/* Send message */
+    }
+}
+ 
 int main()
 {
-    int qid;
-    key_t key;
-    int len;
-    struct message msg;
+    char buffer[MAXBUF];
+    int fds[5];
+    struct sockaddr_in addr;
+    struct sockaddr_in client;
+    int addrlen, n,i,max=0;;
+    int sockfd, commfd;
+    fd_set rset;
 
-    if((key == ftok(".", 'a')) == -1)
+    for(i=0;i<5;i++)
     {
-        perror("ftok");
-        exit(1);
-    }
-
-    if((qid = msgget(key, IPC_CREAT | 0666)) == -1)
-    {
-        perror("msgget");
-        exit(1);
-    }
-    printf("opened queue %d\n", qid);
-    puts("Please enter the message to queue:");
-    if((fgets((&msg)->msg_text, BUFSZ, stdin)) == NULL)
-    {
-        puts("no message");
-        exit(1);
-    }
-    msg.msg_type = getpid();
-    len = strlen(msg.msg_text);
-
-    if((msgsnd(qid, &msg, len, 0) < 0))
-    {
-        perror("message posted");
-        exit(1);
+        if(fork() == 0)
+        {
+            child_process();
+            exit(0);
+        }
     }
 
-    for(int i = 0; i < 5; i++)
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    memset(&addr, 0, sizeof(addr));
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(2000);
+    addr.sin_addr.s_addr = INADDR_ANY;
+    bind(sockfd,(struct sockaddr*)&addr ,sizeof(addr));
+    listen (sockfd, 5); 
+ 
+    for (i=0;i<5;i++) 
     {
-    if(msgrcv(qid, &msg, BUFSZ, 0, 0) < 0)
-    {
-        perror("msgrcv");
-        exit(1);
-    }
-    printf("message is: %s\n", (&msg)->msg_text);
-    }
-    if((msgctl(qid, IPC_RMID, NULL) < 0))
-    {
-        perror("msgctl");
-        exit(1);
+        memset(&client, 0, sizeof (client));
+        addrlen = sizeof(client);
+        fds[i] = accept(sockfd,(struct sockaddr*)&client, &addrlen);
+        if(fds[i] > max)
+        max = fds[i];
     }
 
+    while(1)
+    {
+	    FD_ZERO(&rset);
+  	    for (i = 0; i< 5; i++ ) 
+        {
+  		    FD_SET(fds[i],&rset);
+  	    }
+ 
+        puts("round again");
+        select(max+1, &rset, NULL, NULL, NULL);
+ 
+        for(i=0;i<5;i++)
+        {
+            if (FD_ISSET(fds[i], &rset))
+            {
+                memset(buffer,0,MAXBUF);
+                read(fds[i], buffer, MAXBUF);
+                puts(buffer);
+            }
+        }
+    }
     return 0;
 }
