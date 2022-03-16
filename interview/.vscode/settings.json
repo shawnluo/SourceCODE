@@ -3,6 +3,7 @@
         "socket.h": "c",
         "fcntl.h": "c",
         "errno.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "sstream": "c"
     }
 }
