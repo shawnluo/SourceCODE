@@ -15,33 +15,32 @@
 
 int isSubstring(char *s1, char *s2)
 {
-    printf("s1: %s\n", s1);
-    printf("s2: %s\n", s2);
-    int i, j, cnt = 0;
+    int i, j, tmp;
+    int cnt = 0;
     int size1 = strlen(s1);
     int size2 = strlen(s2);
-    char tmp;
 
     for(i = 0; i < size1; i++)
     {
         tmp = i;
         for(j = 0; j < size2; j++)
         {
-            if((*s2 != '\0') && (s1[tmp] == s2[j]))
+            if((s1[tmp] != '\0') && (s1[i] == s2[j]))
             {
-                tmp++;
                 cnt++;
-                if(cnt == size2)
-                {
-                    return 1;
-                }
             }
             else
             {
                 cnt = 0;
             }
+
+            if(cnt == size2)
+            {
+                return 1;
+            }
         }
     }
+
     return 0;
 }
 
