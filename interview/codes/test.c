@@ -12,126 +12,62 @@
 #include <sys/ipc.h>
 #include <fcntl.h>
 
-/*
-    producer and consumer:
-    1. buffer[10]
-    2. producer pushes to buffer
-    3. consumer pops from buffer
-    4. producer pauses pushing when buffer is full
-    5. consumer pauses popping when buffer is empty
+#include <stdio.h>
+#include <stdlib.h>
 
-    solution:
-        1. mutex for 2 threads to access the same buffer
-        2. synchnization of produce and consume
-            full    0
-            avail   N - the empty unit number
-*/
 
-#define N 5
-#define FIFO "myfifo"
+typedef uint16_t offset_t;
+#define PTR_OFFSET_SZ sizeof(offset_t)
 
-time_t end_time;
-int fd;
-char buf_r[100];
-sem_t mutex, avail, full;
+void* aligned_malloc(size_t required_bytes, size_t alignment)
+{
+    void *p_addr = NULL;
+    void* aligned_addr = NULL;
+    int offset = alignment - 1;
+    
+    // we also need about 2 bytes for storing offset to get to orig malloc address during aligned_free().
+    uint32_t hdr_size = PTR_OFFSET_SZ + (alignment - 1);
+    if((p_addr = (void * ) malloc(required_bytes + hdr_size)) == NULL)
+    {
+        return NULL;
+    }
 
-void productor(void *arg);
-void consumer(void *arg);
+    // a) bit-shift to move address to aligned_addr
+    //    Note that this operates on powers of two
+    aligned_addr = (void * ) (((size_t)(p_addr) + offset) & ~(offset));
+    
+    #if 0
+    //b) OR use modulo operator to get how much to move forward
+    int move_forward = (alignment - ((size_t)p_addr % alignment));
+    aligned_addr= (size_t)p_addr + move_forward;
+    #endif
+
+    // store 16-bit offset instead of a 32bit or 64 bit platform address.
+    *((size_t *) aligned_addr - 1) = (size_t)(aligned_addr - p_addr);
+
+    return aligned_addr;
+}
+
+
+
+void *align_ptr_free(void *ptr)
+{
+		void *base_addr = NULL;
+		printf("%x %x\n", ptr, *((int *)ptr - 1));
+
+		base_addr = (void *)(ptr - *((int *)ptr - 1));
+		printf("ptr %x base_addr %x\n", ptr, base_addr);
+
+		free(base_addr);
+}
 
 int main(void)
 {
-    pthread_t id1, id2;
-    end_time = time(NULL) + 30;
-    int ret;
+		void *ptr;
+		//ptr = align_ptr_malloc(1024, 64);
+        ptr = aligned_malloc(1024, 64);
+		printf("ptr %x\n", ptr);
+		align_ptr_free(ptr);
 
-    if((mkfifo(FIFO, 0666) < 0) && (errno != EEXIST))
-    {
-        printf("cannot create fifoserver\n");
-    }
-    printf("Preparing for reading bytes...\n");
-    memset(buf_r, 0, sizeof(buf_r));
-
-    fd = open(FIFO, O_RDWR|O_NONBLOCK, 0);
-    if(fd == -1)
-    {
-        perror("open");
-        exit(1);
-    }
-
-    ret = sem_init(&mutex, 0, 1);
-    ret = sem_init(&avail, 0, N);   //N empty space
-    ret = sem_init(&full, 0, 0);
-    if(ret != 0)
-    {
-        perror("sem_init");
-    }
-
-    ret = pthread_create(&id1, NULL, (void *)productor, NULL);
-    if(ret != 0)
-    {
-        perror("pthread cread1");
-    }
-    ret = pthread_create(&id2, NULL, (void *)consumer, NULL);
-    if(ret != 0)
-    {
-        perror("pthread cread2");
-    }
-
-    pthread_join(id1, NULL);
-    pthread_join(id2, NULL);
-
-    return (0);
-}
-
-void productor(void *arg)
-{
-    int i, nwrite, val;
-    while(time(NULL) < end_time)
-    {
-        sem_wait(&avail);   //N empty space
-        sem_getvalue(&avail, &val);
-        printf("p - %d\n", val);
-
-        sem_wait(&mutex);   //it does NOT matter which thread go first
-
-        if((nwrite = write(fd, "hello", 5)) == -1)
-        {
-            printf("write fail, data unavailable!\n");
-        }
-        else
-        {
-            sleep(1);
-            printf("write hello to the FIFO. buf remain: %d\n", strlen(buf_r));
-        }
-        sem_post(&full);
-        sem_post(&mutex);
-        sleep(1);
-    }
-}
-
-void consumer(void *arg)
-{
-    int nolock = 0;
-    int ret, nread, val;
-    int n = 1;
-    while(time(NULL) < end_time)
-    {
-        sem_wait(&full);
-        sem_wait(&mutex);
-
-        sem_getvalue(&avail, &val);
-        printf("c - %d\n", val);
-
-        memset(buf_r, 0, sizeof(buf_r));
-        if((nread = read(fd, buf_r, n)) == -1)
-        {
-            printf("no data yet\n");
-        }
-        sleep(3);
-        printf("read %s from FIFO, remain: %d\n", buf_r, strlen(buf_r));
-
-        sem_post(&avail);
-        sem_post(&mutex);
-        sleep(1);
-    }
+		return 0;
 }

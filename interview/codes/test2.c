@@ -5,63 +5,48 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <semaphore.h>
+#include <stdint.h>
 
-#define NUM 5
-
-int queue[NUM];                     //全局数组实现环形队列
-sem_t blank_number, product_number; //空格数信号量, 产品数信号量
-
-void *producer(void *arg)
+void *aligned_malloc(size_t required_bytes, size_t alignment)
 {
-    int i = 0;
+    int offset = alignment - 1 + sizeof(void *);
+    void *p1 = (void *)malloc(required_bytes + offset);
 
-    while (1)
+    if (p1 == NULL)
     {
-        sem_wait(&blank_number); //生产者将空格子数--,为0则阻塞等待
-        int data = rand() % 1000 + 1;
-        queue[i] = data;           //生产一个产品
-        i = (i + 1) % NUM;         //借助下标实现环形
-        sem_post(&product_number); //将产品数++
-
-        printf("- P -%d\n", data);
-
-        sleep(rand() % 3);
+        return NULL;
     }
+
+    void **p2 = (void **)(((size_t)p1 + offset) & ~(alignment - 1));
+    p2[-1] = p1;
+
+    return p2;
 }
 
-void *consumer(void *arg)
+
+void aligned_free(void *p2)
 {
-    int i = 0;
+    void *p1 = ((void **)p2)[-1];
 
-    while (1)
-    {
-        sem_wait(&product_number); //消费者将产品数--,为0则阻塞等待
-        int data = queue[i];
-        queue[i] = 0; //消费一个产品
-        i = (i + 1) % NUM;
-        sem_post(&blank_number); //消费掉以后,将空格子数++
-
-        printf("- C -%d\n", data);
-
-        sleep(rand() % 3);
-    }
+    free(p1);
 }
 
-int main(int argc, char *argv[])
+int main()
 {
-    pthread_t pid, cid;
+    void *p[128];
+    int i;
 
-    sem_init(&blank_number, 0, NUM); //初始化空格子信号量为5
-    sem_init(&product_number, 0, 0); //产品数为0
+    for (i = 0; i < 128; ++i)
+    {
+        p[i] = aligned_malloc(i, 16);
 
-    pthread_create(&pid, NULL, producer, NULL);
-    pthread_create(&cid, NULL, consumer, NULL);
+        printf("%p\n", p[i]);
+    }
 
-    pthread_join(pid, NULL);
-    pthread_join(cid, NULL);
-
-    sem_destroy(&blank_number);
-    sem_destroy(&product_number);
+    for (i = 0; i < 128; ++i)
+    {
+        aligned_free(p[i]);
+    }
 
     return 0;
 }
