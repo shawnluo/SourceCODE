@@ -14,26 +14,88 @@
 #include <assert.h>
 
 
-typedef struct Data
-{
-    int id;
-    struct Data *next;
-}data, *pData;
+/*
+    global:
+        buff[]
+        size = 100
+        stack[3]: [0 ~ 100),  [100, 200), [200, 300)
+        pointer to the top of the stack
+*/
 
+#define SIZE 100
+int buff[SIZE] = {0};
+int stack_top = 0;    //point to the top of stack
 
-pData create_ll(int *arr, int size)
+void push(int data)
 {
-    
+    int index = stack_top + 1;
+    if(index >= SIZE)
+    {
+        return;
+    }
+    buff[index] = data;
+    stack_top++;
 }
 
-int rm_dup()
+int pop()
 {
-    return 0;
+    int value;
+    int index = stack_top;
+    value = buff[index];
+
+    index = stack_top - 1;
+    if(index < 0)
+    {
+        return -1;
+    }
+    stack_top--;
+
+    return value;
 }
+
+int peek()
+{
+    int index = stack_top;
+    printf("%d\n", buff[index]);
+    return buff[index];
+}
+
+int isEmpty()
+{
+
+}
+
+int isFull()
+{
+
+}
+
+
+int create_stacks()
+{
+
+}
+
 
 int main(void)
 {
-    int arr[5] = {1, 2, 3, 4, 5};
-    pData pHead = create_ll(arr, 5);
+    push(99);
+    push(21);
+    push(87);
+    int val = peek();
+    //printf("%d\n", val);
+
+    pop();
+    peek();
+
+    pop();
+    peek();
+
+    pop();
+    peek();
+
+    pop();
+    peek();
+    
     return 0;
 }
