@@ -9,7 +9,7 @@ The API read4 reads 4 consecutive characters from the file, then writes those ch
 The return value is the number of actual characters read.
 Note that read4() has its own file pointer, much like FILE *fp in C.
 Definition of read4:
-   Parameter:  char[] buf
+    Parameter:  char[] buf
     Returns:    int
 
 Note: buf[] is destination not source, the results from read4 will be copied to buf[]
@@ -26,7 +26,7 @@ Method read:
 By using the read4 method, implement the method read that reads n characters from the file and store it in the buffer array buf. Consider that you cannot manipulate the file directly.
 The return value is the number of actual characters read.
 Definition of read: 
-   Parameters:	char[] buf, int n
+    Parameters:	char[] buf, int n
     Returns:	int
 
 Note: buf[] is destination not source, you will need to write the results to buf[]
@@ -64,25 +64,18 @@ Note: buf[] is destination not source, the results from read4 will be copied to 
 Int read4(char[] buf)
 
 */
-uint32_t read(char* buff, uint32_t n) {
-Int num_read = 0; //already read
-Int idx = 0;	//the data position of buf
-	Char *buff_read4 = NULL;
-  while(num_read == 4)
+uint32_t read(char* buff, uint32_t n)
 {
-	Num_read = read4(buf_read4);
-	// save buf_read4 to buf[]
-	Buff[idx] = buff_read4;
+    int num_read = 0; //already read
+    int idx = 0;	//the data position of buf
+    char *buff_read4 = NULL;
 
-	if((idx + buff_read4)  > n)	//find the end of buff, add ‘\0’
-	{
-		Int tmp = idx + buff_read4 - n;
-		Buff[idx + buff_read4 - n]	
-}
-Else
-{
-		Idx += 4;
-}
-}
+    while(num_read = read4(buf_read4))
+    {
+        //save buf_read4 to buf[]
+        strcat(Buff[idx], buff_read4);
+        idx += num_read;
+    }
+    return idx;
 }
 
