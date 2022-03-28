@@ -52,30 +52,28 @@ sol.read(buf, 1); // We have reached the end of file, no more characters can be 
   read(D, 5);
 */
 
-/*
- using read4() to imple. 
-
-Note that read4() has its own file pointer, much like FILE *fp in C.
-Definition of read4:
-   Parameter:  char[] buf
-    Returns:    int
-
-Note: buf[] is destination not source, the results from read4 will be copied to buf[]
-Int read4(char[] buf)
-
-*/
 uint32_t read(char* buff, uint32_t n)
 {
+    assert(buff);
     int num_read = 0; //already read
     int idx = 0;	//the data position of buf
-    char *buff_read4 = NULL;
+    char buff_tmp[100] = {0};
 
-    while(num_read = read4(buf_read4))
+    while(num_read = read4(buff))
     {
-        //save buf_read4 to buf[]
-        strcat(Buff[idx], buff_read4);
+        //save buff[] to buff_tmp
+        strcat(buff_tmp[idx], buff);
         idx += num_read;
+
+        if(idx >= n)  //if read more than n
+        {
+            buff_tmp[n] = '\0';
+            break;
+        }
     }
+
+    strcpy(buff, buff_tmp);
+
     return idx;
 }
 
