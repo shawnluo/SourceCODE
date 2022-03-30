@@ -14,26 +14,120 @@
 #include <assert.h>
 
 
-void *aligned_malloc(size_t required_bytes, size_t alignment)
+typedef struct Node
 {
-    int offset = alignment - 1;
-    void *p_addr = NULL;
+    int idx;
+    struct Node *next;
+}node, *pNode;
 
-    if((p_addr = (void *)malloc(required_bytes + offset + sizeof(uint16_t))) == NULL)
+#define SIZE sizeof(node)
+
+void showme(pNode pHead)
+{
+    while(pHead)
     {
-        return NULL;
+        printf("%d ", pHead->idx);
+        pHead = pHead->next;
     }
-
-    void *aligned_addr = (p_addr + offset) & ~(offset);
-    *((int *)aligned_addr - 1) = aligned_addr - p_addr;
-
-    return aligned_addr;
+    printf("\n");
 }
 
-void aligned_free(void *ptr)
+
+
+pNode create_ll(int arr[], int n)
 {
-    assert(ptr);
-    int offset = *((int *)ptr - 1);
-    void *p = (void *)((int *)ptr - offset);
-    free(p);
+    pNode pHead = NULL;
+    pNode p = NULL;
+
+    while(n--)
+    {
+        p = (pNode)malloc(SIZE);
+        p->idx = arr[n];
+        p->next = pHead;
+        pHead = p;
+    }
+
+    return pHead;
+}
+
+int del_node(pNode *ppHead, int num)
+{
+    assert(*ppHead);
+    pNode *pp = ppHead;
+
+    while(*pp && (*pp)->idx != num)
+    {
+        pp = &(*pp)->next;
+    }
+    if(!*pp)
+    {
+        return -1;   //can not find the node
+    }
+
+    pNode tmp = *pp;
+    *pp = (*pp)->next;
+    free(tmp);
+
+    return 0;
+}
+
+int insert_node_infront(pNode *ppHead, int num, int newNum)
+{
+    assert(*ppHead);
+    pNode *pp = ppHead;
+
+    while(*pp && (*pp)->idx != num)
+    {
+        pp = &(*pp)->next;
+    }
+    if(!*pp)
+        return -1;
+
+    pNode p = (pNode)malloc(SIZE);
+    p->idx = newNum;
+
+    //pNode tmp = *pp;
+    p->next = *pp;
+    *pp = p;
+
+    return 0;
+}
+
+int insert_node_after(pNode *ppHead, int num, int newNum)
+{
+    assert(*ppHead);
+    pNode *pp = ppHead;
+
+    while(*pp && (*pp)->idx != num)
+    {
+        pp = &(*pp)->next;
+    }
+    if(!*pp)
+        return -1;
+
+    pNode p = (pNode)malloc(SIZE);
+    p->idx = newNum;
+
+    p->next = (*pp)->next;
+    (*pp)->next = p;
+
+    return 0;
+}
+
+int main(void)
+{
+    int arr[5] = {1, 2, 3, 4, 5};
+    pNode pHead = create_ll(arr, 5);
+    showme(pHead);
+
+    //del_node(&pHead, 4);
+    //showme(pHead);
+
+    //insert_node_infront(&pHead, 1, 100);
+    //showme(pHead);
+
+    insert_node_after(&pHead, 5, 50);
+    showme(pHead);
+
+    return 0;
 }
