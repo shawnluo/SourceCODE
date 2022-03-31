@@ -17,32 +17,40 @@
 #include <fcntl.h>
 #include <assert.h>
 
+int ones = 0;
 
-void test(float f)
+int test(int base, int n)
 {
-    if(f == 0.0)
-    {
-        printf("%d", 0);
-        return;
-    }
-    /*if(f == 1.0)
-    {
-        printf("%d", 1);
-    }*/
+    if(n == 0)
+        return 1;
+    if(n == 1)
+        return base;
 
-    float data = (f * 2);
-    int inc = data >= 1 ? 1 : 0;
-    printf("%d", inc);
+    return base * test(base, n - 1);
+}
 
-    data = data >= 1 ? (f * 2) - 1 : (f * 2);
-    test(data);
+void sorting(int *arr, int left, int right)
+{
+    //find the 
+    int center = find_center();
+    forting(arr, left, center - 1);
+    sorting(arr, center + 1, right);
+}
+
+
+int mySort(int *arr, int size)
+{
+    int left = 0, right = size - 1;
+
+    sorting(arr, left, right);
 }
 
 int main(void)
 {
-    float f = 0.4567;
-    test(f);
+    int end1 = 0, end2 = 1;
+    int A[5] = {0, 5, 4, 2, 9};
 
+    mySort(A, 5);
 
     return 0;
 }
