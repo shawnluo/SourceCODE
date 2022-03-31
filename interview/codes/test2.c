@@ -18,18 +18,31 @@
 #include <assert.h>
 
 
+void test(float f)
+{
+    if(f == 0.0)
+    {
+        printf("%d", 0);
+        return;
+    }
+    /*if(f == 1.0)
+    {
+        printf("%d", 1);
+    }*/
+
+    float data = (f * 2);
+    int inc = data >= 1 ? 1 : 0;
+    printf("%d", inc);
+
+    data = data >= 1 ? (f * 2) - 1 : (f * 2);
+    test(data);
+}
+
 int main(void)
 {
-    char str[100] = "abcdefg";
-    char newStr[100] = {0};
+    float f = 0.4567;
+    test(f);
 
-    printf("%s\n", newStr);
-
-    strcat(newStr, str);
-    printf("%s\n", newStr);
-
-        strcat(newStr, str);
-    printf("%s\n", newStr);
 
     return 0;
 }

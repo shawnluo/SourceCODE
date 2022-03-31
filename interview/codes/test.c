@@ -14,120 +14,57 @@
 #include <assert.h>
 
 
-typedef struct Node
-{
-    int idx;
-    struct Node *next;
-}node, *pNode;
 
-#define SIZE sizeof(node)
-
-void showme(pNode pHead)
+void print_bin(int num)
 {
-    while(pHead)
+    if(num == 0)
     {
-        printf("%d ", pHead->idx);
-        pHead = pHead->next;
+        printf("%d", 0);
+        return;
+    }
+    if(num == 1)
+    {
+        printf("%d", 1);
+        return;
+    }
+    if(num > 1)
+    {
+        int x = num % 2;
+        num = num / 2;
+
+        print_bin(num);
+        printf("%d", x);
+    }
+}
+
+void print_bin_ext(int num)
+{
+    char *c = (char *)&num;
+
+    c += 3;
+    for(int k = 0; k < 4; k++)
+    {
+        for(int i = 7; i >= 0; i--)
+        {
+            //printf("\n*c: 0x%x\n", *c);
+            if(*c & (1 << i))
+                printf("%d", 1);
+            else
+                printf("%d", 0);
+        }
+        c--;
+        printf(" ");
     }
     printf("\n");
 }
 
 
 
-pNode create_ll(int arr[], int n)
-{
-    pNode pHead = NULL;
-    pNode p = NULL;
 
-    while(n--)
-    {
-        p = (pNode)malloc(SIZE);
-        p->idx = arr[n];
-        p->next = pHead;
-        pHead = p;
-    }
-
-    return pHead;
-}
-
-int del_node(pNode *ppHead, int num)
-{
-    assert(*ppHead);
-    pNode *pp = ppHead;
-
-    while(*pp && (*pp)->idx != num)
-    {
-        pp = &(*pp)->next;
-    }
-    if(!*pp)
-    {
-        return -1;   //can not find the node
-    }
-
-    pNode tmp = *pp;
-    *pp = (*pp)->next;
-    free(tmp);
-
-    return 0;
-}
-
-int insert_node_infront(pNode *ppHead, int num, int newNum)
-{
-    assert(*ppHead);
-    pNode *pp = ppHead;
-
-    while(*pp && (*pp)->idx != num)
-    {
-        pp = &(*pp)->next;
-    }
-    if(!*pp)
-        return -1;
-
-    pNode p = (pNode)malloc(SIZE);
-    p->idx = newNum;
-
-    //pNode tmp = *pp;
-    p->next = *pp;
-    *pp = p;
-
-    return 0;
-}
-
-int insert_node_after(pNode *ppHead, int num, int newNum)
-{
-    assert(*ppHead);
-    pNode *pp = ppHead;
-
-    while(*pp && (*pp)->idx != num)
-    {
-        pp = &(*pp)->next;
-    }
-    if(!*pp)
-        return -1;
-
-    pNode p = (pNode)malloc(SIZE);
-    p->idx = newNum;
-
-    p->next = (*pp)->next;
-    (*pp)->next = p;
-
-    return 0;
-}
 
 int main(void)
 {
-    int arr[5] = {1, 2, 3, 4, 5};
-    pNode pHead = create_ll(arr, 5);
-    showme(pHead);
-
-    //del_node(&pHead, 4);
-    //showme(pHead);
-
-    //insert_node_infront(&pHead, 1, 100);
-    //showme(pHead);
-
-    insert_node_after(&pHead, 5, 50);
-    showme(pHead);
-
+    print_bin_ext(9);
+    //printf("0x%x", val);
     return 0;
 }
