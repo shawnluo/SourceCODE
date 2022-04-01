@@ -58,7 +58,7 @@ int is_rotation(char *s1, char *s2)
 
 char *myStrstr(const char *str, const char *sub)
 {
-    char *str1 = (char *)str;
+    char *str1 = (char *)str;   //force to char* type for incremental in loop
     char *s1, *s2;
 
     if(!*sub)   

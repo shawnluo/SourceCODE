@@ -17,40 +17,61 @@
 #include <fcntl.h>
 #include <assert.h>
 
-int ones = 0;
 
-int test(int base, int n)
+int partition(int *arr, int low, int high)
 {
-    if(n == 0)
-        return 1;
-    if(n == 1)
-        return base;
+    int key;
+    key = arr[low];
+    while(low < high)
+    {
+        while(low < high && arr[high] >= key)
+            high--;
 
-    return base * test(base, n - 1);
+        if(low < high)
+            arr[low++] = arr[high];
+
+        while(low < high && arr[low] <= key)
+            low++;
+
+        if(low < high)
+            arr[high--] = arr[low];
+    }
+    arr[low] = key;
+
+    return low;
 }
 
-void sorting(int *arr, int left, int right)
+void quick_sort(int *arr, int start, int end)
 {
-    //find the 
-    int center = find_center();
-    forting(arr, left, center - 1);
-    sorting(arr, center + 1, right);
+    int pos;
+    if(start < end)
+    {
+        pos = partition(arr, start, end);
+        quick_sort(arr, start, pos - 1);
+        quick_sort(arr, pos + 1, end);
+    }
 }
 
 
-int mySort(int *arr, int size)
+void mySort(int *arr, int size)
 {
     int left = 0, right = size - 1;
 
-    sorting(arr, left, right);
+    quick_sort(arr, left, right);
 }
 
 int main(void)
 {
-    int end1 = 0, end2 = 1;
-    int A[5] = {0, 5, 4, 2, 9};
+    int A[5] = {0, 5, 4, 2, 1};
 
-    mySort(A, 5);
+    //mySort(A, 5);
+    quick_sort(A, 0, 4);
+
+    for(int i = 0; i < 5; i++)
+    {
+        printf("%d ", A[i]);
+    }
+    printf("\n");
 
     return 0;
 }
