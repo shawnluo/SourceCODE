@@ -13,61 +13,62 @@
 #include <fcntl.h>
 #include <assert.h>
 
-void swap(char *x, char *y)
+
+
+/*
+    find the longest substring
+    123abcdefa  --> abcdef
+*/
+char *fnd_sub(char *str)
 {
-    char c = *x;
-    *x = *y;
-    *y = c;
+    if(!str)    return NULL;
+//    char *s, *s1, *s2;
+    int i, j;
+    int size = strlen(str);
+
+    static char sub[10] = {0};
+
+    for(i = 1; i < size;i ++)
+    {
+        for(j = 0; j < i; j++)
+        {
+            if(str[i] == str[j])
+            {
+                strcpy(sub, str);
+                sub[i] = '\0';
+                return sub;
+            }
+        }
+    }
+    return str;
 }
 
-//sorting
-void sort(char *str)
+
+char *fnd_sub_longest(char *str)
 {
     int i, j;
     int size = strlen(str);
 
-    for(i = 0; i < size; i++)
+    static char sub[10] = {0};
+    char *val;
+    for(i = 0; i < size - 1; i++)
     {
-        for(j = 1; j < size - i; j++)
-        {
-            if(str[j - 1] > str[j])
-            {
-                swap(str + j - 1, str + j);
-            }
-        }
+        str = str + i;
+        val = fnd_sub(str);
+        //printf("%s\n", val);
+        if(strlen(val) > strlen(sub))
+            strcpy(sub, val);
     }
+
+    return sub;
 }
+
 
 int main(void)
 {
-    char str[] = "abclkjjmm3421";
+    char *str = "abc123abcdefa";
+    //char *ret = fnd_sub_longest(str);
 
-    sort(str);
-    printf("%s\n", str);
-
-    return 0;
-}
-
-
-
-
-void *my_memcpy(void *des, void *src, unsigned int len)
-{
-    assert(des);
-    assert(src);
-    if(des == src)
-        return src;
-
-    if(des > src)   //copy from end
-    {
-
-    }
-    else
-    {
-        while(len--)
-        {
-            *des++ = *src++;
-        }
-    }
-
+    printf("%s\n", fnd_sub_longest(str));
+    //printf("%s\n", fnd_sub_longest(str));
 }
