@@ -15,60 +15,37 @@
 
 
 
-/*
-    find the longest substring
-    123abcdefa  --> abcdef
-*/
-char *fnd_sub(char *str)
+typedef int myType;
+typedef struct treeNode
 {
-    if(!str)    return NULL;
-//    char *s, *s1, *s2;
-    int i, j;
-    int size = strlen(str);
+    myType element;
+    struct treeNode *lchild;
+    struct treeNode *rchild;
+}Btree;
 
-    static char sub[10] = {0};
+#define SIZE sizeof(Btree)
 
-    for(i = 1; i < size;i ++)
-    {
-        for(j = 0; j < i; j++)
-        {
-            if(str[i] == str[j])
-            {
-                strcpy(sub, str);
-                sub[i] = '\0';
-                return sub;
-            }
-        }
-    }
-    return str;
-}
-
-
-char *fnd_sub_longest(char *str)
+void createTree(Btree **T)
 {
-    int i, j;
-    int size = strlen(str);
+    myType data;
+    scanf("%d", &data);
 
-    static char sub[10] = {0};
-    char *val;
-    for(i = 0; i < size - 1; i++)
+    if(data == - 1)
     {
-        str = str + i;
-        val = fnd_sub(str);
-        //printf("%s\n", val);
-        if(strlen(val) > strlen(sub))
-            strcpy(sub, val);
+        *T = NULL;
     }
-
-    return sub;
+    else
+    {
+        *T = (Btree *)malloc(SIZE);
+        (*T)->element = data;
+        printf("left child node %d", data);
+        
+    }
 }
-
 
 int main(void)
 {
-    char *str = "abc123abcdefa";
-    //char *ret = fnd_sub_longest(str);
+    printf("%d\n", );
 
-    printf("%s\n", fnd_sub_longest(str));
-    //printf("%s\n", fnd_sub_longest(str));
+    return 0;
 }
