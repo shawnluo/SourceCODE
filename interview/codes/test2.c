@@ -18,60 +18,115 @@
 #include <assert.h>
 
 
-int partition(int *arr, int low, int high)
+
+/*
+    1234
+    - 1 12 123 1234
+    - 2 23 234
+    - 3 34
+    - 4
+*/
+
+
+void print_str(const char *str, char *substr, int pos, int num)
 {
-    int key;
-    key = arr[low];
-    while(low < high)
+    int i = 0;
+    while(num--)
     {
-        while(low < high && arr[high] >= key)
-            high--;
-
-        if(low < high)
-            arr[low++] = arr[high];
-
-        while(low < high && arr[low] <= key)
-            low++;
-
-        if(low < high)
-            arr[high--] = arr[low];
+        //printf("%c", str[pos++]);
+        substr[i++] = str[pos++];
     }
-    arr[low] = key;
-
-    return low;
+    substr[i] = '\0';
 }
 
-void quick_sort(int *arr, int start, int end)
+
+// Is substr str's substring?
+//("322342es", "234")
+int Is_substr(const char *str, const char *sub)
 {
-    int pos;
-    if(start < end)
+    const char *pStr;
+    const char *pSub = sub;
+
+    int len = strlen(sub);
+    int match = 0;
+
+    //for(p1 = str; *p1 != '\0'; p1++)
+    while(*str != '\0')
     {
-        pos = partition(arr, start, end);
-        quick_sort(arr, start, pos - 1);
-        quick_sort(arr, pos + 1, end);
+        pStr = str;
+        for(pSub = sub; *pSub != '\0'; pSub++)
+        {
+            if(*pStr == *pSub)
+            {
+                pStr++;
+                match++;
+                if(match == len)
+                {
+                    return 0;
+                }
+                //printf("match = %d\n", match);
+            }
+            else
+            {
+                match = 0;
+                break;
+            }
+        }
+        str++;
     }
+
+    return -1;
 }
 
 
-void mySort(int *arr, int size)
+void set_longest_substr(char *str, char *longest_substr)
 {
-    int left = 0, right = size - 1;
-
-    quick_sort(arr, left, right);
+    //printf("a - %s - %s\n", str, longest_substr);
+    strcpy(longest_substr, str);
+    //printf("b - %s - %s\n", str, longest_substr);
 }
+
+
+void list_substr(const char *str, const char *str2)
+{
+    int pos, num;
+    int len = strlen(str);
+    char substr[100] = {0};
+    //char *str2 = "123";
+    char longest_substr[100];
+
+    for(pos = 0; pos < len; pos++)  // print from
+    {
+        for(num = 1; num <= len - pos; num++)  // print how many char
+        {
+            print_str(str, substr, pos, num);
+
+            //printf("%s - %s\n", str2, substr);
+            if(Is_substr(str2, substr) == 0)
+            {
+                if(strlen(substr) > strlen(longest_substr))
+                {
+                    set_longest_substr(substr, longest_substr);
+                }
+            }
+
+            memset(substr, 0, 100);
+        }
+        //printf("\n");
+
+    }
+    printf("longest: %s\n", longest_substr);
+}
+
 
 int main(void)
 {
-    int A[5] = {0, 5, 4, 2, 1};
-
-    //mySort(A, 5);
-    quick_sort(A, 0, 4);
-
-    for(int i = 0; i < 5; i++)
-    {
-        printf("%d ", A[i]);
-    }
-    printf("\n");
+    const char *str = "1234abcdef2345";
+    const char *str2 = "322342abcdefes";
+    list_substr(str, str2);
+    
+    //int ret = Is_substr("322342es", "234");
+    //printf("ret = %d\n", ret);
 
     return 0;
 }

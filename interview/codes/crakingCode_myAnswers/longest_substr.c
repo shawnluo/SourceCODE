@@ -26,7 +26,7 @@ char *fnd_sub(char *str)
     int i, j;
     int size = strlen(str);
 
-    static char sub[10] = {0};
+    static char sub[10] = {0};  //better using malloc
 
     for(i = 1; i < size;i ++)
     {
@@ -49,7 +49,7 @@ char *fnd_sub_longest(char *str)
     int i, j;
     int size = strlen(str);
 
-    static char sub[10] = {0};
+    static char sub[10] = {0};  //better using malloc
     char *val;
     for(i = 0; i < size - 1; i++)
     {

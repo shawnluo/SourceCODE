@@ -13,39 +13,48 @@
 #include <fcntl.h>
 #include <assert.h>
 
+/*longest common substring
+1. brutal
+    s1 as a string
+    
+    s2 from head to tail. list all the substring of s1. cmp and save the longest one
+        step 1. find the longest one from s1 head;
+        step 2. s1 move from head to tail, call step1
+*/
 
 
-typedef int myType;
-typedef struct treeNode
+
+char *longest_substr(char *s1, char *s2)
 {
-    myType element;
-    struct treeNode *lchild;
-    struct treeNode *rchild;
-}Btree;
+    char *longest = (char *)malloc(100);
+    memset(longest, 0, 100);
 
-#define SIZE sizeof(Btree)
-
-void createTree(Btree **T)
-{
-    myType data;
-    scanf("%d", &data);
-
-    if(data == - 1)
+    int i, j, k;
+    int size1 = strlen(s1);
+    int size2 = strlen(s2);
+    for(i = 0; i < size1; i++)
     {
-        *T = NULL;
+        k = i;
+        for(j = 0; j < size2; j++)
+        {
+            if(s1[i] != s2[j])
+            {
+                if()
+                strcpy()
+            }
+        }
     }
-    else
-    {
-        *T = (Btree *)malloc(SIZE);
-        (*T)->element = data;
-        printf("left child node %d", data);
-        
-    }
+    
+    
 }
 
 int main(void)
 {
-    printf("%d\n", );
+    char *s1 = "abcdef";
+    char *s2 = "cdabce";
+    char *s = longest(s1, s2);
+
+    printf("%s\n", s);
 
     return 0;
 }
