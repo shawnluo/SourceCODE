@@ -13,54 +13,25 @@
 #include <fcntl.h>
 #include <assert.h>
 
-int convertBfromA(int a, int b)
-{
-    // Absolute difference
-    int moves = abs(a - b);
- 
-    // Print the required moves
-    printf("%d\n", moves);
-    return moves;
-}
+sem_t sem1;
+sem_t sem2;
 
-abcddefg  aaaddeee
-#if 1
-void convert(char *str)
+pthread_mutex_t mutex;
+
+void *th1(void *arg)
 {
-    char tmp;   //save the front
-    int i, j, size = strlen(str);
-    int moves = 0;
-    int flag = 0;
-    
-    for(i = 0; i < size - 1; i++)
-    {
-        for(j = i + 1; j < size; j++)
-        {
-            if(str[j] == str[i])
-            {
-                flag = 0;
-                continue;
-            }
-            else    //save the tmp
-            {
-                if(flag == 1)
-                {
-                    moves += convertBfromA(str[i], str[j]);
-                    flag = 0;
-                }
-                if(flag == 0)
-                    flag = 1;
-            }
-        }
-    }
+
+
 }
-#endif
 
 int main()
 {
-    char A = 'd', B = 'a';
- 
-    convertBfromA(A, B);
- 
+    sem_init(&sem1, 0, 2);
+    sem_init(&sem2, 0, 0);
+    pthread_mutex_init(&mutex, NULL);
+    
+    pthread_create(&pid, NULL, th1, NULL);
+    pthread_create(&cid, NULL, th2, NULL);
+    
     return 0;
 }

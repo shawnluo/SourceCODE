@@ -46,8 +46,8 @@ bool ControlSound(int Volume, bool Enable)
 {
     int i;
     int data = 0;
-    //int max = ~0;
-    int max = INT_MAX;
+    int max = ~0;
+    //int max = INT_MAX;
     int left = 0;
     int right = 0;
     int mask = 0;
@@ -66,7 +66,7 @@ bool ControlSound(int Volume, bool Enable)
     
     
     //set the volume
-    if((Volume >= 0) && (Volumne <= 255))
+    if((Volume >= 0) && (Volume <= 255))
     {
         // there're 2 ways to set the register
         /*
@@ -114,7 +114,8 @@ bool ControlSound(int Volume, bool Enable)
 ControlSound(5,1);
 ControlSound(8,1);
 
-int Power(int m,int n)
+#if 0
+int Power(int m, int n)
 {
     int ret = 0;
     int result = 0;
@@ -138,6 +139,15 @@ int Power(int m,int n)
     }
     return result;
 }
+#endif
+
+
+int power(int base, int m)
+{
+    if(m == 0)  return 1;
+    return base * power(base, m - 1);
+}
+
 Power(3,2) // returns 9
 Power(3,3) // returns 27
 

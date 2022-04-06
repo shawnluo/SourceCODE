@@ -176,3 +176,44 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+
+int volatile *reg = (int *)0x80000000;
+#define REG_CTL (*(volatile unsigned long*)0x80000000)
+
+REG_CTL |= (1 << 0x7);
+
+int i = 1;
+char *p = (char *)&i;
+if(*p == 1) return 1;
+else        return 0;
+
+char *p = (char *)&i;
+
+#define REG_CTL (*volitle unsigned long*)0x80000000
+
+REG_CTL |= (1 << 0x7)
+
+for(int i = 8; i <= 15; i++)
+{
+    data |= (input >> i);
+    data <<= 1;
+}
+
+SOUND_CTL |= (data << 7);
+
+
+//1. set mask   1111... 00 1111...
+    //a. max = ~0
+    //b. left = max - ((1 << i) - 1)
+    //c. right = (1 << j) - 1
+    //d. mask = left | right
+//2. *reg = *reg & mask;
+//3. *reg = *reg | data;
+    //a. data <<= 
+
+
+int power(int base, int n)
+{
+    if(n == 0)  return 1;
+    return base * power(base, n - 1);
+}

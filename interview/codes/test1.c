@@ -25,23 +25,24 @@ void cal_sum(int n, int sum) //求数组中是否存在一些元素和等于sum
     if (nums[n] == sum)
     {
         flag = 1; //假设数组的最后一个元素等于和sum，将flag变量置为true
+        return ;
     }
-    else if (n == 0)
+
+    if (n == 0)
     {
         return; //搜索完了整个数组返回
     }
-    else
-    {
-        // printf("%d ", nums[n]);
-        cal_sum(n - 1, sum - nums[n]); //说明取了nums[n]元素
-        cal_sum(n - 1, sum);           //说明没有取nums[n]
-    }
+    
+    // printf("%d ", nums[n]);
+    cal_sum(n - 1, sum - nums[n]); //说明取了nums[n]元素
+    cal_sum(n - 1, sum);           //说明没有取nums[n]
 }
+
 
 int main()
 {
     int n = 5;
-    int sum = 12;
+    int sum = 22;
     flag = 0; //初始时，将flag置为false，当找到某些元素和为sum的时候在cal_sum函数中flag的值将改变
     cal_sum(n, sum);
     if (flag)
