@@ -16,29 +16,33 @@
 #include <assert.h>
 
 int nums[6] = {1, 2, 3, 4, 5, 6};
-int n; //数组元素个数
-int m; //数组中存在n个元素和为m
+int n;   //数组元素个数
+int sum; //数组中存在n个元素和为sum
 int flag;
 
-void sum(int n, int m) //求数组中是否存在一些元素和等于m
+void cal_sum(int n, int sum) //求数组中是否存在一些元素和等于sum
 {
-    if (nums[n] == m)
-        flag = 1; //假设数组的最后一个元素等于和m，将flag变量置为true
+    if (nums[n] == sum)
+    {
+        flag = 1; //假设数组的最后一个元素等于和sum，将flag变量置为true
+    }
     else if (n == 0)
+    {
         return; //搜索完了整个数组返回
+    }
     else
     {
-        sum(n - 1, m - nums[n]); //说明取了nums[n]元素
-        sum(n - 1, m);           //说明没有取nums[n]
+        cal_sum(n - 1, sum - nums[n]); //说明取了nums[n]元素
+        cal_sum(n - 1, sum);           //说明没有取nums[n]
     }
 }
 
 int main()
 {
     int n = 5;
-    int m = 12;
-    flag = 0; //初始时，将flag置为false，当找到某些元素和为m的时候在sum函数中flag的值将改变
-    sum(n, m);
+    int sum = 12;
+    flag = 0; //初始时，将flag置为false，当找到某些元素和为sum的时候在cal_sum函数中flag的值将改变
+    cal_sum(n, sum);
     if (flag)
         printf("yes\n");
     else

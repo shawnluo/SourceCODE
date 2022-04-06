@@ -1,153 +1,52 @@
+#include <stdlib.h>
+#include <unistd.h>
+#include <semaphore.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <string.h>
+#include <errno.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <pthread.h>
+#include <time.h>
+#include <semaphore.h>
+#include <sys/ipc.h>
+#include <fcntl.h>
+#include <assert.h>
 
-/*
-Shortest Route
-View
-Try
-Insights
-Recommended Time: 45 mins
-Points: 100
-15 test cases (3 samples)
-CodingHARDGraphShortest Path
-There are roads_node buildings and m roads in HackerLand. The ith road connects building roads_from[i] and roads_to[i], is bidirectional, and has length roads_weight[i].
-A delivery person has to deliver an order before returning back to the office. The delivery person starts at building a, the order has to be delivered at building c, and the office is at b. If a road is traveled multiple times, its length will be counted only once.
-Find the shortest route from a to b via c. If there is no such path, return -1.
-Example
-roads_nodes = 4, m = 3, a = 1, b = 3, c = 2
-roads_from = [0, 0, 0], roads_to = [2, 1, 3], roads_weight = [1, 2, 3]
-The shortest path is 1 (a) → 0 → 2 (c) → 0 → 3 (b).
-Return the path length (2 + 1 + 0 + 3) = 6.
-Function Description 
-Complete the function getShortestRoute in the editor below.
-getShortestRoute has the following parameter(s):
-    roads_nodes: the number of buildings
-    int roads_from[m]: the first endpoints of each ith edge
-    int roads_to[m]: roads_to[i] the other endpoints of each ith edge
-    int roads_weight[m]: roads_weight[i] the weights of each ith edge.
-    int a: the start of the route
-    int b: the building where the office is located
-    int c: the building where the order has to be delivered
+int nums[6] = {1, 2, 3, 4, 5, 6};
+int n;   //数组元素个数
+int sum; //数组中存在n个元素和为sum
+int flag;
 
-Returns
-    long: the minimum time required by the delivery person to go from building a to b via c
-Constraints
-1 ≤ roads_nodes < 105
-1 ≤ m ≤ 105
-0 ≤ roads_from[i] < roads_nodes where 0 ≤ i < m 
-0 ≤ roads_to[i] < roads_nodes where 0 ≤ i < m 
-0 ≤ roads_weight[i] < 106 where 0 ≤ i < m 
-0 ≤ a,b,c < roads_nodes
-Input Format for Custom Testing
-The first line contains two integers roads_nodes and m, the number of buildings and the number of roads in the city.
-Each of the next n lines contains three integers: roads_from[i], roads_to[i] and roads_weight[i].
-The next three lines contain three integers, a, b, and c.
-Sample Case 0
-Sample Input 0
-STDIN         FUNCTION
------         --------
-3 3     →    roads_nodes = 3 and number of edges = 3
-0 2 4   →    roads_from = [0, 0, 1]
-0 1 10  →    roads_to = [2, 1, 2]
-1 2 5   →    roads_weight = [4, 10, 5]
-0       →    a = 0, b = 2, c = 1
-2
-1
-Sample Output 0
-9
-Explanation
-The shortest path is 0 (a) → 2 → 1(c) → 2 (b) with a path length (4 + 5 + 0) = 9.
-Sample Case 1
-Sample Input 1
-STDIN          FUNCTION
------          --------
-4 5     →    roads_nodes = 4 and number of edges = 5
-0 2 20  →    roads_from = [0, 2, 1, 3, 0]
-2 1 25  →    roads_to = [2, 1, 0, 1, 3]
-1 0 15  →    roads_weight = [20, 25, 15, 10, 5]
-3 1 10
-0 3 5
-0       →    a = 0, b = 3, c = 1
-3
-1
-Sample Output 1
-15
-Explanation
-
-
-The shortest path is 0 (a) → 3 → 1 (c) → 3 (b) with a path length (5 + 10 + 0) = 15.
-*/
-
-int m, n, p, q;
-int min = 999999999;
-int a[100][100]; //1 empty,2 some thing
-int v[100][100]; //0 not accessed,1 accessed
-
-void dfs(int x, int y, int step)
+void cal_sum(int n, int sum) //求数组中是否存在一些元素和等于sum
 {
-
-	if(x == p && y == q)
-	{
-		if(step < min)
-			min = step;
-		return;	
-	}	
-
-	if(a[x+1][y] == 1 && v[x+1][y] == 0) 
-	{
-
-		v[x+1][y] = 1;
-		dfs(x+1, y, step+1);
-
-		v[x+1][y] = 0; 
-	}
-
-	if(a[x][y-1] == 1 && v[x][y-1] == 0) 
-	{
-		v[x][y-1] = 1;
-		dfs(x, y-1, step+1);
-		v[x][y-1] = 0;
-	}
-
-	if(a[x-1][y] == 1 && v[x-1][y] == 0) 
-	{
-		v[x-1][y] = 1;
-		dfs(x-1, y, step+1);
-		v[x-1][y] = 0; 
-	}
-
-	if(a[x][y+1] == 1 && v[x][y+1] == 0) 
-	{
-		v[x][y+1] = 1;
-		dfs(x, y+1, step+1);
-		v[x][y+1] = 0;
-	}
-
-
-	return;
+    if (nums[n] == sum)
+    {
+        flag = 1; //假设数组的最后一个元素等于和sum，将flag变量置为true
+    }
+    else if (n == 0)
+    {
+        return; //搜索完了整个数组返回
+    }
+    else
+    {
+        // printf("%d ", nums[n]);
+        cal_sum(n - 1, sum - nums[n]); //说明取了nums[n]元素
+        cal_sum(n - 1, sum);           //说明没有取nums[n]
+    }
 }
 
-main()
+int main()
 {
-	int i, j;
-	//定义起点坐标
-	int startx,starty;
-	//定义数组的行和列 
-	scanf("%d%d",&m,&n);
-	
-	//给地图赋值 
-	for(i = 1; i <= m; i++)
-	{
-		for(j = 1; j <= n; j++)
-		{
-			scanf("%d",&a[i][j]);
-		}
-	}
-	//定义起点和终点 
-	scanf("%d%d%d%d",&startx,&starty,&p,&q);
-	//将起点坐标设为访问
-	v[startx][starty]  = 1; 
-	dfs(startx,starty,0);
-	
-	printf("%d",min);
-	
-	return 0;
+    int n = 5;
+    int sum = 12;
+    flag = 0; //初始时，将flag置为false，当找到某些元素和为sum的时候在cal_sum函数中flag的值将改变
+    cal_sum(n, sum);
+    if (flag)
+        printf("yes\n");
+    else
+        printf("no\n");
+    return 0;
 }
