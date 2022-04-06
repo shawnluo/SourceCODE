@@ -1,5 +1,5 @@
 test: test.c
-	gcc test.c -o test -lpthread -g3 -Wall -fsanitize=address
+	gcc test.c -o test -lpthread -g3 -Wall #-fsanitize=address
 
 PHONY: clean
 

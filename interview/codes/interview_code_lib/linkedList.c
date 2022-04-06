@@ -301,6 +301,22 @@ int find_circular_entry_ll(pData pHead)
 }
 
 
+pData reverse(pData pHead)
+{
+    pData pre = NULL;
+    pData cur = pHead;
+
+    while(cur)
+    {
+        pData tmp = cur->next;
+        cur->next = pre;
+        pre = cur;
+        cur = tmp;
+    }
+    return pre;
+}
+
+
 int main(void)
 {
     int arr1[] = {2, 4, 14, 71, 125};
@@ -312,6 +328,9 @@ int main(void)
     showme(pHead1);
     //pData pHead2 = create_linkedlist(arr2, len2);
     //showme(pHead2);
+
+    pData p = reverse(pHead1);
+    showme(p);
 
     int ret;
 
