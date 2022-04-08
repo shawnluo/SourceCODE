@@ -15,39 +15,66 @@
 #include <fcntl.h>
 #include <assert.h>
 
-int nums[6] = {1, 2, 3, 4, 5, 6};
-int n;   //数组元素个数
-int sum; //数组中存在n个元素和为sum
-int flag;
-
-void cal_sum(int n, int sum) //求数组中是否存在一些元素和等于sum
+typedef struct Node
 {
-    if (nums[n] == sum)
-    {
-        flag = 1; //假设数组的最后一个元素等于和sum，将flag变量置为true
-        return ;
-    }
+	int data;
+	struct Node *next;
+	struct Node *prev;
+} node, *pNode;
 
-    if (n == 0)
-    {
-        return; //搜索完了整个数组返回
-    }
-    
-    // printf("%d ", nums[n]);
-    cal_sum(n - 1, sum - nums[n]); //说明取了nums[n]元素
-    cal_sum(n - 1, sum);           //说明没有取nums[n]
+#define SIZE sizeof(node)
+
+void showme(pNode pHead)
+{
+	assert(pHead);
+	while(pHead)
+	{
+		printf("%d ", pHead->data);
+		pHead = pHead->next;
+	}
+	printf("\n");
 }
 
-
-int main()
+pNode create_ll(int *arr, int len)
 {
-    int n = 5;
-    int sum = 22;
-    flag = 0; //初始时，将flag置为false，当找到某些元素和为sum的时候在cal_sum函数中flag的值将改变
-    cal_sum(n, sum);
-    if (flag)
-        printf("yes\n");
-    else
-        printf("no\n");
-    return 0;
+	assert(arr);
+	
+	pNode pHead = NULL;
+	pNode p, pPre, pCur;
+
+	pHead = (pNode)malloc(SIZE);
+	pHead->data = arr[0];
+	pHead->next = NULL;
+	pHead->prev = NULL;
+	pPre = pHead;
+
+	if(len < 2)	return pHead;
+
+	for(int i = 1; i < len; i++)
+	{
+		pCur = (pNode)malloc(SIZE);
+		pCur->data = arr[i];
+		pCur->next = NULL;
+
+		pPre->next = pCur;
+		
+		pCur->prev = pPre;
+		pPre = pCur;
+		pCur = pCur->next;
+	}
+	return pHead;
+}
+
+pNode
+
+int main(void)
+{
+	int arr[] = {1, 2, 3, 4, 5};
+	int len = sizeof(arr) / sizeof(arr[0]);
+
+	pNode pHead = create_ll(arr, len);
+	showme(pHead);
+
+	
+	return 0;
 }

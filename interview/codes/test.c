@@ -46,13 +46,44 @@ pNode reverse_ll(pNode pHead)
 {
     assert(pHead);
 
-    pNode cur = NULL;
+    pNode cur = pHead;
     pNode pre = NULL;
 
-    
+    while(cur)
+    {
+        pNode tmp = cur->next;
+        cur->next = pre;
+        pre = cur;
+        cur = tmp;
+    }
+
+    return pre;
+}
+
+pNode add_node(pNode pHead, int data)
+{
+    if(!pHead)
+    {
+        pHead = (pNode)malloc(SIZE);
+        pHead->num = data;
+        pHead->next = NULL;
+        return pHead;
+    }
+
+    pNode p = pHead;
+    while(p->next)
+    {
+        p = p->next;
+    }
+    pNode newNode = (pNode)malloc(SIZE);
+    newNode->num = data;
+    newNode->next = NULL;
+    p->next = newNode;
 
     return pHead;
 }
+
+
 
 int main(void)
 {
@@ -63,5 +94,15 @@ int main(void)
 
     pNode pHead1 = create_linkedlist(arr1, len1);
     showme(pHead1);
+
+    pHead1 = reverse_ll(pHead1);
+    showme(pHead1);
+
+    pNode pHead = NULL;
+    pHead = add_node(pHead, 1000);
+    showme(pHead);
+    pHead = add_node(pHead, 2000);
+    showme(pHead);
+
     return 0;
 }
