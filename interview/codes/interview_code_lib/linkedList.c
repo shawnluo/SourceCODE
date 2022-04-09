@@ -31,6 +31,30 @@ void showme(pData head)
     printf("\n");
 }
 
+pData create_linkedlist_1(int *arr, int size)
+{
+    assert(arr);
+
+    pData pHead, p1, p2;
+
+    pHead = (pData)malloc(SIZE);
+    pHead->num = arr[0];
+    pHead->next = NULL;
+
+    p1 = pHead, p2 = pHead;
+    for(int i = 1; i < size; i++)
+    {
+        p1 = (pData)malloc(SIZE);
+        p1->num = arr[i];
+        p1->next = NULL;
+
+        p2->next = p1;
+        p2 = p1;
+    }
+
+    return pHead;
+}
+
 pData create_linkedlist(int *arr, int size)
 {
     pData head = NULL, p = NULL;
