@@ -6,53 +6,82 @@
 #include <unistd.h>
 #include <assert.h>
 
-typedef struct Node
+typedef struct treeNode
 {
-    int data;
-    struct Node *next;
-}node, *pNode;
+    int element;
+    struct treeNode *lchild;
+    struct treeNode *rchild;
+}Btree, *pBtree;
 
-#define SIZE sizeof(node)
+#define SIZE sizeof(Btree)
 
-void showme(pNode p)
+int arr[] = {0, 1, 2, -1, -1, 3, -1, -1, 4, 5, -1, -1, 6, -1, -1};
+int len = sizeof(arr) / sizeof(arr[0]);
+
+void showme_C_L_R(pBtree tree)
 {
-    assert(p);
-    while(p)
-    {
-        printf("%d ", p->data);
-        p = p->next;
-    }
-    printf("\n");
+    if(tree == NULL)    return;
+
+    printf("%d ", tree->element);
+    showme_C_L_R(tree->lchild);
+    showme_C_L_R(tree->rchild);
 }
 
-pNode fun(int *str, int len)
+void showme_L_C_R(pBtree tree)
 {
-    pNode pHead, p1, p2;
-    pHead = (pNode)malloc(SIZE);
-    pHead->data = str[0];
-    pHead->next = NULL;
+    if(tree == NULL)    return;
 
-    p1 = p2 = pHead;
+    showme_L_C_R(tree->lchild);
+    printf("%d ", tree->element);
+    showme_L_C_R(tree->rchild);
+}
 
-    for(int i = 1; i < len; i++)
+void showme_L_R_C(pBtree tree)
+{
+    if(tree == NULL)    return;
+
+    showme_L_R_C(tree->lchild);
+    showme_L_R_C(tree->rchild);
+    printf("%d ", tree->element);
+}
+
+void createTree(Btree **T)
+{
+    int data;
+    static int i = 0;
+    data = arr[i++];
+    //scanf("%d", &data);
+
+    if(data == -1)  *T = NULL;
+    else
     {
-        p1 = (pNode)malloc(SIZE);
-        p1->data = str[i];
-        p1->next = NULL;
+        *T = (Btree *)malloc(SIZE);
+        (*T)->element = data;
 
-        p2->next = p1;
-        p2 = p1;
+        //printf("left child node: ");
+        createTree(&((*T)->lchild));
+
+        //printf("right child node: ");
+        createTree(&((*T)->rchild));
     }
-
-    return pHead;
 }
 
 int main(void)
 {
-    int arr[] = {1, 2, 3, 4, 5};
-    pNode pHead = fun(arr, 5);
-    
-    showme(pHead);
+    pBtree tree = NULL;
+    createTree(&tree);
+
+    printf("C_L_R: ");
+    showme_C_L_R(tree);
+    printf("\n");
+
+    printf("L_C_R: ");
+    showme_L_C_R(tree);
+    printf("\n");
+
+    printf("L_R_C: ");
+    showme_L_R_C(tree);
+    printf("\n");
 
     return 0;
 }

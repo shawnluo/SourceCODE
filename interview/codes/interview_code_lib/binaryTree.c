@@ -42,7 +42,7 @@ void createTree(Btree **T)
     myType data;
     scanf("%d", &data);
 
-    if(data == - 1)
+    if(data == -1)
     {
         *T = NULL;
     }

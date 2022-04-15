@@ -340,6 +340,25 @@ pData reverse(pData pHead)
     return pre;
 }
 
+/*
+    delete a node.
+    1. only know its address
+    2. we don't have the previous node address, so we cannot delete the current node
+    
+    the solution: copy the next node's data to current node, and next pointer points to
+    next of next. At last delete the next node.
+*/
+void rm_node(pNode p)
+{
+    pNode nextNode = p->next->next;
+    p->data = p->next->data;
+
+    pNode tmp = p->next;
+    p->next = p->next->next;
+
+    free(tmp);
+}
+
 
 int main(void)
 {
