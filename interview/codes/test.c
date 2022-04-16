@@ -6,82 +6,81 @@
 #include <unistd.h>
 #include <assert.h>
 
-typedef struct treeNode
+
+//1. how to treat two demension pointer arr as one demension
+//2. 
+
+#if 0
+void test(char **s, int len)
 {
-    int element;
-    struct treeNode *lchild;
-    struct treeNode *rchild;
-}Btree, *pBtree;
+    int i, j;
+    char *arr[100];
+    int k = 0;
 
-#define SIZE sizeof(Btree)
-
-int arr[] = {0, 1, 2, -1, -1, 3, -1, -1, 4, 5, -1, -1, 6, -1, -1};
-int len = sizeof(arr) / sizeof(arr[0]);
-
-void showme_C_L_R(pBtree tree)
-{
-    if(tree == NULL)    return;
-
-    printf("%d ", tree->element);
-    showme_C_L_R(tree->lchild);
-    showme_C_L_R(tree->rchild);
-}
-
-void showme_L_C_R(pBtree tree)
-{
-    if(tree == NULL)    return;
-
-    showme_L_C_R(tree->lchild);
-    printf("%d ", tree->element);
-    showme_L_C_R(tree->rchild);
-}
-
-void showme_L_R_C(pBtree tree)
-{
-    if(tree == NULL)    return;
-
-    showme_L_R_C(tree->lchild);
-    showme_L_R_C(tree->rchild);
-    printf("%d ", tree->element);
-}
-
-void createTree(Btree **T)
-{
-    int data;
-    static int i = 0;
-    data = arr[i++];
-    //scanf("%d", &data);
-
-    if(data == -1)  *T = NULL;
-    else
+    for(i = 0; i < len; i++)
     {
-        *T = (Btree *)malloc(SIZE);
-        (*T)->element = data;
+        arr[i] = (char *)malloc(1000);
+    }
 
-        //printf("left child node: ");
-        createTree(&((*T)->lchild));
+    for(i = 0; i < len; i++)
+    {
+        printf("s[%d]: %s\n", i, s[i]);
+        for(j = 0; s[i][j] != '\0'; j++)
+        {
+            if(s[i][j] != ' ')
+            {
+                strcat(arr[k], s[i][j]);
+                ++k;
+            }
+            else
+            {
+                strcat(arr[k], '\0');
+                ++k;
+            }
+        }
+    }
 
-        //printf("right child node: ");
-        createTree(&((*T)->rchild));
+    for(i = 0; i < k; i++)
+    {
+        printf("%s\n", arr[i]);
     }
 }
+#endif
+
+void extract(char *s)
+{
+    char s1[50];
+    char s2[50];
+    int i_1, i_2;
+
+    int i;
+    while(*s != '\0')
+    {
+        i = 0;
+        while(*s != ' ')
+            s1[i++] = *s++;
+        s1[i] = '\0';
+
+        s++, i = 0;
+        while(*s != ' ')
+            s2[i++] = *s++;
+        s2[i] = '\0';
+
+        break;
+    }
+    i_1 = atoi(s1);
+    i_2 = atoi(s2);
+    printf("i_1: %d\n", i_1);
+    printf("i_2: %d\n", i_2);
+}
+
 
 int main(void)
 {
-    pBtree tree = NULL;
-    createTree(&tree);
+    //char *p[] = {"11 2 100", "2 3 200", "11 2 200"};
 
-    printf("C_L_R: ");
-    showme_C_L_R(tree);
-    printf("\n");
-
-    printf("L_C_R: ");
-    showme_L_C_R(tree);
-    printf("\n");
-
-    printf("L_R_C: ");
-    showme_L_R_C(tree);
-    printf("\n");
+    char *str = "11 2 100";
+    extract(str);
 
     return 0;
 }
