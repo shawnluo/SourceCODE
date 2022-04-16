@@ -6,82 +6,21 @@
 #include <unistd.h>
 #include <assert.h>
 
-typedef struct treeNode
+
+/*
+    ""
+*/
+void extract_str(char **s, int len)
 {
-    int element;
-    struct treeNode *lchild;
-    struct treeNode *rchild;
-}Btree, *pBtree;
+    char *p[100];
+    p = s;
 
-#define SIZE sizeof(Btree)
-
-int arr[] = {0, 1, 2, -1, -1, 3, -1, -1, 4, 5, -1, -1, 6, -1, -1};
-int len = sizeof(arr) / sizeof(arr[0]);
-
-void showme_C_L_R(pBtree tree)
-{
-    if(tree == NULL)    return;
-
-    printf("%d ", tree->element);
-    showme_C_L_R(tree->lchild);
-    showme_C_L_R(tree->rchild);
-}
-
-void showme_L_C_R(pBtree tree)
-{
-    if(tree == NULL)    return;
-
-    showme_L_C_R(tree->lchild);
-    printf("%d ", tree->element);
-    showme_L_C_R(tree->rchild);
-}
-
-void showme_L_R_C(pBtree tree)
-{
-    if(tree == NULL)    return;
-
-    showme_L_R_C(tree->lchild);
-    showme_L_R_C(tree->rchild);
-    printf("%d ", tree->element);
-}
-
-void createTree(Btree **T)
-{
-    int data;
-    static int i = 0;
-    data = arr[i++];
-    //scanf("%d", &data);
-
-    if(data == -1)  *T = NULL;
-    else
-    {
-        *T = (Btree *)malloc(SIZE);
-        (*T)->element = data;
-
-        //printf("left child node: ");
-        createTree(&((*T)->lchild));
-
-        //printf("right child node: ");
-        createTree(&((*T)->rchild));
-    }
 }
 
 int main(void)
 {
-    pBtree tree = NULL;
-    createTree(&tree);
-
-    printf("C_L_R: ");
-    showme_C_L_R(tree);
-    printf("\n");
-
-    printf("L_C_R: ");
-    showme_L_C_R(tree);
-    printf("\n");
-
-    printf("L_R_C: ");
-    showme_L_R_C(tree);
-    printf("\n");
-
+    char *str[] = {"1 2 100", "2 3 100"};
+    int len = 2;
+    extract_str(str, len);
     return 0;
 }

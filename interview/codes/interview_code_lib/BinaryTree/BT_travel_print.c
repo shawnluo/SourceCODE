@@ -66,6 +66,20 @@ void createTree(Btree **T)
     }
 }
 
+pBtree invert_bt(pBtree tree)
+{
+    if(tree == NULL)
+    {
+        return NULL;
+    }
+    
+    pBtree tmp = (tree)->lchild;
+    (tree)->lchild = invert_bt((tree)->rchild);
+    tree->rchild = invert_bt(tmp);
+    return tree;
+}
+
+
 int main(void)
 {
     pBtree tree = NULL;
@@ -81,6 +95,10 @@ int main(void)
 
     printf("L_R_C: ");
     showme_L_R_C(tree);
+    printf("\n");
+
+    tree = invert_bt(tree);
+    showme_L_C_R(tree);
     printf("\n");
 
     return 0;
