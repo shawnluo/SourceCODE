@@ -15,66 +15,18 @@
 #include <fcntl.h>
 #include <assert.h>
 
-typedef struct Node
-{
-	int data;
-	struct Node *next;
-	struct Node *prev;
-} node, *pNode;
+typedef void (*FunP)(int);
 
-#define SIZE sizeof(node)
-
-void showme(pNode pHead)
+void MyFun(int x)
 {
-	assert(pHead);
-	while(pHead)
-	{
-		printf("%d ", pHead->data);
-		pHead = pHead->next;
-	}
-	printf("\n");
+	printf("%d\n", x);
 }
 
-pNode create_ll(int *arr, int len)
+int main()
 {
-	assert(arr);
-	
-	pNode pHead = NULL;
-	pNode p, pPre, pCur;
+	FunP fun;
+	fun = MyFun;
+	fun(10);
 
-	pHead = (pNode)malloc(SIZE);
-	pHead->data = arr[0];
-	pHead->next = NULL;
-	pHead->prev = NULL;
-	pPre = pHead;
-
-	if(len < 2)	return pHead;
-
-	for(int i = 1; i < len; i++)
-	{
-		pCur = (pNode)malloc(SIZE);
-		pCur->data = arr[i];
-		pCur->next = NULL;
-
-		pPre->next = pCur;
-		
-		pCur->prev = pPre;
-		pPre = pCur;
-		pCur = pCur->next;
-	}
-	return pHead;
-}
-
-pNode
-
-int main(void)
-{
-	int arr[] = {1, 2, 3, 4, 5};
-	int len = sizeof(arr) / sizeof(arr[0]);
-
-	pNode pHead = create_ll(arr, len);
-	showme(pHead);
-
-	
 	return 0;
 }

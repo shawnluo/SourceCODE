@@ -2,6 +2,7 @@
 #include <pthread.h> 
 #include <stdlib.h>
 #include <string.h>
+<<<<<<< HEAD
 #include <time.h>
 #include <unistd.h>
 #include <assert.h>
@@ -100,6 +101,31 @@ int main(void)
     tree = invert_bt(tree);
     showme_L_C_R(tree);
     printf("\n");
+=======
+#include <errno.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <pthread.h>
+#include <time.h>
+#include <semaphore.h>
+#include <sys/ipc.h>
+#include <fcntl.h>
+#include <assert.h>
+
+
+int main(void)
+{
+    int i, *pa, a[] = {1, 2, 3, 4, 5};
+
+    pa = a;
+
+    for(i = 0; i <= 9; i++)
+    {
+        printf("%d\n", *pa);
+        pa++;
+    }
+>>>>>>> e42e19d3858d3492941967761b364574a2100dc3
 
     return 0;
 }
