@@ -6,99 +6,114 @@
 #include <unistd.h>
 #include <assert.h>
 
-<<<<<<< HEAD
+
+void get_2_int(char *s, int *arr)
+{
+    //printf("%s\n", s[i]);
+    char *p = NULL;
+    int k = 0;
+    char s1[100], s2[100];
+    //int arr[2] = {0};
+
+    p = s;
+    while(*p != ' ')
+    {
+        s1[k] = *p;
+        ++k, ++p;
+    }
+    s1[k] = '\0', ++p;
+    k = 0;
+    
+    while(*p != ' ')
+    {
+        s2[k] = *p;
+        ++k, ++p;
+    }
+    s2[k] = '\0';
+
+    //printf("%s, %s\n", s1, s2);
+    arr[0] = atoi(s1);
+    arr[1] = atoi(s2);
+
+    printf("%d, %d\n", arr[0], arr[1]);
+    //return arr;
+}
+
+void sorting(int *arr, int len)
+{
+    for(int i = 0; i < len; i++)
+    {
+        for(int j = i + 1; j < len; j++)
+        {
+            if(arr[j - 1] < arr[j])
+            {
+                int tmp = arr[j - 1];
+                arr[j - 1] = arr[j];
+                arr[j] = tmp;
+            }
+        }
+    }
+}
+
+
+//use repeat[i][j] to save the repeat numbers, {num1, repeat times}, {num2, repeat times}
+void cal_repeat(int *arr, int len, int **repeat)
+{
+    
+}
 
 /*
     ""
 */
-void extract_str(char **s, int len)
+void extract_str(char **s, int len, int threshold)
 {
-    char *p[100];
-    p = s;
+    //char *p[100];
+    //p = s;
+    //s[0] = "good";
 
-=======
-
-//1. how to treat two demension pointer arr as one demension
-//2. 
-
-#if 0
-void test(char **s, int len)
-{
-    int i, j;
-    char *arr[100];
-    int k = 0;
-
-    for(i = 0; i < len; i++)
+    int arr[1000] = {0};
+    int tmp[2] = {0};
+    int i, k;
+    for(i = 0, k = 0; i < len; i++)
     {
-        arr[i] = (char *)malloc(1000);
-    }
-
-    for(i = 0; i < len; i++)
-    {
-        printf("s[%d]: %s\n", i, s[i]);
-        for(j = 0; s[i][j] != '\0'; j++)
+        get_2_int(s[i], tmp);
+        printf("%d - %d\n", tmp[0], tmp[1]);
+        if(tmp[0] == tmp[1])
         {
-            if(s[i][j] != ' ')
-            {
-                strcat(arr[k], s[i][j]);
-                ++k;
-            }
-            else
-            {
-                strcat(arr[k], '\0');
-                ++k;
-            }
+            arr[k++] = tmp[0];
+        }
+        else
+        {
+            arr[k++] = tmp[0];
+            arr[k++] = tmp[1];
         }
     }
 
     for(i = 0; i < k; i++)
     {
-        printf("%s\n", arr[i]);
+        printf("%d, ", arr[i]);
     }
-}
-#endif
+    printf("\n");
 
-void extract(char *s)
-{
-    char s1[50];
-    char s2[50];
-    int i_1, i_2;
+    //sorting(arr, k);
+    int repeat[100][2] = {0};
+    cal_repeat(arr, k, repeat);
 
-    int i;
-    while(*s != '\0')
+    for(i = 0; i < k; i++)
     {
-        i = 0;
-        while(*s != ' ')
-            s1[i++] = *s++;
-        s1[i] = '\0';
-
-        s++, i = 0;
-        while(*s != ' ')
-            s2[i++] = *s++;
-        s2[i] = '\0';
-
-        break;
+        //if(arr[i] <= threshold)
+            printf("%d\n", arr[i]);
     }
-    i_1 = atoi(s1);
-    i_2 = atoi(s2);
-    printf("i_1: %d\n", i_1);
-    printf("i_2: %d\n", i_2);
->>>>>>> e42e19d3858d3492941967761b364574a2100dc3
 }
 
 
 int main(void)
 {
-<<<<<<< HEAD
-    char *str[] = {"1 2 100", "2 3 100"};
-    int len = 2;
-    extract_str(str, len);
-=======
-    //char *p[] = {"11 2 100", "2 3 200", "11 2 200"};
+    char *str[] = {"1 2 100", "2 3 100", "4 4 290", "19 2 600"};
+    int len = 4;
+    int threshold = 7;
+    extract_str(str, len, threshold);
 
-    char *str = "11 2 100";
-    extract(str);
-
->>>>>>> e42e19d3858d3492941967761b364574a2100dc3
+    //printf("%s\n", str[0]);
     return 0;
 }
