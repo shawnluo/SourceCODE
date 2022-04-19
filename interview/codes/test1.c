@@ -15,18 +15,18 @@
 #include <fcntl.h>
 #include <assert.h>
 
-typedef void (*FunP)(int);
-
-void MyFun(int x)
+char **process_logs(char **str, int len, int threshold)
 {
-	printf("%d\n", x);
+	char *p = NULL;
+	
 }
 
 int main()
 {
-	FunP fun;
-	fun = MyFun;
-	fun(10);
+    char *str[] = {"1 2 100", "2 3 100", "4 4 290", "19 2 600"};
+    int len = 4;
+    int threshold = 7;
+    process_logs(str, len, threshold);
 
 	return 0;
 }
