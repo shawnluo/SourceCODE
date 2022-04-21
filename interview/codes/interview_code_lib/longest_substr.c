@@ -14,19 +14,19 @@
 #include <assert.h>
 
 
-
+char save[100];
 /*
     find the longest substring
     123abcdefa  --> abcdef
 */
-char *fnd_sub(char *str)
+char *longest_from_head_1(char *str)
 {
     if(!str)    return NULL;
 //    char *s, *s1, *s2;
     int i, j;
     int size = strlen(str);
 
-    static char sub[10] = {0};  //better using malloc
+    static char sub[10] = {0};  //also can use malloc
 
     for(i = 1; i < size;i ++)
     {
@@ -44,17 +44,43 @@ char *fnd_sub(char *str)
 }
 
 
+/*
+    bruteforce 2
+    using hash[] to check if it's unique
+*/
+char *longest_from_head_2(char *str)
+{
+    int i, j;
+    int len = strlen(str);
+    char hash[256] = {0};
+    strcpy(save, str);
+
+    for(i = 0 ; i < len; i++)
+    {
+        if(hash[*(str + i)] == 0)
+            hash[*(str + i)] = 1;
+        else
+        {
+            save[i] = '\0';
+            //printf("save: %s\n", save);
+            return save;
+        }
+    }
+    return save;
+}
+
+
 char *fnd_sub_longest(char *str)
 {
     int i, j;
     int size = strlen(str);
 
-    static char sub[10] = {0};  //better using malloc
+    static char sub[10] = {0};  //or using malloc
     char *val;
-    for(i = 0; i < size - 1; i++)
+    for(i = 0; i < size; i++)
     {
         str = str + i;
-        val = fnd_sub(str);
+        val = longest_from_head_1(str);
         //printf("%s\n", val);
         if(strlen(val) > strlen(sub))
             strcpy(sub, val);

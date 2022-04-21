@@ -15,18 +15,25 @@
 #include <fcntl.h>
 #include <assert.h>
 
-char **process_logs(char **str, int len, int threshold)
+
+void test(char *str, char *s1)
 {
-	char *p = NULL;
-	
+    strcpy(s1, "gooday");
+    //return s1;
 }
+
 
 int main()
 {
-    char *str[] = {"1 2 100", "2 3 100", "4 4 290", "19 2 600"};
-    int len = 4;
-    int threshold = 7;
-    process_logs(str, len, threshold);
+    char *p = "";
+    printf("%ld\n", strlen(p));
 
+    p = "gd";
+    printf("%ld\n", strlen(p));
+
+    char *s = (char *)malloc(100);
+    //test(p, s);
+    //printf("%s\n", s);
+    printf("%ld\n", strlen(s));
 	return 0;
 }
