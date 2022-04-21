@@ -12,17 +12,34 @@
 #include <sys/ipc.h>
 #include <fcntl.h>
 #include <assert.h>
+#include <limits.h>
+
+//int min = -(1 << 31);
+//int max = (1 << 31) - 1;
+
+int min = INT_MIN;
+int max = INT_MAX;
+
+//find the max in arr
+void max_fun(int *arr, int len)
+{
+    min = arr[0];
+    max = arr[0];
+    for(int i = 0; i < 5; i++)
+    {
+        if(arr[i] <= min)   min = arr[i];
+        if(arr[i] >= max)   max = arr[i];
+    }
+
+    printf("min = %d\nmax = %d\n", min, max);
+}
 
 int main(void)
 {
-    char *s = "abcdef";
-    char str[100] = {0};
-    strcpy(str, s);
-    printf("%s\n", str);
+    int arr[] = {1, 2, 1, 1, 1, 2};
 
-    char *s2 = "11234567";
-    strncpy(str, s2, 2);
-    printf("%s\n", str);
+    max_fun(arr, sizeof(arr) / sizeof(arr[0]));
+    printf("min = %d\nmax = %d\n", min, max);
 
     return 0;
 }

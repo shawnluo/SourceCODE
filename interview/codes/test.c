@@ -50,7 +50,7 @@ char *longest_from_head_1(char *str)
 */
 char *longest_from_head_2(char *str)
 {
-    int i, j;
+    int i;
     int len = strlen(str);
     char hash[256] = {0};
     strcpy(save, str);
@@ -72,7 +72,7 @@ char *longest_from_head_2(char *str)
 
 char *fnd_sub_longest(char *str)
 {
-    int i, j;
+    int i;
     int size = strlen(str);
 
     static char sub[100] = {0};  //or using malloc
@@ -93,12 +93,10 @@ char *fnd_sub_longest(char *str)
 //return the repeat char position
 int longest_from_head_3(char *str)
 {
-    if(!str)    return NULL;
-//    char *s, *s1, *s2;
+    if(!str)    return -1;
+
     int i, j;
     int size = strlen(str);
-
-    //static char sub[10] = {0};  //also can use malloc
 
     for(i = 1; i < size;i ++)
     {
@@ -108,7 +106,7 @@ int longest_from_head_3(char *str)
             {
                 //strcpy(sub, str);
                 //sub[i] = '\0';
-                return j;
+                return i;
             }
         }
     }
@@ -122,46 +120,36 @@ int longest_from_head_3(char *str)
 */
 char *fnd_sub_longest_2(char *str)
 {
-    int i, j, val = 0;
+    int val = 0;
     int len = strlen(str);
-    int max_len = 0;
-    int start = 0;
-    for(i = 0; i < len; i++)
+
+    char *p = str;
+    while(p < (str + len))
     {
-        if(i == 0)
-        {
-            val = longest_from_head_3(str);
-            printf("1 - val = %d\n", val);
-            //max_len = (val - start + 1) > max_len ? (val - start) : max_len;
-            strncpy(save, str + val, );
+        val = longest_from_head_3(p);
+        //printf("1.0: val = %d\n", val);
 
-            if(val == (len - 1))
-                break;
-        }
-        else
+        if(val > strlen(save))
         {
-            start = val + i + 1;
-            printf("s: %s\n", str + start);
-            val = longest_from_head_3(str + start);
-            printf("2 - val = %d\n", val);
-
-            max_len = (val - start + 1) > max_len ? (val - start) : max_len;
-            
-            if(val == (len - 1))
-                break;
+            strncpy(save, str, val);
+            save[val] = '\0';
         }
-        //printf("max_len = %d\n", max_len);
+        //printf("1.2: save = %s\n", save);
+        //compare and set the max string
+
+        p += (val + 1);
+        //printf("1.3: p = %s\n", p);
     }
 
-    return NULL;
+    return save;
 }
 
 
 int main(void)
 {
-    char *str = "abc123abcdefa";
+    char *str = "a3456bc3abcde1abcdefgh";
     fnd_sub_longest_2(str);
 
-    //printf("%s\n", fnd_sub_longest(str));
+    printf("%s\n", fnd_sub_longest(str));
     //printf("%s\n", fnd_sub_longest(str));
 }
