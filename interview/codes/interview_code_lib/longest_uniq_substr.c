@@ -90,6 +90,33 @@ char *fnd_sub_longest(char *str)
 }
 
 
+/*
+    slide window:
+    right: to track the repeated char
+    left:  to move 
+*/
+int longest_uniq_sub(char *s) {
+    int left = 0;
+    int right = 0;
+    int res = 0;
+    int len = strlen(s);
+    char hash[128] = {0};
+    
+    while(right < len) {
+        hash[s[right]]++;
+
+        while(hash[s[right]] > 1) {
+            hash[s[left]]--;
+            left++;                     //beautiful.
+        }
+        int len_uniq = right - left + 1;
+        res = res > len_uniq ? res : len_uniq;
+        right++;
+    }
+    return res;
+}
+
+
 int main(void)
 {
     char *str = "abc123abcdefa";

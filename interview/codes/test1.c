@@ -15,25 +15,74 @@
 #include <fcntl.h>
 #include <assert.h>
 
+/*
 
-void test(char *str, char *s1)
-{
-    strcpy(s1, "gooday");
-    //return s1;
+
+            
+             ongoing-------------------------------
+
+
+
+
+*/
+
+
+int lengthOfLongestSub(char *s) {
+    int len = strlen(s);
+    int left = 0;
+    int right = 0;
+
+    char hash[128] = {0};
+    int res = 0;
+    while(right < len) {
+        hash[s[right]]++;
+
+        while(hash[s[right]] > 1) {
+            hash[s[left]]--;
+            left++;
+        }
+
+        res = res > (right - left + 1) ? res : (right - left + 1);
+        right++;
+    }
+    return res;
 }
 
 
-int main()
-{
-    char *p = "";
-    printf("%ld\n", strlen(p));
+#if 0
+int lengthOfLongestSub_2(char *s) {
+    int left = 0, right = 0;
+    int len = strlen(s);
 
-    p = "gd";
-    printf("%ld\n", strlen(p));
+    char hash[128] = {0};
+    int res = 0;
+    while(right < len) {
+        hash[s[right]]++;
 
-    char *s = (char *)malloc(100);
-    //test(p, s);
-    //printf("%s\n", s);
-    printf("%ld\n", strlen(s));
+        while(hash[s[right]] > 1) {
+            hash[s[left]]--;
+            left++;
+        }
+
+        int dy_len = right - left + 1;  //the length of non repeat string
+        
+        if(res > dy_len) {
+            dy_len = res;
+            strncpy(max_s, s + , 
+        }
+            
+        right++;
+    }
+
+    return res;
+}
+#endif
+
+
+int main() {
+    char *str = "abcdefabce1234";
+    int val = lengthOfLongestSub(str);
+    printf("%d\n", val);
+
 	return 0;
 }
