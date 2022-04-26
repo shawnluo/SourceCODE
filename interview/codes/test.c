@@ -13,40 +13,60 @@
 #include <fcntl.h>
 #include <assert.h>
 
-
+char *str = "1234561234";
 /*
     slide window:
     right: to track the repeated char
     left:  to move 
 */
 int longest_uniq_sub(char *s) {
-    int left = 0;
     int right = 0;
-    int res = 0;
+    int left = 0;
+    int hash[128] = {0};
     int len = strlen(s);
-    char hash[128] = {0};
-    
+    int longest = 0;
+
     while(right < len) {
         hash[s[right]]++;
 
         while(hash[s[right]] > 1) {
             hash[s[left]]--;
-            left++;                     //beautiful.
+            left++;
         }
-        int len_uniq = right - left + 1;
-        res = res > len_uniq ? res : len_uniq;
-        right++;
+
+        int cur = right - left + 1;
+        longest = longest > cur ? longest : cur;
+
+        ++right;
     }
-    return res;
+
+    return longest;
 }
 
 
 int isPalind(char *s, int start, int end) {
     assert(s);
 
-    int res = 0;
+    //int res = 0;
     char *s1 = s + start;
     char *s2 = s + end;
+
+    while(s1 < s2 && *s1 == *s2) {
+        ++s1, --s2;
+    }
+
+    if(s1 >= s2)
+        return 1;
+
+    return 0;
+}
+
+
+int isPalind_ext(char *s)
+{
+    assert(s);
+    char *s1 = s;
+    char *s2 = s + strlen(s) - 1;
 
     while(s1 < s2 && *s1 == *s2) {
         ++s1, --s2;
@@ -62,12 +82,12 @@ int isPalind(char *s, int start, int end) {
 char palind_str[100] = {0};
 
 void process_palin(char *s, int start, int end, char *palind_str) {
-    int i;
+    //int i;
     char tmp[100];
 
     strncpy(tmp, s + start, end - start + 1);
     tmp[end - start + 1] = '\0';
-    printf("%s\n", tmp);
+    //printf("%s\n", tmp);
 
     if(strlen(tmp) > strlen(palind_str)) {
         strcpy(palind_str, tmp);
@@ -94,26 +114,50 @@ char *longest_palind_sub(char *str) {
     return palind_str;
 }
 
-#if 0
+
 /*
     Longest Palindromic Substring
-
+    1. a pointer "left" points the first char,
+    2. while loop: "left" moves to the end
+        loop: another pointer "right" points to the end of string
+            compare s[left] and s[right], and save the bigger one to "longest"
 
 */
-char *longest_palin_sub(char *s) {
+char *longest_palin_sub_ext(char *s) {
     int len = strlen(s);
+    int left = 0, right = len - 1;
+
+    while(left < len) {
+        while(left < right) {
+            right = len - 1;
+            //ignore the not matching char
+            while(left < right && s[left] != s[right]) {
+                right++;
+            }
+            if(left < right) {
+                while(left < right && s[left] == s[right])
+                {
+                    right++;
+                }
+                
+            }
+        }
+        left++;
+    }
 }
-#endif
+
 
 int main(void) {
-    char *str = "aacbbaca";
+
     //int len = strlen(str);
     //int res = isPalind(str, 0, len - 1);
     //printf("%d\n", res);
 
-    char *s = longest_palind_sub(str);
-    printf("longest: %s\n", s);
+    //char *s = longest_palind_sub(str);
+    //printf("longest: %s\n", s);
 
+    int res = longest_uniq_sub(str);
+    printf("longest: %d\n", res);
 
     return 0;
 }
