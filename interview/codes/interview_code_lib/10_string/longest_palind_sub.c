@@ -94,16 +94,52 @@ char *longest_palind_sub(char *str) {
     return palind_str;
 }
 
-#if 0
-/*
-    Longest Palindromic Substring
+typedef struct Data {
+    int longest;
+    char save[100];
+} data;
 
-
-*/
-char *longest_palin_sub(char *s) {
+data longest_palind_sub_ext(char *s) {
     int len = strlen(s);
+    int left = 0;
+    int right = len - 1;
+    int L = 0, R;
+
+    data res;
+    res.longest = 0;
+
+    while(left < len) {         //left not reach to the end
+        right = len - 1;
+        while(left < right) {   //before right reach to left
+            //find the first character from right equal to left
+            while(left < right && s[left] != s[right]) {
+                --right;
+            }
+
+            if(left < right) {          //not reach to left
+                L = left, R = right;    //save left and right
+                while(L < R && s[L] == s[R]) {  //if match
+                    ++L, --R;
+                }
+                if(L >= R) {        //is palindar
+                    //cmp and save
+                    int cur_len = right - left + 1;
+                    if(cur_len > res.longest) {
+                        res.longest = cur_len;
+                        strncpy(res.save, s + left, cur_len);
+                        res.save[cur_len] = '\0';
+                    }
+                    break; 
+                }
+            }
+            --right;
+        }
+        ++left;
+    }
+
+    return res;
 }
-#endif
+
 
 int main(void) {
     char *str = "aacbbaca";
@@ -114,6 +150,9 @@ int main(void) {
     char *s = longest_palind_sub(str);
     printf("longest: %s\n", s);
 
+    data val = longest_palind_sub_ext(str);
+    printf("val: %d\n", val.longest);
+    printf("val: %s\n", val.save);
 
     return 0;
 }
