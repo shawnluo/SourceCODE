@@ -18,24 +18,18 @@
     then go through the string, add 1 to the arr[*str].
     if the arr[*str] = 1, then return
 */
-int Is_unique(const char *str)
-{
-    if(!str)
-    {
+int Is_unique(const char *str) {
+    if(!str) {
         printf("str is invalid!\n");
         return -1;
     }
 
     int arr[128] = {0};
-    while(*str != '\0')
-    {
+    while(*str != '\0') {
         //arr[*str] = 1;
-        if(arr[*str] == 0)
-        {
+        if(arr[*str] == 0) {
             arr[*str] = 1;
-        }
-        else
-        {
+        } else {
             return 1;
         }
 
