@@ -37,9 +37,9 @@ int lengthOfLongestSub(char *s) {
     while(right < len) {
         hash[s[right]]++;
 
-        while(hash[s[right]] > 1) {
+        while(hash[s[right]] > 1) { //if the char repeat - hash > 1
             hash[s[left]]--;
-            left++;
+            left++;                 //alway will find the repeat left char
         }
 
         res = res > (right - left + 1) ? res : (right - left + 1);

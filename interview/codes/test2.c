@@ -20,26 +20,32 @@
 int min = INT_MIN;
 int max = INT_MAX;
 
-//find the max in arr
-void max_fun(int *arr, int len)
-{
-    min = arr[0];
-    max = arr[0];
-    for(int i = 0; i < 5; i++)
-    {
-        if(arr[i] <= min)   min = arr[i];
-        if(arr[i] >= max)   max = arr[i];
-    }
+typedef struct DATA {
+    int i;
+    int j;
+}data;
 
-    printf("min = %d\nmax = %d\n", min, max);
+//find the max in arr
+data test()
+{
+    data x;
+    x.i = 34;
+    x.j = 1009;
+
+    return x;
 }
 
 int main(void)
 {
     int arr[] = {1, 2, 1, 1, 1, 2};
 
-    max_fun(arr, sizeof(arr) / sizeof(arr[0]));
-    printf("min = %d\nmax = %d\n", min, max);
+    //max_fun(arr, sizeof(arr) / sizeof(arr[0]));
+    //printf("min = %d\nmax = %d\n", min, max);
+
+    data ret = test();
+    printf("i = %d\n", ret.i);
+    printf("j = %d\n", ret.j);
+
 
     return 0;
 }
