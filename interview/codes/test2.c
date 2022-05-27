@@ -32,6 +32,14 @@ data test()
     x.i = 34;
     x.j = 1009;
 
+    for(int i = 0; i < 10; i++) {
+        if(i == 5) {
+            break;
+        }
+        printf("i = %d\n", i);
+    }
+    printf("xxxxxxxxx\n");
+
     return x;
 }
 
@@ -43,8 +51,7 @@ int main(void)
     //printf("min = %d\nmax = %d\n", min, max);
 
     data ret = test();
-    printf("i = %d\n", ret.i);
-    printf("j = %d\n", ret.j);
+
 
 
     return 0;

@@ -12,8 +12,8 @@
     we can use "int fetch(int *arr, i, j)" to get jth bit of arr[i],
     find the missing integer
     solution:
-        we can use fetch() to get arr[i], then save it to an newArr[], then
-        we can find the missing one.
+        we can use fetch() to get arr[i], then save it to an newArr[],
+        then we can find the missing one.
 */
 int find_missing(int *arr, int len)
 {

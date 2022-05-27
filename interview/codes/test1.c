@@ -28,61 +28,67 @@
 
 
 int lengthOfLongestSub(char *s) {
-    int len = strlen(s);
-    int left = 0;
-    int right = 0;
-
-    char hash[128] = {0};
-    int res = 0;
-    while(right < len) {
-        hash[s[right]]++;
-
-        while(hash[s[right]] > 1) { //if the char repeat - hash > 1
-            hash[s[left]]--;
-            left++;                 //alway will find the repeat left char
-        }
-
-        res = res > (right - left + 1) ? res : (right - left + 1);
-        right++;
-    }
-    return res;
-}
-
-
-#if 0
-int lengthOfLongestSub_2(char *s) {
     int left = 0, right = 0;
     int len = strlen(s);
-
     char hash[128] = {0};
-    int res = 0;
+    int max = 0;
+
     while(right < len) {
         hash[s[right]]++;
-
-        while(hash[s[right]] > 1) {
+        
+        while(s[right] > 1) {
             hash[s[left]]--;
             left++;
         }
 
-        int dy_len = right - left + 1;  //the length of non repeat string
-        
-        if(res > dy_len) {
-            dy_len = res;
-            strncpy(max_s, s + , 
+        int size = right - left + 1;
+        if(max < size) {
+            max = size;
         }
-            
-        right++;
     }
+    return left;
+}
 
+
+int isSub(char *s, char *sub) {
+    int i, j, len;
+    for(i = 0; i < strlen(s); i++) {
+        int k = i;
+        for(j = 0; j < strlen(sub); j++) {
+            if(s[k++] != sub[j]) {
+                break;
+            }
+        }
+
+        printf("j = %d\n", j);
+        if(j == strlen(sub)) {
+            return 1;
+        }        
+    }
+    return 0;
+}
+
+
+//string copy
+char *myStrcpy(char *des, const char *src) {
+    assert(src);
+    char *res = des;
+    while(*des = *src) {
+        des++;
+        src++;
+    }
     return res;
 }
-#endif
 
 
 int main() {
     char *str = "abcdefabce1234";
-    int val = lengthOfLongestSub(str);
-    printf("%d\n", val);
+    char *sub = "1234";
+    //int val = isSub(str, sub);
+    //printf("%d\n", val);
 
+    char des[100] = {0};
+    char *s = myStrcpy(des, str);
+    printf("%s\n", s);
 	return 0;
 }

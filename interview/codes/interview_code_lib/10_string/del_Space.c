@@ -17,7 +17,6 @@ void print_trace()
 }
 
 
-
 char *Del_Space(char const *str, char *x)
 {
 	assert(x);

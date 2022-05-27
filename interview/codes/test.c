@@ -15,30 +15,64 @@
 #include <fcntl.h>
 #include <assert.h>
 
-int replace_space_with(char *str) {
-    int i, j, k;
-    int len = strlen(str);
-    int n_space = 0;
 
-    for(i = 0; i < len; i++) {
-        if(str[i] == ' ') {
-            n_space++;
+
+#if 0
+void print_bits(int data) {
+    char *p = (char *)&data + 3;
+
+    for(int i = 0; i < 4; i++) {
+        for(int j = 7; j >= 0; j--) {
+            int tmp = (*p) & (1 << j);
+            if(tmp) {
+                printf("1");
+            } else {
+                printf("0");
+            }
         }
-    }
+        printf(" ");
 
-    for(i = len; i >= 0;) {
-        
+        p--;
     }
+}
 
+int fibo(int n) {
+    if(n <= 2) {
+        return n;
+    } else {
+        return fibo(n - 1) + fibo(n - 2);
+    }
+}
+
+int reverse(int x) {
+    int res = 0;
+    while(x != 0) {
+        res = res * 10 + x % 10;
+        x = x / 10;
+    }
+    return res;
 }
 
 
+#endif
+
+
+int reverse(int n) {
+    int res = 0;
+    while(n) {
+        res = res * 10 + n % 10;
+        n /= 10;
+    }
+
+    return res;
+}
+
+
+#define REG_DEV (*(volitle unsigned int *)0x80004000)
+
+
 int main(void) {
-    char str[20] = "123 4  1516 ";
-
-    replace_space_with(str);
-    //printf("ret = %d\n", ret);
-    printf("str = %s\n", str);
-
+    int ret = reverse(51);
+    printf("%d\n", ret);
 	return 0;
 }
