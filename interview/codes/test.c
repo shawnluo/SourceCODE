@@ -15,12 +15,6 @@
 #include <fcntl.h>
 #include <assert.h>
 
-<<<<<<< HEAD
-
-int main(void) {
-    int ret = reverse(51);
-    printf("%d\n", ret);
-=======
 
 
 
@@ -34,6 +28,5 @@ int main(void) {
     printf("%s\n", p);
     printf("%s\n", p + 1);
 
->>>>>>> test rebase
 	return 0;
 }
