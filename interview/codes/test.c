@@ -17,16 +17,11 @@
 
 
 
-
-
 int main(void) {
-    char *s1[] = {"abc", "good"};
-    //char (*s2)[] = {"123", "4567"};
-
+    char *s1[] = {"abc", "1234", "defghi"};
     char *p = s1[0];
 
-    printf("%s\n", p);
-    printf("%s\n", p + 1);
+    printf("%s\n", s1);
 
 	return 0;
 }
