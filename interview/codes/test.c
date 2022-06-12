@@ -16,8 +16,12 @@
 #include <assert.h>
 
 
+
 int main(void) {
-    int ret = reverse(51);
-    printf("%d\n", ret);
+    char *s1[] = {"abc", "1234", "defghi"};
+    char *p = s1[0];
+
+    printf("%s\n", s1);
+
 	return 0;
 }
