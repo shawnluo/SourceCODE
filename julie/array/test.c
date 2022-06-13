@@ -19,14 +19,14 @@ int find_target(int *arr, int start_idx, int end_idx, int target)
 		printf("\n find the target successfully\n");
 		return mid;
 	}	
-	ret = find_target(arr,start_idx,mid,target); 
+	ret = find_target(arr, start_idx, mid, target); 
 	if(ret >=0)
 	{
 		printf("\n find the target successfully \n");
 		return ret;
 	}
 
-	ret = find_target(arr,mid,end_idx,target);
+	ret = find_target(arr, mid, end_idx, target);
 	if(ret >= 0)
 	{
 		printf("\n find the target successfully \n");
