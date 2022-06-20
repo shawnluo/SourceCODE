@@ -21,7 +21,7 @@ int main(void) {
     char *s1[] = {"abc", "1234", "defghi"};
     char *p = s1[0];
 
-    printf("%s\n", s1);
+    printf("%s\n", p);
 
 	return 0;
 }
