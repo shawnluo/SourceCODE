@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-clear;
-make -f Makefile_test clean; make -f Makefile_test && ./test
