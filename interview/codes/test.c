@@ -16,6 +16,10 @@
 #include <assert.h>
 
 
+//pass string pointer array, and print 
+void show_str_arr() {
+    
+}
 
 int main(void) {
     char *s1[] = {"abc", "1234", "defghi"};
