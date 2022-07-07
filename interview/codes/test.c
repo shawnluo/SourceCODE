@@ -16,6 +16,8 @@
 #include <assert.h>
 
 
+//TODO
+#if 0
 //pass string pointer array, and print 
 void show_str_arr() {
     
@@ -28,4 +30,21 @@ int main(void) {
     printf("%s\n", s1);
 
 	return 0;
+}
+#endif
+
+#define N 80
+
+int main(void) {
+    long dp[100];
+    dp[0] = 0;
+    dp[1] = 1;
+
+    for(int i = 2; i <= N; i++) {
+        dp[i] = dp[i - 1] + dp[i - 2];
+    }
+
+    printf("%ld\n", dp[N]);
+
+    return 0;
 }
