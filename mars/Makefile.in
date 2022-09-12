@@ -1,6 +1,6 @@
 # Thanks to Job Vranish (https://spin.atomicobject.com/2016/08/26/makefile-c-projects/)
 # https://makefiletutorial.com/#makefile-cookbook
-TARGET_EXEC := clean mars
+TARGET_EXEC := mars
 
 BUILD_DIR := ./build
 SRC_DIRS := ./src
@@ -50,13 +50,12 @@ $(BUILD_DIR)/%.cpp.o: %.cpp
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
 
-.PHONY: clean
+.PHONY: clean distclean
 clean:
-	rm -r $(BUILD_DIR)
-	rm $(TARGET_EXEC)
+	rm -r $(BUILD_DIR) -f
 
 distclean: clean
-	rm Makefile
+	rm Makefile -f
 
 # Include the .d makefiles. The - at the front suppresses the errors of missing
 # Makefiles. Initially, all the .d files will be missing, and we don't want those
