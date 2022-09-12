@@ -7,9 +7,36 @@ static int verbose_flag;
 
 #define VERSION "0.1"
 
+
+static void usage(void)
+{
+   fprintf(stderr,
+	"webbench [option]... URL\n"
+	"  -f|--force               Don't wait for reply from server.\n"
+	"  -r|--reload              Send reload request - Pragma: no-cache.\n"
+	"  -t|--time <sec>          Run benchmark for <sec> seconds. Default 30.\n"
+	"  -p|--proxy <server:port> Use proxy server for request.\n"
+	"  -c|--clients <n>         Run <n> HTTP clients at once. Default one.\n"
+	"  -9|--http09              Use HTTP/0.9 style requests.\n"
+	"  -1|--http10              Use HTTP/1.0 protocol.\n"
+	"  -2|--http11              Use HTTP/1.1 protocol.\n"
+	"  --get                    Use GET request method.\n"
+	"  --head                   Use HEAD request method.\n"
+	"  --options                Use OPTIONS request method.\n"
+	"  --trace                  Use TRACE request method.\n"
+	"  -?|-h|--help             This information.\n"
+	"  -V|--version             Display program version.\n"
+	);
+};
+
 int main(int argc, char **argv) {
     int c;
     
+    if(argc == 1) {
+        usage();
+        return 2;
+    }
+
     while (1) {
         static struct option long_options[] = {
                 /* These options set a flag. */
@@ -48,7 +75,7 @@ int main(int argc, char **argv) {
             break;
 
         case 'a':
-            puts("option -a\n");
+            puts("run linked list\n");
             break;
 
         case 'b':
@@ -68,9 +95,10 @@ int main(int argc, char **argv) {
             break;
 
         case '?':
+            break;
+
         case 'h':
-            printf("-a: linked list\n");
-            printf("-b: string\n");
+            usage();
             break;
 
         case 'v':
@@ -78,7 +106,6 @@ int main(int argc, char **argv) {
             break;
 
         default:
-            printf("using -h option\n");
             abort();
         }
     }
@@ -89,6 +116,9 @@ int main(int argc, char **argv) {
     if (verbose_flag)
         puts("verbose flag is set");
 
+    printf("argc = %d\n", argc);
+    printf("optind = %d\n", optind);
+
     /* Print any remaining command line arguments (not options). */
     if (optind < argc) {
         printf("non-option ARGV-elements: ");
@@ -96,6 +126,8 @@ int main(int argc, char **argv) {
             printf("%s ", argv[optind++]);
         putchar('\n');
     }
+
+    //create_linkedlist(argv[]);
 
     exit(0);
 }

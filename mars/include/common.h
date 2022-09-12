@@ -7,6 +7,11 @@
 #include <pthread.h>
 #include <stddef.h>
 
+typedef struct data {
+    int num;
+    struct data *next;
+} Data, *pData;
+
 void showme();
 
 #endif
