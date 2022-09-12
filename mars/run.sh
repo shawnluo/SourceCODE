@@ -1,11 +1,7 @@
 #!/bin/bash
 #set -x
-#make clean
-#make && clear;
-
-echo $@
-
-#VAR=""
+make clean;
+make && clear;
 
 for VAR in "$@"
 do
