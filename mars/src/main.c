@@ -37,32 +37,25 @@ int main(int argc, char **argv) {
         return 2;
     }
 
-    while (1) {
-        static struct option long_options[] = {
-                /* These options set a flag. */
-                {"verbose", no_argument, &verbose_flag, 1},
-                {"brief", no_argument, &verbose_flag, 0},
-                /* These options don’t set a flag.
-                   We distinguish them by their indices. */
-                {"add", no_argument, 0, 'a'},
-                {"append", no_argument, 0, 'b'},
-                {"delete", required_argument, 0, 'd'},
-                {"create", required_argument, 0, 'c'},
-                {"file", required_argument, 0, 'f'},
-                {"help", no_argument, 0, 'h'},
-                {"version", no_argument, NULL, 'v'},
-                {0, 0, 0, 0}};
-        /* getopt_long stores the option index here. */
-        int option_index = 0;
+    int option_index = 0;
 
-        c = getopt_long(argc, argv, "abc:d:f:hv",
-                        long_options, &option_index);
+    /* getopt_long stores the option index here. */
+    static struct option long_options[] = {
+            /* These options set a flag. */
+            {"verbose",     no_argument, &verbose_flag, 1},
+            {"brief",       no_argument, &verbose_flag, 0},
+            /* These options don’t set a flag.
+                We distinguish them by their indices. */
+            {"add",         required_argument, 0, 'a'},
+            {"append",      no_argument, 0, 'b'},
+            {"delete",      required_argument, 0, 'd'},
+            {"create",      required_argument, 0, 'c'},
+            {"file",        required_argument, 0, 'f'},
+            {"help",        no_argument, 0, 'h'},
+            {"version",     no_argument, NULL, 'v'},
+            {0, 0, 0, 0}};
 
-        /* Detect the end of the options. */
-        if (c == -1) {
-            break;
-        }
-
+    while((c = getopt_long(argc, argv, "a:bc:d:f:hv", long_options, &option_index)) != -1) {
         switch (c) {
         case 0:
             /* If this option set a flag, do nothing else now. */
@@ -76,6 +69,10 @@ int main(int argc, char **argv) {
 
         case 'a':
             puts("run linked list\n");
+            optind--;
+            for(; optind < argc && *argv[optind] != ' '; optind++) {
+                printf("%s\n", argv[optind]);
+            }
             break;
 
         case 'b':
