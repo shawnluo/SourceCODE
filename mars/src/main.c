@@ -11,7 +11,7 @@ static int verbose_flag;
 static void usage(void)
 {
    fprintf(stderr,
-	"webbench [option]... URL\n"
+	"marswalker [option]... URL\n"
 	"  -f|--force               Don't wait for reply from server.\n"
 	"  -r|--reload              Send reload request - Pragma: no-cache.\n"
 	"  -t|--time <sec>          Run benchmark for <sec> seconds. Default 30.\n"

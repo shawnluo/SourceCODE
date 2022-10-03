@@ -1,0 +1,8 @@
+# generate Makefile
+./configure
+
+# build and run
+./run.sh
+
+# clean Makefile and all objects
+make distclean
