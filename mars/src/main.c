@@ -14,7 +14,7 @@ static void usage(void)
 	"marswalker [option]... URL\n"
 	"  -f|--force               Don't wait for reply from server.\n"
 	"  -r|--reload              Send reload request - Pragma: no-cache.\n"
-	"  -t|--time <sec>          Run benchmark for <sec> seconds. Default 30.\n"
+	"  -t|--test                Run test.\n"
 	"  -p|--proxy <server:port> Use proxy server for request.\n"
 	"  -c|--clients <n>         Run <n> HTTP clients at once. Default one.\n"
 	"  -9|--http09              Use HTTP/0.9 style requests.\n"
@@ -53,9 +53,10 @@ int main(int argc, char **argv) {
             {"file",        required_argument, 0, 'f'},
             {"help",        no_argument, 0, 'h'},
             {"version",     no_argument, NULL, 'v'},
+            {"test",     no_argument, NULL, 't'},
             {0, 0, 0, 0}};
 
-    while((c = getopt_long(argc, argv, "a:bc:d:f:hv", long_options, &option_index)) != -1) {
+    while((c = getopt_long(argc, argv, "a:bc:d:f:hvt", long_options, &option_index)) != -1) {
         switch (c) {
         case 0:
             /* If this option set a flag, do nothing else now. */
@@ -100,6 +101,11 @@ int main(int argc, char **argv) {
 
         case 'v':
             printf("version: %s\n", VERSION);
+            break;
+
+        case 't':
+            printf("run test\n");
+            test();
             break;
 
         default:
