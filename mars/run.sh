@@ -2,6 +2,7 @@
 #set -x
 make clean;
 make && clear;
+#make;
 
 for VAR in "$@"
 do

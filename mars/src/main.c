@@ -1,4 +1,5 @@
 #include "../include/common.h"
+#include "test/inc/test.h"
 #include <getopt.h>
 //#include <popt.h>   //TODO using popt
 
@@ -7,6 +8,7 @@ static int verbose_flag;
 
 #define VERSION "0.1"
 
+typedef void (*fun_ptr)(int);
 
 static void usage(void)
 {
@@ -104,8 +106,10 @@ int main(int argc, char **argv) {
             break;
 
         case 't':
-            printf("run test\n");
-            test();
+            printf("run test ...\n");
+            //void (*fun_ptr)() = &quicksort_2;
+            fun_ptr x = &quicksort;
+            x(999);
             break;
 
         default:
@@ -113,14 +117,17 @@ int main(int argc, char **argv) {
         }
     }
 
+    //(*fun_ptr)();
+    //x();
+
     /* Instead of reporting ‘--verbose’
         and ‘--brief’ as they are encountered,
         we report the final status resulting from them. */
     if (verbose_flag)
         puts("verbose flag is set");
 
-    printf("argc = %d\n", argc);
-    printf("optind = %d\n", optind);
+    //printf("argc = %d\n", argc);
+    //printf("optind = %d\n", optind);
 
     /* Print any remaining command line arguments (not options). */
     if (optind < argc) {
