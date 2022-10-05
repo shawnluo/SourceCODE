@@ -1,12 +1,20 @@
 #include "../../../include/common.h"
 #include "../inc/test.h"
 
+void swap(int *x, int *y);
 
+
+void showme(int *arr, int len) {
+    for(int i = 0; i < len; i++) {
+        printf("%d, ", arr[i]);
+    }
+    printf("\n");
+}
 
 void test() {
-    int arr[] = {100, 7, 98, 123, -12, 54};
-    int len = sizeof(arr) / sizeof(arr[0]);
-    printf("len = %d\n", len);
+    int arr[] = {100, 200, 300, 400, 500};
+    swap(arr + 1, arr + 2);
+    showme(arr, 5);
 }
 
 
@@ -57,7 +65,7 @@ void do_quicksort(int *arr, int left, int right) {
 
     while(left < right) {
         mid = partition(arr, left, right);
-        do_quicksort(arr, 0, mid - 1);
+        do_quicksort(arr, left, mid - 1);
         do_quicksort(arr, mid + 1, right);
     }
 }

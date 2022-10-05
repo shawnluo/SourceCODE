@@ -109,6 +109,7 @@ int main(int argc, char **argv) {
             printf("run test ...\n");
             //void (*fun_ptr)() = &quicksort_2;
             fun_ptr x = &quicksort;
+            //fun_ptr x = &test;
             x(999);
             break;
 
