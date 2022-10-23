@@ -84,3 +84,59 @@ void quicksort() {
 void quicksort_2(int data) {
     printf("run quicksort! %d\n", data);
 }
+
+
+// 
+int binary_search_loop(int *arr, int target) {
+    int left = 0;
+    int len = sizeof(arr) / sizeof(arr[0]);
+    int right = len - 1;
+    int mid;
+
+    while(left <= right){
+        mid = (left + right) / 2;
+        if(arr[mid] == target) {
+            return mid;
+        } else if(arr[mid] > target) {
+            //search left
+            right = mid - 1;
+        } else if(arr[mid] < target) {
+            //search right
+            left = mid + 1;
+        }
+
+        if((left == right) && (arr[left] != target)) {
+            printf("Can not find it!\n");
+            return -1;
+        }
+    }
+}
+
+
+int binary_search_recursion(int *arr, int left, int right, int target) {
+    if(left == right){
+        if(arr[left] == target) {
+            return left;
+        }
+        else {
+            printf("Can not find it!\n");
+            return -1;
+        }
+    }
+
+    int mid = (left + right) / 2;
+    if(target == arr[mid]) {
+        return mid;
+    } else if(target < arr[mid]) {
+        right = mid - 1;
+    }
+    else {
+        left = mid + 1;
+    }
+    binary_search_recursion(arr, left, right, target);
+}
+
+
+//1. find the 2 numbers which less than target
+
+//2. 4 points, if they're square

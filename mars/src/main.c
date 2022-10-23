@@ -8,7 +8,7 @@ static int verbose_flag;
 
 #define VERSION "0.1"
 
-typedef void (*fun_ptr)(int);
+typedef void (*fun_ptr)(int *, int);
 
 static void usage(void)
 {
@@ -108,9 +108,14 @@ int main(int argc, char **argv) {
         case 't':
             printf("run test ...\n");
             //void (*fun_ptr)() = &quicksort_2;
-            fun_ptr x = &quicksort;
-            //fun_ptr x = &test;
-            x(999);
+            //fun_ptr x = &quicksort;
+
+            fun_ptr x = &binary_search_loop;
+
+            int arr[] = {1, 2, 3, 4, 5, 6};
+            int target = 1;
+            x(arr, target);
+            
             break;
 
         default:

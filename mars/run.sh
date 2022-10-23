@@ -1,7 +1,7 @@
 #!/bin/bash
 #set -x
 make clean;
-make && clear;
+make; # && clear;
 #make;
 
 for VAR in "$@"
