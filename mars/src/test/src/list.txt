@@ -1,0 +1,24 @@
+
+
+
+
+--- memory ---
+1. memory alignment
+
+
+--- string ---
+1. reverse
+2. substring
+3. 
+
+
+1. memory copy vs string copy
+2. 4 points, if it's square shape
+
+
+--- linked list ---
+1. create
+2. delete node
+3. delete multpile nodes
+4. reverse linkedlist
+5. 
