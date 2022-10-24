@@ -6,6 +6,7 @@
 #include <string.h>
 #include <pthread.h>
 #include <stddef.h>
+#include <math.h>
 
 typedef struct data {
     int num;

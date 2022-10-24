@@ -110,11 +110,11 @@ int main(int argc, char **argv) {
             //void (*fun_ptr)() = &quicksort_2;
             //fun_ptr x = &quicksort;
 
-            fun_ptr x = &binary_search_loop;
+            fun_ptr x = &sort_ascent;
 
             int arr[] = {1, 2, 3, 4, 5, 6};
             int target = 1;
-            x(arr, target);
+            x(arr, 6);
             
             break;
 
