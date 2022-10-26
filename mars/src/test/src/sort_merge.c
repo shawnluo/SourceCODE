@@ -1,11 +1,13 @@
 #include "../../../include/common.h"
 #include "../inc/test.h"
 
+
+
+// 1.
 //nums[] and val
 //remove nums[i] which equals val
 //don't change elements order in nums[]
 //in place
-
 
 /*solution 1: 
     using 2 array index to point to array:
@@ -43,10 +45,12 @@ int sort_ascent(int *arr, int len) {
 }
 
 
+//2.
 //merge 2 array
 int merge_array(int *arr1, int *arr2, int len1, int len2) {
     int i;
     int len = len1 + len2;
+    int tmp[len];
 
     while(len) {
         if(len1 >= 0 && arr1[len1] >= arr2[len2]) {
@@ -65,6 +69,7 @@ int merge_array(int *arr1, int *arr2, int len1, int len2) {
 }
 
 
+//3.
 //merge:
 //  arr[] L,       mid
 //  arr[] mid + 1, R
@@ -105,3 +110,22 @@ void sort(int *arr, int L, int R) {
         merge(arr, L, mid, R);
     } 
 }
+
+
+//4.
+//  --- bubble sorting
+
+void bb(int *arr, int len) {
+    int i, j;
+    for(i = 0; i < len; i++) {
+        for(j = 0; j < len - i; j++) {
+            if(arr[j] > arr[j + 1]) {
+                swap(arr + j, arr + j + 1);
+            }
+        }
+    }
+}
+
+
+//5.
+//  --- quick sorting
