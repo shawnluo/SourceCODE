@@ -40,3 +40,23 @@ int sort_ascent(int *arr, int len) {
         }
     }
 }
+
+
+/*2. binary search
+    in sorted array, find the target
+*/
+int b_search(int *arr, int start, int end, int target) {
+    if(start <= end) {
+        int mid = (end - start + 1) / 2;
+        if(arr[mid] == target) {
+            return mid;
+        } else if(arr[mid] > target) {
+            b_search(arr, start, mid - 1, target);
+        } else if(arr[mid] < target) {
+            b_search(arr, mid + 1, end, target);
+        }
+    }
+
+    printf("can not find it!\n");
+    return -1;
+}

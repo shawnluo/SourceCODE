@@ -2,6 +2,10 @@
 
 
 
+--- array ---
+1. binary search
+
+
 --- memory ---
 1. memory alignment
 
