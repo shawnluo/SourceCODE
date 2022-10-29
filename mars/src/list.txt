@@ -1,0 +1,41 @@
+
+
+
+
+--- array ---
+1. binary search
+2. 
+
+--- memory ---
+1. memory alignment
+
+
+--- string ---
+1. reverse
+2. substring
+3. 
+
+--- linked list ---
+1. create
+2. delete node
+3. delete multpile nodes
+4. reverse linkedlist
+5. linked list + linked list
+
+--- sorting ---
+https://blog.csdn.net/mwj327720862/article/details/80498455
+1. merge
+2. quick sorting
+3. bubble
+4. select
+5. insection
+6. shell sort
+7. Heap sort
+8. counting sort
+9. bucket sort
+10. radix sort
+
+--- others ---
+1. memory copy vs string copy
+2. 4 points, if it's square shape
+3. 
