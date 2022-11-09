@@ -109,12 +109,12 @@ void merge(int *arr, int L, int M, int R) {
 }
 
 //sort_merge
-void sort(int *arr, int L, int R) {
+void sort_merge(int *arr, int L, int R) {
     int mid;
     if(L < R) {
         mid = (L + R) / 2;
-        sort(arr, L, mid); 
-        sort(arr, mid + 1, R);
+        sort_merge(arr, L, mid); 
+        sort_merge(arr, mid + 1, R);
         merge(arr, L, mid, R);
     } 
 }
@@ -137,3 +137,74 @@ void bb(int *arr, int len) {
 
 //5.
 //  --- quick sorting
+int partition(int *arr, int left, int right) {
+    int save = arr[left];
+
+    while(left < right) {
+        while(right > left && arr[right] >= save) {
+            right--;
+        }
+        if(left < right) {
+            arr[left++] = arr[right];
+        }
+
+        while(left <= right && arr[left] <= save) {
+            left++;
+        }
+        if(left < right) {
+            arr[right--] = arr[left];
+        }
+    }
+    arr[left] = save;
+
+    return left;
+}
+
+void sort_quick(int *arr, int L, int R) {
+    if(L < R) {
+        int pivot = partition(arr, L, R);
+        sort_quick(arr, L, pivot - 1);
+        sort_quick(arr, pivot + 1, R);
+    }
+}
+
+
+//6. select
+void sort_select(int *arr, int len) {
+    int i, j;
+    int min = 0;
+    for(i = 0; i < len - 1; i++) {
+        min = i;
+        for(j = i + 1; j < len; j++) {
+            if(arr[j] < min) {
+                min = j;
+            }
+        }
+        int tmp = arr[min];
+        arr[min] = arr[j];
+        arr[j] = tmp;
+    }
+}
+
+
+//7. shell
+
+
+
+//8. insert
+//
+int insert_sort(int *arr, int len) {
+    if(arr == NULL) {
+        return -1;
+    }
+    for(int i = 1; i < len; i++) {
+        int save = arr[i];
+        for(int j = i; j >= 0; j--) {
+            if(arr[i] < arr[j]) {
+                arr[j] = arr[j - 1];
+            }
+        }
+        arr[i] = save;
+    }
+    return 0;
+}

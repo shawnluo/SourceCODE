@@ -113,12 +113,17 @@ int binary_search_loop(int *arr, int target) {
 }
 
 
+/// @brief 
+/// @param arr 
+/// @param left 
+/// @param right 
+/// @param target 
+/// @return 
 int binary_search_recursion(int *arr, int left, int right, int target) {
     if(left == right){
         if(arr[left] == target) {
             return left;
-        }
-        else {
+        } else {
             printf("Can not find it!\n");
             return -1;
         }
@@ -129,8 +134,7 @@ int binary_search_recursion(int *arr, int left, int right, int target) {
         return mid;
     } else if(target < arr[mid]) {
         right = mid - 1;
-    }
-    else {
+    } else {
         left = mid + 1;
     }
     binary_search_recursion(arr, left, right, target);
