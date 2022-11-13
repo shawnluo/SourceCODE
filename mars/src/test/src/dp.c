@@ -3,8 +3,13 @@
 
 
 // 1. 
+
+int min(int x, int y) {
+    return x >= y ? x : y;
+}
+
 int minCostClimbingStairs(int* cost, int costSize){
-    int dp[costSize] = {0};
+    int dp[costSize];
     dp[0] = cost[0];
     dp[1] = cost[1];
     
@@ -22,5 +27,6 @@ int minCostClimbingStairs(int* cost, int costSize){
     x, y: current position
 */
 int robot_find_path_sum(int m, int n, int x, int y) {
-    int dp[m][n] = 0;
+    int dp[m][n];
+    return 0;
 }

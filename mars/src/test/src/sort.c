@@ -51,6 +51,7 @@ int merge_array(int *arr1, int *arr2, int len1, int len2) {
     int len = 0;
     int l1 = 0;
     int l2 = 0;
+    int tmp[len1 + len2];
 
     while(len < len1 + len2) {
         if(l1 <= len1 && l2 <= len2) {
@@ -65,11 +66,11 @@ int merge_array(int *arr1, int *arr2, int len1, int len2) {
             }
         } else if(l1 <= len1) {
             for( ; l1 <= len1; len++, l1++) {
-                tmp[len] = arr[l1];
+                tmp[len] = arr1[l1];
             }
         } else if(l2 <= len2) {
             for( ; l2 <= len2; l2++, len++) {
-                tmp[len] = arr[l2];
+                tmp[len] = arr2[l2];
             }
         }
     }
