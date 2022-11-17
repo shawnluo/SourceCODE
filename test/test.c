@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <math.h>
 
 /*
     step 1: if it hasn't repeat character
@@ -83,6 +84,49 @@ char *longest_uniq_subs(char *str) {
     }
     printf("%s\n", max_str);
     return NULL;
+}
+
+
+int new_arr[100];
+
+int *sort_square(int *arr, int size) {
+    if(size <= 0) {
+        return -1;
+    }
+
+    if(size == 1) {
+        return arr;
+    }
+    if(all_element(arr, size) >= 0) {
+        return arr;
+    } else if(all_element(arr, size) <= 0) {
+        return reverse_arr(arr, size);
+    }
+
+    //static int new_arr[size];
+    int p1 = 0;
+    int p2 = size - 1;
+    while(arr[p1] <= 0 || arr[p2] >= 0) {
+        if(arr[p1] <= 0 && arr[p2] >= 0) {
+            if(sqrt(arr[p1]) >= sqrt(arr[p2])) {
+                new_arr[size - 1] = sqrt(arr[p1]);
+                p1++;
+            } else {
+                new_arr[size - 1] = sqrt(arr[p2]);
+                p2--;
+            }
+        } else {
+            if(arr[p2] < 0) {
+                new_arr[size - 1] = arr[p1];
+                p1++;
+            } else {
+                new_arr[size - 1] = arr[p2];
+                p2--;
+            }
+        }
+        size--;
+    }
+    return new_arr;
 }
 
 
