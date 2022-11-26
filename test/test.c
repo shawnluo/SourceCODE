@@ -4,43 +4,47 @@
 #include <assert.h>
 #include <math.h>
 
-int longest_uniq_substring(char *s, char *max_s, int size) {
-    int len = 0;
-    int max = 0;
-
-    for(int i = 1; i < size; i++) {
-        for(int j = i - 1; j >= 0; j--) {
-            if(s[i] == s[j]) {
-                len = i - j;
-                if(len > max) {
-                    max = len;
-                    strncpy(max_s, s, len);
-                    max_s[j] = '\0';
-                }
-            }
+int is_uniq(char *s, int size) {
+    for(int i = 0; i < size - 1; i++) {
+        if(s[size] == s[i]) {
+            return 0;
         }
     }
-    return 0;
+    return 1;
 }
 
 
-int longest(char *s) {
+void longest(char *s) {
+    int start, end;
     int size = strlen(s);
-    char s1[size];
     int max = 0;
-    char max_s[size];
-    for(int i = 0; i < size; i++) {
-        longest_uniq_substring(s + i, s1, size - i);
-        if(strlen(s1) > max) {
-            strcpy(max_s, s1);
+    char s_max[size];
+
+    start = 0;
+    end = 1;
+    memset(s_max, 0, size);
+    while(end < size) {
+        while((end < size) && is_uniq(s + start, end - start)) {
+            end++;
         }
+        if((end < size) && (end - start > max)) {
+            max = end - start;
+            strncpy(s_max, s + start, end - start);
+            s_max[end - start] = '\0';
+        } else if((end == size) && (end - start + 1 > max)) {
+            max = end - start + 1;
+            strncpy(s_max, s + start, end - start + 1);
+            s_max[end - start + 1] = '\0';
+        }
+        start++;
     }
+    printf("%s\n", s_max);
 }
 
 
 int main(int argc, char *argv[]) {
-    char *s = "abcabce";
-    longest_uniq_subs(s);
+    char *s = "abcacbe";
+    longest(s);
 
     return 0;
 }
