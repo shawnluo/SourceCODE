@@ -4,7 +4,9 @@
 #include <assert.h>
 #include <math.h>
 
-int is_uniq(char *s, int size) {
+//solution1
+// compare s[size] with s[0, size)
+int cmp_end(char *s, int size) {
     for(int i = 0; i < size - 1; i++) {
         if(s[size] == s[i]) {
             return 0;
@@ -13,7 +15,11 @@ int is_uniq(char *s, int size) {
     return 1;
 }
 
-
+/*  using slide window
+    maintain a array[start, end] is uniq, 
+        if it's uniq,       then end++
+        if it's not uniq,   then start++
+*/
 void longest(char *s) {
     int start, end;
     int size = strlen(s);
@@ -24,7 +30,7 @@ void longest(char *s) {
     end = 1;
     memset(s_max, 0, size);
     while(end < size) {
-        while((end < size) && is_uniq(s + start, end - start)) {
+        while((end < size) && cmp_end(s + start, end - start)) {
             end++;
         }
         if((end < size) && (end - start > max)) {
@@ -39,6 +45,35 @@ void longest(char *s) {
         start++;
     }
     printf("%s\n", s_max);
+}
+
+
+/*solution2:
+using hash table
+*/
+int hash[100] = {0};
+int is_uniq(char *s, int start, int end) {
+    int size = strlen(s);
+    for(int i = 0; i < size; i++) {
+        if(hash[s[]])
+    }
+}
+
+//using hash table
+void longest_1(char *s) {
+    int size = strlen(s);
+    int start = 0;
+    int end = 0
+    int max = 0;
+    char s_max[size];
+
+    for(int i = 0; i < size; i++) {
+        for(int j = 1; j < size; j++) {
+            if(is_uniq(s, start, end)) {
+                max = end - start;
+            }
+        }
+    }
 }
 
 
