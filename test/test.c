@@ -4,82 +4,38 @@
 #include <assert.h>
 #include <math.h>
 
-//solution1
-// compare s[size] with s[0, size)
-int cmp_end(char *s, int size) {
-    for(int i = 0; i < size - 1; i++) {
-        if(s[size] == s[i]) {
-            return 0;
-        }
+int is_happyTree(int num) {
+    while(num > 0) {
+        int bit = num % 10;
+        printf("%d\n", num / 10);
+        num = num / 10;
     }
-    return 1;
+    return 0;
 }
 
-/*  using slide window
-    maintain a array[start, end] is uniq, 
-        if it's uniq,       then end++
-        if it's not uniq,   then start++
-*/
-void longest(char *s) {
-    int start, end;
-    int size = strlen(s);
-    int max = 0;
-    char s_max[size];
-
-    start = 0;
-    end = 1;
-    memset(s_max, 0, size);
-    while(end < size) {
-        while((end < size) && cmp_end(s + start, end - start)) {
-            end++;
-        }
-        if((end < size) && (end - start > max)) {
-            max = end - start;
-            strncpy(s_max, s + start, end - start);
-            s_max[end - start] = '\0';
-        } else if((end == size) && (end - start + 1 > max)) {
-            max = end - start + 1;
-            strncpy(s_max, s + start, end - start + 1);
-            s_max[end - start + 1] = '\0';
-        }
-        start++;
+void print_bits(int num) {
+    //while(num) {
+    if(num) {
+        num = num / 10;
+        print_bits(num);
+        printf("%d\n", num % 10);
     }
-    printf("%s\n", s_max);
+    //printf("\n");
 }
 
-
-/*solution2:
-using hash table
-*/
-int hash[100] = {0};
-int is_uniq(char *s, int start, int end) {
-    int size = strlen(s);
-    for(int i = 0; i < size; i++) {
-        if(hash[s[]])
+int get_sum(int n) {
+    int sum = 0;
+    while(n) {
+        sum = sum + sqrt(n % 10);
+        n = n / 10;
     }
-}
-
-//using hash table
-void longest_1(char *s) {
-    int size = strlen(s);
-    int start = 0;
-    int end = 0
-    int max = 0;
-    char s_max[size];
-
-    for(int i = 0; i < size; i++) {
-        for(int j = 1; j < size; j++) {
-            if(is_uniq(s, start, end)) {
-                max = end - start;
-            }
-        }
-    }
+    printf("sum = %d\n", sum);
 }
 
 
 int main(int argc, char *argv[]) {
-    char *s = "abcacbe";
-    longest(s);
+    int num = 103;
+    get_sum(num);
 
     return 0;
 }
