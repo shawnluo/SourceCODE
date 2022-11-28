@@ -92,6 +92,86 @@ void find_intersection(int a1[], int a2[], int size1, int size2){
     }
 }
 
+
+int is_happyTree(int num) {
+    while(num > 0) {
+        int bit = num % 10;
+        printf("%d\n", num / 10);
+        num = num / 10;
+    }
+    return 0;
+}
+
+void print_bits(int num) {
+    //while(num) {
+    if(num) {
+        num = num / 10;
+        print_bits(num);
+        printf("%d\n", num % 10);
+    }
+    //printf("\n");
+}
+
+int get_sum(int n) {
+    int sum = 0;
+    while(n) {
+        sum = sum + pow(n % 10, 2);
+        n = n / 10;
+    }
+    printf("sum = %d\n", sum);
+}
+
+
+void save_value(int i, int j, int k) {
+
+}
+
+
+void sort(int *a, int left, int right) {
+
+}
+
+
+int three_sum(int *a, int size, int target) {
+    int pos = 0;
+    int left = 1;
+    int right = size - 1;
+    int sum = 0;
+
+    sort(a, 0, size - 1);
+    for(int pos = 0; pos < size; pos++) {
+        if(pos > 0 && a[pos] == a[pos - 1]) continue;
+
+        while(left < right) {
+            sum = a[pos] + a[left] + a[right];
+            if(sum == target) {
+                save_value(pos, left, right);
+                while(left < right && a[left + 1] == a[left]) left++;
+                while(left < right && a[right - 1] == a[right]) right--;
+                left++, right--;
+            }
+            else if(sum < target) left++;
+            else if(sum > target) right--;
+        }
+    }
+
+    return 0;
+}
+
+
+int four_sum(int *a, int size, int target) {
+    int pos1 = 0;
+    int pos2 = 1;
+    int left = 2;
+    int right = size - 1;
+    int sum = 0;
+
+    sort(a, 0, size - 1);
+    for(pos1 = 0; pos1 < size; pos1++) {
+        for(pos2 = pos1 + 1; )
+    }
+}
+
 int main(int argc, char *argv[]) {
     char *s = "abcacbe";
     longest(s);
