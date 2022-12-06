@@ -4,38 +4,85 @@
 #include <assert.h>
 #include <math.h>
 
-int is_happyTree(int num) {
-    while(num > 0) {
-        int bit = num % 10;
-        printf("%d\n", num / 10);
-        num = num / 10;
+char *reverse_s(char *s, int start, int end) {
+    int left = 0;
+    int size = strlen(s);
+    int right = size - 1;
+    while(left < right) {
+        char tmp = s[left];
+        s[left] = s[right];
+        s[right] = tmp;
     }
-    return 0;
+
+    return NULL;
 }
 
-void print_bits(int num) {
-    //while(num) {
-    if(num) {
-        num = num / 10;
-        print_bits(num);
-        printf("%d\n", num % 10);
+
+char *replace_s(char *s, int size) {
+    int flag = 0;
+    for(int i = 0; i < size; i++) {
+        if((i > flag * 1000) && (i < 1000 * (flag + 1))) {
+            reverse_s(s, flag * 1000, size - flag * 1000);
+        }
     }
-    //printf("\n");
+    return NULL;
 }
 
-int get_sum(int n) {
-    int sum = 0;
-    while(n) {
-        sum = sum + sqrt(n % 10);
-        n = n / 10;
+
+//the elements in s are uniq
+int isUniq(char *s, int L, int R) {
+    for(int i = L; i < R - 1; i++) {
+        for(int j = i + 1; j < R; j++) {
+            if(s[i] == s[j]) {
+                return 0;
+            }
+        }
     }
-    printf("sum = %d\n", sum);
+    return 1;
+}
+
+
+int long_uniq_sub(char *s) {
+    int max = 0;
+    int L, R;
+    int size = strlen(s);
+    char save[size];
+    memset(save, 0, size);
+    for(R = 1; R < size; R++) {
+        for(L = R - 1; L >= 0; L--) {
+            //if((s[L] == s[R]) && ((R - L) > max)) {
+            int uniq = isUniq(s, L, R);
+            //printf("L = %d, R = %d, uniq = %d, max = %d, len = %d\n", L, R, uniq, max, R - L);
+            if(!uniq) {
+                if(R - L > max) {
+                    max = R - L;
+                    strncpy(save, s + L + 1, max);
+                    save[max] = '\0';
+                    printf("save: %s\n", save);
+                }
+                break;
+            }
+        }
+
+        //printf("L = %d\n", L);
+        if(L == -1) {
+            max = R + 1;
+            strncpy(save, s, max);
+            save[max] = '\0';
+            //printf("%s\n", save);
+        }
+    }
+
+    printf("%s\n", save);
+    return max;
 }
 
 
 int main(int argc, char *argv[]) {
-    int num = 103;
-    get_sum(num);
+    char s[] = "abcabcdea";
+    int size = strlen(s);
+    //reverse_s(s, size);
+    long_uniq_sub(s);
 
     return 0;
 }
