@@ -78,11 +78,47 @@ int long_uniq_sub(char *s) {
 }
 
 
+void longest_common_sub(char *s1, char *s2) {
+    int p1, p2;
+    int max = 0;
+    int size1 = strlen(s1);
+    int size2 = strlen(s2);
+    char save[100] = {0};
+
+    for(p1 = 0; p1 < size1; p1++) {
+        int tmp1 = p1;
+        for(p2 = 0; p2 < size2; p2++) {
+            int tmp2 = p2;
+            while(s1[tmp1] == s2[tmp2]) {
+                tmp1++;
+                tmp2++;
+            }
+            if(tmp1 < size1 && tmp2 < size2) {
+                if(tmp1 - p1 > max) {
+                    max = tmp1 - p1;
+                    strncpy(save, s1 + p1, max);
+                }
+            } else if(tmp1 == size1) {
+                if(tmp1 - p1 > max) {
+                    max = tmp1 - p1;
+                    strncpy(save, s1 + p1, max);
+                }
+            } else if(tmp2 == size2) {
+                if(tmp2 - p2 > max) {
+                    max = tmp2 - p2;
+                    strncpy(save, s2 + p2, max);
+                }
+            }
+        }
+    }
+    printf("%s\n", save);
+}
+
 int main(int argc, char *argv[]) {
-    char s[] = "abcabcdea";
-    int size = strlen(s);
-    //reverse_s(s, size);
-    long_uniq_sub(s);
+    char s1[] = "abcabcdea";
+    char s2[] = "abcxab";
+
+    longest_common_sub(s1, s2);
 
     return 0;
 }
