@@ -195,13 +195,106 @@ void LCS(char *s1, char *s2) {
     }
 }
 
+int max(int x, int y) {
+    return x >= y ? x: y;
+}
+
+#if 0
+int longestSubstring(char *s) {
+    //利用哈希的思想,key是每一个字符,value是其对应的下标
+    // 存储上一个重复字符的位置
+    int lastPosition[256];
+    //初始化,首字符之前没有与其重复的字符,都为-1
+    for (int i = 0; i < 256; i++) {
+        lastPosition[i] = -1;
+    }
+
+    int previous = -1;  //记录上一个不重复子串的终点
+    int current = 0;    //记录当前不重复子串长度
+    int maxLength = 0;  //记录最大不重复子串长度
+    int n = strlen(s);
+    for (int i = 0; i < n; i++) {
+        //碰到重复字符previous更改为该重复字符的位置
+        previous = max(previous, lastPosition[s[i]]);
+        //本次子串长度
+        current = i - previous;
+        maxLength = max(current, maxLength);
+        //更新该字符对应的下标
+        lastPosition[s[i]] = i;
+    }
+    return maxLength;
+}
+#endif
+
+
+void longest_common_sub_dp(char *s1, char *s2) {
+    int size1 = strlen(s1);
+    int size2 = strlen(s2);
+    int dp[size1][size2];
+    int max = 0;
+
+    for(int i = 0; i < size1; i++) {
+        for(int j = 0; j < size2; j++) {
+            dp[i][j] = 0;
+        }
+    }
+
+    for(int i = 0; i < size1; i++) {
+        for(int j = 0; j < size2; j++) {
+            if((i == 0 || j == 0) && (s1[i]  == s2[j])) {
+                dp[i][j] = 1;
+            } else if(s1[i] == s2[j]) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+                max = dp[i][j] > max ? dp[i][j] : max;
+            }
+        }
+    }
+
+    printf("%d\n", max);
+}
+
+
+int longest_uniq_sub(char *s) {
+    int len = 0;
+    int max_len = 0;
+    int pos = -1;
+    int size = strlen(s);
+    int hash[256];
+    for(int i = 0; i < 256; i++) {
+        hash[i] = -1;
+    }
+
+    for(int i = 0; i < size; i++) {
+        pos = max(pos, hash[s[i]]);
+        len = i - pos;
+        max_len = max(max_len, len);
+        hash[s[i]] = i;
+    }
+
+    return max_len;
+}
+
+
+/*  brute force
+    from second to the end, checking from pos back to front, are all characters uniq?
+*/
+int longest_uniq_1(char *s) {
+    int size = strlen(s);
+
+    for()
+}
+
 
 int main(int argc, char *argv[]) {
     char s1[] = "abxcaxbcdea";
     char s2[] = "abxcmanxbfc";
 
-    //longest_common_sub(s1, s2);
-    LCS(s1, s2);
+    longest_common_sub_dp(s1, s2);
+    //LCS(s1, s2);
+
+    char *s = "aabbcdd";
+    int ret = longest_uniq_sub_1(s);
+    printf("ret = %d\n", ret);
 
     return 0;
 }
