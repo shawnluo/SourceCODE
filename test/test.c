@@ -275,13 +275,48 @@ int longest_uniq_sub(char *s) {
 }
 
 
+int is_uniq_2(char *s, int left, int right) {
+    for(int i = left; i < right; i++) {
+        for(int j = i + 1; j < right; j++) {
+            if(s[i] == s[j]) return 0;
+        }
+    }
+    return 1;
+}
+
+
 /*  brute force
     from second to the end, checking from pos back to front, are all characters uniq?
 */
-int longest_uniq_1(char *s) {
-    int size = strlen(s);
+#define TRUE 1
+#define FALSE 0
 
-    for()
+void longest_uniq_sub_1(char *s) {
+    int size = strlen(s);
+    int len = 0;    //the length of unique characters
+    int max_len = 0;
+    char save[size];
+    memset(save, 0, size);
+    int i, j;
+
+    for(i = 1; i < size; i++) {
+        for(j = i - 1; j >= 0; j--) {
+            if(is_uniq_2(s, i, j) == FALSE) {
+                len = i - j;
+                if(len > max_len) {
+                    max_len = len;
+                    strncpy(save, s + j + 1, len);
+                }
+                break;
+            }
+        }
+        if(j == -1) {
+            max_len = i + 1;
+            printf("%d\n", max_len);
+            strncpy(save, s, max_len);
+        }
+    }
+    printf("%s\n", save);
 }
 
 
@@ -289,12 +324,11 @@ int main(int argc, char *argv[]) {
     char s1[] = "abxcaxbcdea";
     char s2[] = "abxcmanxbfc";
 
-    longest_common_sub_dp(s1, s2);
+    //longest_common_sub_dp(s1, s2);
     //LCS(s1, s2);
 
     char *s = "aabbcdd";
-    int ret = longest_uniq_sub_1(s);
-    printf("ret = %d\n", ret);
+    longest_uniq_sub_1(s);
 
     return 0;
 }
